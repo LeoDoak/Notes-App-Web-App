@@ -1,1 +1,8 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/25QNtE92)
+
+[To build and run this project you will first need to make sure that Flask is installed.]
+[![Install Flask Link](https://code.visualstudio.com/docs/python/tutorial-flask)]
+
+
+[Whichever application you may be using to run the code, we used VS Code, make sure to install the necessary frameworks, including Flask, waitress and any other import you might see in the code above.]
+
+[That's all it takes to be able to run our program so far. Enjoy!]
