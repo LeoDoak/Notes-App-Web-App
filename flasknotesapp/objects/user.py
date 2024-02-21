@@ -1,3 +1,4 @@
+"Image library, need to 'pip install Pillow'"
 from PIL import Image
 class User:
     user_id: str
