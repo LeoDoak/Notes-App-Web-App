@@ -1,8 +1,53 @@
+# Notes Web Flask Application 
 
-[To build and run this project you will first need to make sure that Flask is installed.]
-[![Install Flask Link](https://code.visualstudio.com/docs/python/tutorial-flask)]
+## Install Flask and Waitress
+* Flask and Waitress are necessary for this project to function correctly. 
+* [Install Flask Link](https://code.visualstudio.com/docs/python/tutorial-flask)
+* [Install waitress](https://pypi.org/project/waitress)
 
+### Can also be downloaded using a package manager such as pip: 
+ 
+MacOS / Linux / Windows
+```bash
+$ pip install flask 
+$ pip install waitress
+```
 
-[Whichever application you may be using to run the code, we used VS Code, make sure to install the necessary frameworks, including Flask, waitress and any other import you might see in the code above.]
+## Create Virtual Environment
+* A virtual environment is necessary to run the flask project in
+* [Info found here](https://flask.palletsprojects.com/en/3.0.x/installation)
 
-[That's all it takes to be able to run our program so far. Enjoy!]
+MacOS / Linux
+```bash
+$ mkdir myproject
+$ cd myproject
+$ python3 -m venv .venv
+```
+Windows 
+```bash
+> mkdir myproject
+> cd myproject
+> py -3 -m venv .venv
+```
+
+## Activate Virtual Environment 
+
+MacOS / Linux
+```bash
+$ . .venv/bin/activate
+```
+
+Windows 
+```bash
+> .venv\Scripts\activate
+```
+
+## Running the flask project: 
+* Run the server.py file and enter whatever local host number you want
+* go into a browser and in the search bar,type in localhost:(Number), ex: localhost:8000
+* The project will be started from that link. 
+
+## IDE Used 
+* Whichever application you may be using to run the code, we used VS Code or PyCharm, make sure to install the necessary frameworks, including Flask, waitress and any other import you might see in the code above.
+
+**That's all it takes to be able to run our program so far. Enjoy!**
