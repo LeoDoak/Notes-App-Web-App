@@ -22,4 +22,5 @@ SAMPLE_USERS = [
         User("2", "AliceBarnes", "Password10", "ab1234@uncw.edu", None),
         User("3", "BobbyHill123", "Qwerty123", "bh4201@uncw.edu", None),
         User("4", "JettHoward", "Random12", "jh4321@uncw.edu", None),
+        User("0", "Admin", "1234", "admin@uncw.edu",None) #admin access
     ]
