@@ -7,6 +7,9 @@ import sqlite3
 # Used this tutorial to figure out login screen 
 #https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
 
+#used this for the sql request for placeholders, https://medium.com/@miguel.amezola/protecting-your-code-from-sql-injection-attacks-when-using-raw-sql-in-python-916466961c97
+
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -25,7 +28,8 @@ def login():
     if len(row) == 1: 
         return render_template('index.html') 
     else:
-        return render_template("loginpage.html", info = "Invalid Credentials") 
+        error_message = "Incorrect Username or Password!"
+        return render_template("loginpage.html", msg = error_message) 
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
