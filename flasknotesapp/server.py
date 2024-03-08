@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from waitress import serve
 from objects.user import User,SAMPLE_USERS
-
+import sqlite3
 
 
 # Used this tutorial to figure out login screen 
@@ -15,13 +15,17 @@ def set_up():
 
 @app.route('/form_login', methods = ['POST','GET'])
 def login():
-    #temp solution untill database is up and running 
     get_name = request.form['username'] 
     get_password = request.form['password']
-    for user in SAMPLE_USERS: # sample users is the sample data from User Class 
-        if user.username == get_name and user.password == get_password:
-            return render_template('index.html') 
-    return render_template("loginpage.html", info = "Invalid Credentials") 
+    connection = sqlite3.connect("databases/user.db")
+    cursor =  connection.cursor()
+    cursor.execute("SELECT username, password FROM user where (username = ? and password = ?)",(get_name, get_password))
+    row = cursor.fetchall()
+    connection.close()
+    if len(row) == 1: 
+        return render_template('index.html') 
+    else:
+        return render_template("loginpage.html", info = "Invalid Credentials") 
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
