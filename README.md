@@ -1,16 +1,15 @@
 # Notes Web Flask Application 
 
-## Install Flask and Waitress
-* Flask and Waitress are necessary for this project to function correctly. 
+## Install Flask
+* Flask is necessary for this project to function correctly. 
 * [Install Flask Link](https://code.visualstudio.com/docs/python/tutorial-flask)
-* [Install waitress](https://pypi.org/project/waitress)
+
 
 ### Can also be downloaded using a package manager such as pip: 
  
 MacOS / Linux / Windows
 ```bash
 $ pip install flask 
-$ pip install waitress
 ```
 
 ## Create Virtual Environment
@@ -41,6 +40,23 @@ Windows
 ```bash
 > .venv\Scripts\activate
 ```
+
+## Other Necessary Packages
+
+* [Waitress Documentation](https://pypi.org/project/waitress)
+```bash
+$ pip install waitress
+```
+* [Pillow Documentation](https://pypi.org/project/pillow/)
+```bash
+$ pip install pillow
+```
+* [sqlite3 Documentation](https://docs.python.org/3/library/sqlite3.html)
+```bash
+$ pip install sqlite3
+```
+
+
 
 ## Running the flask project: 
 * Run the server.py file and enter whatever local host number you want
