@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .file-item {
+            border-bottom: 1px solid #eaecef;
+            padding: 12px 0;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-item:hover {
+            background-color: #e7e9ed;
+        }
+        /* New Styling Starts Here */
+        .file-icon {
+            float: left;
+            margin-right: 10px;
+            color: #9b59b6;
+        }
+        .file-name {
+            font-size: 16px;
+            color: #34495e;
+            line-height: 24px;
+        }
+        .clear {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Pinned Files</h2>
+    <div id="filesList">
+        <!-- Pinned files will be listed here -->
+    </div>
+</div>
+
+<script>
+    const pinnedFiles = [
+        "Project Proposal.docx",
+        "Budget.xlsx",
+        "Presentation.pptx",
+        "Notes.txt",
+        "MeetingSummary.pdf"
+    ];
+
+    function displayPinnedFiles() {
+        const listElement = document.getElementById("filesList");
+        pinnedFiles.forEach(file => {
+            const fileElement = document.createElement("div");
+            fileElement.classList.add("file-item");
+            
+            // Adding file icon span (simulated)
+            const iconSpan = document.createElement("span");
+            iconSpan.classList.add("file-icon");
+            iconSpan.innerHTML = "&#128196;"; // Generic document icon
+            
+            const nameSpan = document.createElement("span");
+            nameSpan.classList.add("file-name");
+            nameSpan.textContent = file;
+
+            fileElement.appendChild(iconSpan);
+            fileElement.appendChild(nameSpan);
+            listElement.appendChild(fileElement);
+
+            const clearDiv = document.createElement("div");
+            clearDiv.classList.add("clear");
+            fileElement.appendChild(clearDiv);
+        });
+    }
+
+    window.onload = displayPinnedFiles;
+</script>
+
+</body>
+</html>
