@@ -4,9 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Sharing Web Application</title>
-    <link href="{{ url_for('static', filename='styles/style.css')}} " rel="stylesheet" />
+    <link href="{{ url_for('static', filename='styles/mainpage.css')}} " rel="stylesheet" />
 </head>
 <body>
-    <h1>Welcome to the Notes App main page!</h1>
+    <div class="main">
+        <div class = "navbar">
+            <div class = "icon">
+                <h2 class="logo">Notes App</h2>
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li><a href='#'>Upload</a></li>
+                    <li><a href='#'>Favorites</a></li>
+                </ul>
+            </div>
+
+            <div class="search">
+                <input class="srch" type="search" name="" placeholder="Search">
+                <a href="#"> <button class="btn">Search</button></a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
