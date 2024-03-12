@@ -20,6 +20,7 @@ def set_up():
 def login():
     get_name = request.form['username'] 
     get_password = request.form['password']
+
     connection = sqlite3.connect("databases/user.db")
     cursor =  connection.cursor()
     cursor.execute("SELECT username, password FROM user where (username = ? and password = ?)",(get_name.strip(), get_password.strip()))
