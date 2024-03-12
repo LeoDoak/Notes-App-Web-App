@@ -1,18 +1,18 @@
-class groups: 
+class Groups: 
 # A class representing Groups created by user
     group_id: int
     group_name: str
     isPrivate: bool
-    def __init__(self, id: int, group_name: str, isPrivate: bool):
-        self.group_id = id
+    def __init__(self, group_id: int, group_name: str, is_private: bool):
+        self.group_id = group_id
         self.group_name: group_name
-        self.isPrivate: isPrivate
+        self.is_private: is_private
 
 
 SAMPLE_GROUP = [
-    groups(12,'Mat 111', True),
-    groups(46,'Oceanography', False),
-    groups(20,'Programming Test', False),
-    groups(9,'Group 11 files', True),
-    groups(7,'Computer Graphics', False),
+    Groups(12,'Mat 111', True),
+    Groups(46,'Oceanography', False),
+    Groups(20,'Programming Test', False),
+    Groups(9,'Group 11 files', True),
+    Groups(7,'Computer Graphics', False),
 ]
