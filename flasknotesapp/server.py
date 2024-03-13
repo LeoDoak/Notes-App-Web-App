@@ -40,6 +40,18 @@ def register():
 def forgot_password():
     return render_template("forgot_pswd.html")
 
+@app.route('/upload')
+def upload_page(): 
+    return render_template("upload.html")
+
+@app.route('/group')
+def group_page():
+    return render_template("groups.html")
+
+@app.route('/favorite')
+def favorite_page():
+    return render_template("homepage.html")
+
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
 login()
