@@ -50,7 +50,7 @@ def group_page():
 
 @app.route('/favorite')
 def favorite_page():
-    return render_template("homepage.html")
+    return render_template("favorite.html")
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
