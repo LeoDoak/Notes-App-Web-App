@@ -11,12 +11,28 @@
     height: 109vh;
 }
 
-.menu{
-    float: left;
-    margin-left: 300px;
-
+.navbar {
+    width: 1350px;
+    height: 75px;
+    margin: auto;
 }
 
+.icon {
+    width: 200px;
+    float: left;
+    height: 70px;
+}
+
+.logo {
+    color: red;
+    font-size: 35px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    float: left;
+    padding-top: 10px;
+    margin-bottom: 40px;
+    
+}
 
 ul {
     float: left;
