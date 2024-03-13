@@ -3,7 +3,7 @@
     padding: 0;
 }
 
-.main{
+.main {
     width: 100%;
     background: linear-gradient(to left, #041113, #001115); 
     background-position: center;
@@ -11,67 +11,69 @@
     height: 109vh;
 }
 
-.navbar{
+.navbar {
     width: 1350px;
     height: 75px;
     margin: auto;
 }
 
-.icon{
+.icon {
     width: 200px;
     float: left;
     height: 70px;
 }
 
-.logo{
-    color:#00c8ff;
+.logo {
+    color: red;
     font-size: 35px;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
     float: left;
     padding-top: 10px;
+    margin-bottom: 40px;
+    
 }
 
-ul{
+ul {
     float: left;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-ul li{
+ul li {
     list-style: none;
     margin-left: 62px;
     margin-top: 27px;
     font-size: 14px;
 }
 
-ul li a{
+ul li a {
     text-decoration: none;
-    color:white;
+    color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     transition: 0.4s ease-in-out;
 }
 
-ul li a:hover{
+ul li a:hover {
     color: #00c8ff;
 }
 
-.search{
+.search {
     width: 330px;
     float: left;
     margin-left: 270px;
 }
 
-.srch{
+.srch {
     font-family: 'Times New Roman';
     width: 200px;
     height: 40px;
     background: transparent;
     border: 1px #00c8ff;
     margin-top: 13px;
-    color:aliceblue;
+    color: aliceblue;
     border-right: none;
     font-size: 16px;
     float: left;
@@ -80,7 +82,7 @@ ul li a:hover{
     border-top-left-radius: 5px;
 }
 
-.btn{
+.btn {
     width: 100px;
     height: 40px;
     background: #00c8ff;
@@ -92,10 +94,30 @@ ul li a:hover{
     border-bottom-left-radius: 5px;
 }
 
-.btn:focus{
+.btn:focus {
     outline: none;
 }
 
-.srch:focus{
+.srch:focus {
     outline: none;
+}
+/* Additional styles for the sidebar */
+.sidebar {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: cornflowerblue;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar a {
+    display: block;
+    margin-bottom: 10px;
+    color: white;
+    text-decoration: none;
 }

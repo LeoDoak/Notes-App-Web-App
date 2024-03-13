@@ -1,18 +1,25 @@
-<!-- used this tutorial: https://www.youtube.com/watch?v=CQZxeoQeo5c&t=305s -->
-<!-- profile dropdown tutorial for later: https://www.youtube.com/watch?v=ybXulmeilFM -->
-<!-- also have to link pages -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Sharing Web Application</title>
-    <link href="{{ url_for('static', filename='styles/mainpage.css')}} " rel="stylesheet" />
+    <link href="{{ url_for('static', filename='styles/mainpage.css')}}" rel="stylesheet" />
+    
 </head>
 <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 style="color: white;">Notes App</h2>
+        <a href="#">Dashboard</a>
+        <a href="#">Groups</a>
+        <a href="#">Create Groups</a>
+    </div>
+
+    <!-- Main content -->
     <div class="main">
-        <div class = "navbar">
-            <div class = "icon">
+        <div class="navbar">
+            <div class="icon">
                 <h2 class="logo">Notes App</h2>
             </div>
 
@@ -25,7 +32,7 @@
 
             <div class="search">
                 <input class="srch" type="search" name="" placeholder="Search">
-                <a href="#"> <button class="btn">Search</button></a>
+                <a href="#"><button class="btn">Search</button></a>
             </div>
         </div>
     </div>
