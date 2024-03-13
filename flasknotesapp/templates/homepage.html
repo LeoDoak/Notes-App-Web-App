@@ -12,21 +12,22 @@
     <div class="sidebar">
         <h2 style="color: white;">Notes App</h2>
         <a href="#">Dashboard</a>
-        <a href="#">Groups</a>
+        <p> <a href="{{ url_for('group_page') }}">Groups</a></p>
         <a href="#">Create Groups</a>
     </div>
 
     <!-- Main content -->
+    <!-- https://www.w3schools.com/tags/tag_ul.asp --> 
     <div class="main">
         <div class="navbar">
             <div class="icon">
-                <h2 class="logo">Notes App</h2>
+                <h2 class="logo"></h2>
             </div>
 
             <div class="menu">
                 <ul>
-                    <li><a href='#'>Upload</a></li>
-                    <li><a href='#'>Favorites</a></li>
+                    <li class = 'upload'><a href="{{ url_for('upload_page') }}">Upload</a></li>
+                    <li class = 'favorite' ><a href="{{ url_for('favorite_page') }}">Favorites</a></li>
                 </ul>
             </div>
 
