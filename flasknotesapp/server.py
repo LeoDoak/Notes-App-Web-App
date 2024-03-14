@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request
 from waitress import serve
-from objects.user import User,SAMPLE_USERS
 import sqlite3
+import sys 
+sys.path.append("databases")
+import user_database
+
 
 
 # Used this tutorial to figure out login screen 
@@ -12,6 +15,9 @@ import sqlite3
 
 app = Flask(__name__)
 
+def checkdatabase():
+    user_database.create_database() #call the function that creates the database
+
 @app.route('/')
 def set_up(): 
     return render_template('loginpage.html')
@@ -20,8 +26,7 @@ def set_up():
 def login():
     get_name = request.form['username'] 
     get_password = request.form['password']
-
-    connection = sqlite3.connect("databases/user.db")
+    connection = sqlite3.connect("user.db")
     cursor =  connection.cursor()
     cursor.execute("SELECT username, password FROM user where (username = ? and password = ?)",(get_name.strip(), get_password.strip()))
     row = cursor.fetchall()
@@ -54,4 +59,5 @@ def favorite_page():
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
+checkdatabase()
 login()
