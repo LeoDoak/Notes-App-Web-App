@@ -7,7 +7,8 @@ nobody should have to run this since the database should be created and stored w
 
 import sqlite3
 
-def create_database(connection): 
+def create_database(): 
+	connection = sqlite3.connect("user.db")
 	#check to see if database is created 
 	print(connection.total_changes)
 	cursor =  connection.cursor()
@@ -25,26 +26,6 @@ def create_database(connection):
 	cursor.execute("SELECT * FROM user")
 	rows = cursor.fetchall()
 	print(rows)
+	connection.close()
 
-# checklogin only a test function, the function call is 
-def checklogin(connection): 
-	cursor =  connection.cursor()
-	usname = 'admin'
-	pswd = '1234'
-	cursor.execute("SELECT username, password FROM user where user_id = user_id")
-	row = cursor.fetchall()
-	print(row)
-	if row[0][0] == usname and row[0][1] == pswd: 
-		return True
-	else: 
-		return False 
-
-def main(): 
-	connection = sqlite3.connect("user.db")
-	create_database(connection)
-	#print(checklogin(connection))
-	connection.close() 
-		
-if __name__ == "__main__":
-    main()
 
