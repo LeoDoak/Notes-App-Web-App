@@ -55,7 +55,10 @@ $ pip install pillow
 ```bash
 $ pip install sqlite3
 ```
-
+* [numpy Documentation](https://numpy.org/doc/)
+```bash
+$ pip install numpy 
+```
 
 
 ## Running the flask project: 
