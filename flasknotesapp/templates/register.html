@@ -15,33 +15,36 @@
         <div class="headingsContainer">
             <h3>&emsp;Create Account</h3>
             <p>&emsp;Create Account with email, username, and password</p>
+            <ul>
+              <li>Passwords must be 9 character long and include a number and a special character</li>
+            </ul>
         </div>
 
         <!-- Main container for all inputs -->
         <div class="mainContainer">
 
             <!-- First Name -->
-            <label for="fname">First Name {{fname_error}}</label>
+            <label for="fname">First Name <span class = 'error_msg'> {{fname_error}} </span> </label>
             <input type="text" placeholder="Enter First Name" name="fname" required>
 
             <!-- Last Name  -->
-            <label for="lname">Last Name {{lname_error}}</label>
+            <label for="lname">Last Name <span class = 'error_msg'>{{lname_error}}</span> </label>
             <input type="text" placeholder="Enter Last Name" name="lname" required>
 
             <!-- email -->
-            <label for="email">Valid E-mail {{email_error}}</label>
+            <label for="email">Valid E-mail <span class = 'error_msg'>{{email_error}}</span></label>
             <input type="text" placeholder="Enter email" name="email" required>
 
             <!-- Username -->
-            <label for="username">Your username {{username_error}}</label>
+            <label for="username">Your username <span class = 'error_msg'>{{username_error}}</span></label>
             <input type="text" placeholder="Enter Username" name="username" required>
 
             <!-- Password -->
-            <label for="password">Your password {{password_error}}</label>
+            <label for="password">Your password <span class = 'error_msg'>{{password_error}}</span></label>
             <input type="password" placeholder="Enter Password" name="password" required>
 
             <!-- Password -->
-            <label for="confirmpassword"> Confirm password {{confirm_password_error}}</label>
+            <label for="confirmpassword"> Confirm password <span class = 'error_msg'>{{confirm_password_error}}</span></label>
             <input type="password" placeholder="Enter Password" name="confirmpassword" required>
 
             <!-- Submit button -->
@@ -51,7 +54,7 @@
             <p class="login"><a href="{{url_for('set_up')}}">Back to login page</a></p>
 
             <!-- Error Message --> 
-            <p><center><u><font size="5">{{msg}}</font></u></center></p>
+            <p><span class = 'main_error_msg'>{{msg}}</span></p>
 
         </div>
     </form>

@@ -11,6 +11,19 @@ h1{
     text-align: center;
 }
 
+/* https://sentry.io/answers/how-do-i-add-a-tab-space-instead-of-multiple-non-breaking-spaces/ */ 
+
+.error_msg {
+    display: inline-block;
+    margin-left: 6em;
+    color: red;
+}
+
+.main_error_msg {
+    display: inline-block;
+    text-align: center;
+    color: red;
+}
 
 form{
     width:35rem;
