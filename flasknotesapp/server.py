@@ -192,6 +192,10 @@ def group_page():
 def favorite_page():
     return render_template("favorite.html")
 
+@app.route('/logout')
+def logoutpage_page():
+    return render_template("logoutpage.html")
+
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
     checkdatabase()
