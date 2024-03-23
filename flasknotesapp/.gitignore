@@ -3,3 +3,4 @@ __pycache__
 .env
 .DS_Store
 .idea
+.ms_graph_api_token.json
