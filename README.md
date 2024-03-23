@@ -59,6 +59,10 @@ $ pip install sqlite3
 ```bash
 $ pip install numpy 
 ```
+* [Flask-login](https://flask-login.readthedocs.io/en/latest/)
+```bash
+$ pip install flask-login
+```
 
 
 ## Running the flask project: 

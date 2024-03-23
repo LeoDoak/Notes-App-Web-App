@@ -6,6 +6,7 @@ import sys
 sys.path.append("databases")
 import user_database
 import numpy as np 
+from flask_login import LoginManager
 
 
 # Used this tutorial to figure out login screen 
