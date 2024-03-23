@@ -4,12 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Private Group</title>
+    <style>
+        .section {
+            margin-block-end: 20px;
+        }
+        .section label {
+            display: block;
+            margin-block-end: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Create a Private Group</h1>
     <form action="/create_group" method="post">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+        <div class="section">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+
+        <div class="section">
+            <label for="members">Add Members (one per line):</label>
+            <textarea id="members" name="members" placeholder="member1@example.com&#10;member2@example.com" rows="4"></textarea>
+        </div>
+
         <button type="submit">Create Group</button>
     </form>
 </body>
