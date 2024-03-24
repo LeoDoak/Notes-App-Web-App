@@ -1,8 +1,14 @@
+import os
+import requests
+import sys
+#pip install iPython
+from IPython.display import display, HTML
+sys.path.append("objects")
+from onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from flask import Flask, render_template, request
 from waitress import serve
 import sqlite3
 import re
-import sys 
 sys.path.append("databases")
 import user_database
 import numpy as np 
@@ -194,7 +200,18 @@ def favorite_page():
 
 @app.route('/logout')
 def logoutpage_page():
+    os.remove("ms_graph_api_token.json")
     return render_template("logoutpage.html")
+
+@app.route('/onedrive')
+def onedrive():
+    APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
+    SCOPES = ['Files.ReadWrite']
+    access_token = generate_access_token(APP_ID, SCOPES)
+    headers = {
+        'Authorization': 'Bearer ' + access_token['access_token']
+    }
+    return render_template("homepage.html")
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
