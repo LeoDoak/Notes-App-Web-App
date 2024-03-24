@@ -9,6 +9,7 @@
     background-position: center;
     background-size: cover;
     height: 109vh;
+    
 }
 
 .navbar {
@@ -122,3 +123,64 @@ ul li a:hover {
     color: white;
     text-decoration: none;
 }
+
+
+
+.file-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 20px;
+    width: 100%; 
+    max-width: 960px; 
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0 auto; 
+}
+
+.file-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.file-list li {
+    background: #FFF; 
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    height: 150px; 
+    position: relative;
+}
+
+
+.file-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+.file-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.file-name {
+    flex-grow: 1; /* Ensures the file name uses the available space, pushing the star to the right */
+}
+.star {
+    cursor: pointer;
+    font-size: 24px; /* Larger star */
+    color: #ddd; /* Default star color */
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+.star.active {
+    color: gold; /* Active star color */
+}
+

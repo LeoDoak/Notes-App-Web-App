@@ -39,6 +39,67 @@
                 <a href="#"><button class="btn">Search</button></a>
             </div>
         </div>
+        <div class="file-list">
+            <ul>
+                <li class="file-entry">
+                    <span class="file-name">note1.pdf</span>
+                    <span class="star" onclick="toggleStar(this)" data-filename="note1.pdf">&#9733;</span>
+                </li>
+                <li class="file-entry">
+                    <span class="file-name">assignment2.docx</span>
+                    <span class="star" onclick="toggleStar(this)" data-filename="assignment2.docx">&#9733;</span>
+                </li>
+                <li class="file-entry">
+                    <span class="file-name">lecture3.pptx</span>
+                    <span class="star" onclick="toggleStar(this)" data-filename="lecture3.pptx">&#9733;</span>
+                </li>
+            </ul>
+        </div>
     </div>
-</body>
-</html>
+</head>
+<body>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            document.querySelectorAll('.star').forEach(star => {
+                const filename = star.dataset.filename;
+                if (favorites.includes(filename)) {
+                    star.classList.add('active');
+                }
+            });
+        });
+        
+        function toggleStar(starElement) {
+            const filename = starElement.getAttribute('data-filename');
+            starElement.classList.toggle('active');
+            const isActive = starElement.classList.contains('active');
+        
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            if (isActive && !favorites.includes(filename)) {
+                favorites.push(filename);
+            } else {
+                favorites = favorites.filter(f => f !== filename);
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+        
+        
+        function addToFavorites(filename) {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            if (!favorites.includes(filename)) {
+                favorites.push(filename);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+            }
+        }
+        
+        function removeFromFavorites(filename) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const index = favorites.indexOf(filename);
+            if (index !== -1) {
+                favorites.splice(index, 1);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+            }
+        }
+        </script>
+        
