@@ -217,3 +217,29 @@ if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
     checkdatabase()
     login()
+
+# Check if the group name is a duplicate in the database
+def check_for_duplicate_group(group_name):
+    connection = sqlite3.connect("group.db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT group_name FROM groups WHERE group_name = ?", (group_name,))
+    existing_group = cursor.fetchone()
+    connection.close()
+    return existing_group is not None
+
+@app.route('/form_create_group', methods=['POST'])
+def create_group():
+    # Get form data
+    group_name = request.form['group_name']
+
+    # Check for duplicate group name
+    if check_for_duplicate_group(group_name):
+        error_message = "Create the group with a different name"
+        return render_template("create_group.html", error_message=error_message)
+    else:
+        # If group name is unique, continue with group creation logic
+        # Your group creation logic here
+        return "Group successfully created"
+
+if __name__ == "__main__":
+    app.run(debug=True)

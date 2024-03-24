@@ -1,0 +1,56 @@
+
+    body {
+        background-color: black;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    .header {
+        text-align: center;
+        padding: 10px;
+    }
+
+    h1 {
+        color: cornflowerblue;
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .logo {
+        color: skyblue;
+        text-align: left;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .section {
+        margin-bottom: 20px;
+    }
+
+    .section label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 5px;
+        margin-top: 5px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: cornflowerblue;
+        color: white;
+        border: none;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+    }
+
+    button:hover {
+        background-color: darkblue;
+    }
+
