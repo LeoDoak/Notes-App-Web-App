@@ -16,6 +16,7 @@ import numpy as np
 from flask_login import LoginManager
 from flask_login import login_required
 from flask_login import login_user
+from flask_login import logout_user
 sys.path.append("objects")
 from user import User
 
@@ -45,7 +46,7 @@ def load_user(user_id):
     userdata = cursor.fetchall()
     connection.close()
     if len(userdata) == 0: 
-        return none
+        return None
     else:
         #print("user data")
         print(userdata)
@@ -256,6 +257,7 @@ def logoutpage_page():
         os.remove("ms_graph_api_token.json")
     else:
         pass
+    logout_user()
     return render_template("logoutpage.html")
 
 @app.route('/onedrive')
