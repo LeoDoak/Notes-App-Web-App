@@ -1,3 +1,4 @@
+import flask 
 from flask import Flask, render_template, request
 from waitress import serve
 import sqlite3
@@ -7,6 +8,12 @@ sys.path.append("databases")
 import user_database
 import numpy as np 
 from flask_login import LoginManager
+from flask_login import login_required
+from flask_login import login_user
+sys.path.append("objects")
+from user import User
+
+
 
 
 # Used this tutorial to figure out login screen 
@@ -14,11 +21,35 @@ from flask_login import LoginManager
 
 #used this for the sql request for placeholders, https://medium.com/@miguel.amezola/protecting-your-code-from-sql-injection-attacks-when-using-raw-sql-in-python-916466961c97
 
+login_manager = LoginManager()
 
 app = Flask(__name__)
 
+login_manager.init_app(app)
+
+app.secret_key = '967b75c111e64965848a7786bda9602f9d208f991036ccc4f793a4199a9f74b4'
+
 def checkdatabase():
     user_database.create_database() #call the function that creates the database
+
+@login_manager.user_loader
+def load_user(user_id):
+    connection = sqlite3.connect("user.db")
+    cursor =  connection.cursor()
+    cursor.execute('SELECT * from user where user_id = ?', (user_id,))
+    userdata = cursor.fetchall()
+    connection.close()
+    if len(userdata) == 0: 
+        return none
+    else:
+        #print("user data")
+        print(userdata)
+        user_id = userdata[0][0]
+        username = userdata[0][1]
+        password = userdata[0][2]
+        email = userdata[0][3]
+        return User(user_id, username, password, email)
+
 
 @app.route('/')
 def set_up(): 
@@ -30,10 +61,18 @@ def login():
     get_password = request.form['password']
     connection = sqlite3.connect("user.db")
     cursor =  connection.cursor()
-    cursor.execute("SELECT username, password FROM user where (username = ? and password = ?)",(get_name.strip(), get_password.strip()))
+    cursor.execute("SELECT user_id, username, password, email  FROM user where (username = ? and password = ?)",(get_name.strip(), get_password.strip()))
     row = cursor.fetchall()
+    print(row)
     connection.close()
     if len(row) == 1: 
+        flask.flash('Logged in successfully.')
+        next = flask.request.args.get('next')
+        #if not url_has_allowed_host_and_scheme(next, request.host):
+        #    return flask.abort(400)
+
+        user = User(row[0][0],row[0][1],row[0][2],row[0][3])
+        login_user(user)
         return render_template('homepage.html') 
     else:
         error_message = "Incorrect Username or Password!"
@@ -127,12 +166,14 @@ def register_actions():
             else: 
                 pass
 
-    if criteria_number < password_num_count: 
+    if password_num_count < criteria_number : 
         password_message = 'Password does not meet criteria' 
+        error_count += 1 
     else: 
         pass
-    if criteria_special < password_special_count:
-        password_message = 'Password does not meet criteria' 
+    if password_special_count < criteria_special :
+        password_message = 'Password does not meet criteria'
+        error_count += 1 
     else: 
         pass 
 
@@ -140,7 +181,7 @@ def register_actions():
     if get_password != get_confirmpassword:
         confirm_password_message = 'Passwords do not match'
 
-    print("ERROR COUNT", error_count)
+    #print("ERROR COUNT", error_count)
 
     # Check if email is associated with account already, if so send them to login / forgot password 
 
@@ -172,6 +213,7 @@ def register_actions():
             cursor.execute("INSERT INTO user VALUES (?,? ,? ,?)",(get_user_id,get_name, get_password, get_email,))
             connection.commit()
             connection.close()
+            flask.flash('Logged in successfully.')
             return render_template('homepage.html')
     else: 
         return render_template('register.html',fname_error = fname_message, lname_error = lname_message, email_error = email_message, username_error = username_message,password_error = password_message, confirm_password_error = confirm_password_message)
@@ -182,16 +224,30 @@ def forgot_password():
     return render_template("forgot_pswd.html")
 
 @app.route('/upload')
+@login_required
 def upload_page(): 
     return render_template("upload.html")
 
 @app.route('/group')
+@login_required
 def group_page():
     return render_template("groups.html")
 
 @app.route('/favorite')
+@login_required
 def favorite_page():
     return render_template("favorite.html")
+
+@app.route('/logout')
+@login_required
+def logoutpage_page():
+    logout_user()
+    return render_template("logoutpage.html")
+
+@app.route('/settings')
+@login_required
+def setting():
+    pass
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
