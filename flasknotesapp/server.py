@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 import flask 
-=======
 import os
 import requests
 import sys
@@ -8,7 +6,6 @@ import sys
 from IPython.display import display, HTML
 sys.path.append("objects")
 from onedrive import generate_access_token, GRAPH_API_ENDPOINT
->>>>>>> main
 from flask import Flask, render_template, request
 from waitress import serve
 import sqlite3
@@ -21,6 +18,7 @@ from flask_login import login_required
 from flask_login import login_user
 sys.path.append("objects")
 from user import User
+
 
 
 
