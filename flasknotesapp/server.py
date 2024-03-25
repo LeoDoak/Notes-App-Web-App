@@ -6,10 +6,9 @@ import sys
 from IPython.display import display, HTML
 sys.path.append("objects")
 from onedrive import generate_access_token, GRAPH_API_ENDPOINT
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from waitress import serve
 import sqlite3
-import re
 sys.path.append("databases")
 import user_database
 import numpy as np 
@@ -27,6 +26,7 @@ from user import User
 
 #used this for the sql request for placeholders, https://medium.com/@miguel.amezola/protecting-your-code-from-sql-injection-attacks-when-using-raw-sql-in-python-916466961c97
 
+
 login_manager = LoginManager()
 
 app = Flask(__name__)
@@ -34,6 +34,7 @@ app = Flask(__name__)
 login_manager.init_app(app)
 
 app.secret_key = '967b75c111e64965848a7786bda9602f9d208f991036ccc4f793a4199a9f74b4'
+
 
 def checkdatabase():
     user_database.create_database() #call the function that creates the database
@@ -220,6 +221,7 @@ def register_actions():
             connection.commit()
             connection.close()
             flask.flash('Logged in successfully.')
+            User_logged_in = True
             return render_template('homepage.html')
     else: 
         return render_template('register.html',fname_error = fname_message, lname_error = lname_message, email_error = email_message, username_error = username_message,password_error = password_message, confirm_password_error = confirm_password_message)
@@ -250,15 +252,17 @@ def favorite_page():
 def setting():
     pass
 
+
 @app.route('/logout')
 @login_required
 def logoutpage_page():
     if os.path.exists("ms_graph_api_token.json"):
         os.remove("ms_graph_api_token.json")
     else:
-        pass
+        pass   
     logout_user()
     return render_template("logoutpage.html")
+
 
 @app.route('/onedrive')
 def onedrive():
