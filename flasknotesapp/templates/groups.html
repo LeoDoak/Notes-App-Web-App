@@ -4,13 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Private Group</title>
+    <link href="{{ url_for('static', filename='styles/groups.css')}}" rel="stylesheet" />
 </head>
 <body>
-    <h1>Create a Private Group</h1>
-    <form action="/create_group" method="post">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+    <div class="header">
+        <h1>Notes App</h1>
+        <div class="logo"> Create a Private Group</div>
+    </div>
+    
+    <form id="groupForm" action="/create_group" method="post">
+        <div class="section">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        
+        <div class="section">
+            <label for="members">Add Members (one per line):</label>
+            <textarea id="members" name="members" placeholder="member1@example.com&#10;member2@example.com" rows="4"></textarea>
+        </div>
+        
         <button type="submit">Create Group</button>
     </form>
+</body>
+    
+    <script>
+        // Dummy database to store group names
+        const groupDatabase = ['CSC450', 'CSC344', 'STT215']; // Example groups
+
+        document.getElementById('groupForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting in the traditional way
+
+            const groupTitle = document.getElementById('title').value;
+
+            // Check if the group title already exists in the dummy database (Simulated database check)
+            const isDuplicateGroup = groupDatabase.includes(groupTitle);
+
+            if (isDuplicateGroup) {
+                alert("Create the group with a different name");
+            } else {
+                try {
+                    // Simulated failure for OneDrive connection (Replace with actual API call handling)
+                    throw new Error("Failed to connect to OneDrive");
+
+                    // Alert on group successfully created
+                    // alert("Group successfully created!");
+                } catch (error) {
+                    // OneDrive connection error message
+                    alert("Cannot connect to OneDrive, please refresh and try again");
+                }
+            }
+        });
+    </script>
 </body>
 </html>

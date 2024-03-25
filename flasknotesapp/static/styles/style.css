@@ -21,3 +21,16 @@ input, button {
     padding: 1rem;
     border-radius: 10px;
 }
+
+.file-item {
+    /* Example styles; adjust as needed */
+    padding: 10px;
+    margin: 10px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+}
+
+
+
+
+
