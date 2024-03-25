@@ -21,8 +21,6 @@ from user import User
 
 
 
-
-
 # Used this tutorial to figure out login screen 
 #https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
 
@@ -246,7 +244,6 @@ def favorite_page():
     return render_template("favorite.html")
 
 
-
 @app.route('/settings')
 @login_required
 def setting():
@@ -255,7 +252,10 @@ def setting():
 @app.route('/logout')
 @login_required
 def logoutpage_page():
-    os.remove("ms_graph_api_token.json")
+    if os.path.exists("ms_graph_api_token.json"):
+        os.remove("ms_graph_api_token.json")
+    else:
+        pass
     return render_template("logoutpage.html")
 
 @app.route('/onedrive')
