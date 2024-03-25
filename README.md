@@ -71,6 +71,10 @@ $ pip install msal
 ```bash
 $ pip install requests
 ```
+* [ipython Documentation](https://ipython.org/)
+```bash
+$ pip install ipython
+```
 
 
 ## Running the flask project: 
