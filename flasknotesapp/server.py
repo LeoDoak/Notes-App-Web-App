@@ -247,13 +247,12 @@ def group_page():
 def favorite_page():
     return render_template("favorite.html")
 
-<<<<<<< HEAD
+
 
 @app.route('/settings')
 @login_required
 def setting():
     pass
-=======
 
 @app.route('/logout')
 @login_required
@@ -270,7 +269,6 @@ def onedrive():
         'Authorization': 'Bearer ' + access_token['access_token']
     }
     return render_template("homepage.html")
->>>>>>> main
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
