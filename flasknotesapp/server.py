@@ -2,6 +2,7 @@ import flask
 import os
 import requests
 import sys
+import re
 #pip install iPython
 from IPython.display import display, HTML
 sys.path.append("objects")
