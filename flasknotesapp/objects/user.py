@@ -8,6 +8,7 @@ class User:
     profile_picture: Image
     priv_groups: list
     public_groups: list
+    access_token = ""
 
     def __init__(self, user_id: str, username: str, password: str, email: str):
         self.user_id = user_id
@@ -27,7 +28,11 @@ class User:
         else:
             return False
 
+    def set_access_token(self, ac):
+        self.access_token = ac
 
+    def get_access_token(self):
+        return self.access_token
 
     # sample list
 SAMPLE_USERS = [
