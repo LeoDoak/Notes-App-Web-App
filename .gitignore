@@ -5,6 +5,7 @@
 __pycache__
 .vscode
 ms_graph_api_token.json
+static/files/mcd.png
 # User Database
 
 user.db
