@@ -43,27 +43,14 @@ app.secret_key = '967b75c111e64965848a7786bda9602f9d208f991036ccc4f793a4199a9f74
 
 access_token = ""
 
+current_user = User(None, None, None, None) # create user instance
+
 def checkdatabase():
     user_database.create_database() #call the function that creates the database
 
 @login_manager.user_loader
 def load_user(user_id):
-    connection = sqlite3.connect("user.db")
-    cursor =  connection.cursor()
-    cursor.execute('SELECT * from user where user_id = ?', (user_id,))
-    userdata = cursor.fetchall()
-    connection.close()
-    if len(userdata) == 0: 
-        return None
-    else:
-        #print("user data")
-        print(userdata)
-        user_id = userdata[0][0]
-        username = userdata[0][1]
-        password = userdata[0][2]
-        email = userdata[0][3]
-        return User(user_id, username, password, email)
-
+    return current_user
 
 @app.route('/')
 def set_up(): 
@@ -73,25 +60,16 @@ def set_up():
 def login():
     get_name = request.form['username'] 
     get_password = request.form['password']
-    connection = sqlite3.connect("user.db")
-    cursor =  connection.cursor()
-    cursor.execute("SELECT user_id, username, password, email  FROM user where (username = ? and password = ?)",(get_name.strip(), get_password.strip()))
-    row = cursor.fetchall()
-    print(row)
-    connection.close()
-    if len(row) == 1: 
+    if current_user.check_login(get_name, get_password):
         flask.flash('Logged in successfully.')
         next = flask.request.args.get('next')
-        #if not url_has_allowed_host_and_scheme(next, request.host):
-        #    return flask.abort(400)
-
-        user = User(row[0][0],row[0][1],row[0][2],row[0][3])
-        login_user(user)
+        print(current_user.toString())
+        login_user(current_user)
         return render_template('homepage.html') 
     else:
         error_message = "Incorrect Username or Password!"
-        return render_template("loginpage.html", msg = error_message) 
-
+        return render_template("loginpage.html", msg = error_message)
+        
 @app.route('/register')
 def register(): 
     return render_template("register.html")
