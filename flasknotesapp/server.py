@@ -3,6 +3,7 @@ import flask
 import os
 import requests
 import sys
+import re
 #pip install iPython
 from IPython.display import display, HTML
 sys.path.append("objects")
@@ -17,6 +18,9 @@ from flask_login import LoginManager
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from flask_wtf  import FlaskForm
+from wtforms import FileField, SubmitField
+from werkzeug.utils import secure_filename
 sys.path.append("objects")
 from user import User
 
@@ -31,11 +35,14 @@ from user import User
 login_manager = LoginManager()
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secretkey'
+app.config['UPLOAD_FOLDER'] = 'static\\files'
 
 login_manager.init_app(app)
 
 app.secret_key = '967b75c111e64965848a7786bda9602f9d208f991036ccc4f793a4199a9f74b4'
 
+access_token = ""
 
 def checkdatabase():
     user_database.create_database() #call the function that creates the database
@@ -232,10 +239,19 @@ def register_actions():
 def forgot_password():
     return render_template("forgot_pswd.html")
 
-@app.route('/upload')
+class UploadFileForm(FlaskForm):
+    file = FileField("File")
+    submit = SubmitField("Upload File")
+
+@app.route('/upload', methods =['GET', "POST"])
 @login_required
 def upload_page(): 
-    return render_template("upload.html")
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        file = form.file.data
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+        return render_template("homepage.html")
+    return render_template("upload.html", form=form)
 
 @app.route('/group')
 @login_required

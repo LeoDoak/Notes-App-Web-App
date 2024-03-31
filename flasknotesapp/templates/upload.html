@@ -4,9 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Sharing Web Application</title>
-    <link href="{{ url_for('static', filename='styles/style.css')}} " rel="stylesheet" />
+    <link href="{{ url_for('static', filename='styles/mainpage.css')}}" rel="stylesheet" />
+    
 </head>
 <body>
-    <h1>Upload Placeholder</h1>
+    <form method='POST' enctype='multipart/form-data'>
+        {{form.hidden_tag()}}
+        {{form.file()}}
+        {{form.submit()}}
+    </form>
+    <!-- Sidebar 
+    <div class="sidebar">
+        <h2 style="color: white;">Notes App</h2>
+        <a href="#">Dashboard</a>
+        <a href="#">Groups</a>
+        <p> <a href="{{ url_for('group_page') }}">Create Groups</a></p>
+        
+    </div>
+
+    <!-- Main content 
+    <!-- https://www.w3schools.com/tags/tag_ul.asp 
+    <div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <h2 class="logo"></h2>
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li class = 'upload'><a href="{{ url_for('upload_page') }}">Upload</a></li>
+                    <li class = 'favorite' ><a href="{{ url_for('favorite_page') }}">Favorites</a></li>
+                    <li class = 'logout'><a href="{{ url_for('logoutpage_page') }}">Log Out</a></li>
+                    <li class = 'Authenticate'><a href="{{ url_for('onedrive') }}">Authenticate</a></li>
+                </ul>
+            </div>
+
+            <div class="search">
+                <input class="srch" type="search" name="" placeholder="Search">
+                <a href="#"><button class="btn">Search</button></a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
+-->
