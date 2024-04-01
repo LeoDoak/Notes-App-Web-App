@@ -172,23 +172,21 @@ ul li a:hover {
     border-radius: 5px;
 }
 .file-name {
-    flex-grow: 1; /* Ensures the file name uses the available space, pushing the star to the right */
+    flex-grow: 1; 
 }
 .star {
     cursor: pointer;
-    font-size: 24px; /* Larger star */
-    color: #ddd; /* Default star color */
-    transition: color 0.3s; /* Smooth transition for color change */
+    font-size: 24px; 
+    color: #ddd; 
+    transition: color 0.3s; 
 }
 .star.active {
-    color: gold; /* Active star color */
+    color: gold; 
 }
-/* Your existing CSS styles */
 
 #groupsListItems {
     display: flex;
     flex-wrap: wrap;
-    /* Ensure the groups are displayed line by line */
 }
 
 #groupsListItems li {
@@ -200,6 +198,25 @@ ul li a:hover {
     display: flex; /* Enable flexbox for centering */
     justify-content: center; /* Center the content horizontally */
     align-items: left; /* Center the content vertically */
+}
+
+.font-size-controls {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+body, .sidebar, .navbar a, .nav-link, .nav-button, .main, .search, .file-list, .file-entry, .btn, .srch {
+    font-size: 1rem; 
+}
+
+#upload-button, #favorites-button, #logout-button, #authenticate-button {
+    font-size: 1rem !important; 
+}
+
+.btn, .srch {
+    font-size: inherit;
+    padding: 0.5rem; 
 }
 
 

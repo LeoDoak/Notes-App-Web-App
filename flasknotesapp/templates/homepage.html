@@ -27,6 +27,10 @@
             <div class="icon">
                 <h2 class="logo"></h2>
             </div>
+            <div class="font-size-controls">
+                <button onclick="changeFontSize(-2)" aria-label="Decrease font size">A-</button>
+                <button onclick="changeFontSize(2)" aria-label="Increase font size">A+</button>
+            </div>
 
             <div class="menu">
                 <ul>
@@ -104,7 +108,7 @@
                 localStorage.setItem('favorites', JSON.stringify(favorites));
             }
         }
-        </script>
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const groupsToggle = document.getElementById('groupsToggle');
@@ -134,5 +138,48 @@
                 }
             });
         });
+    </script>
+    <script>
+        function changeFontSize(change) {
+            const root = document.documentElement;
+            const currentFontSize = parseFloat(getComputedStyle(root).fontSize);
+            root.style.fontSize = `${Math.max(currentFontSize + change, 10)}px`; // Prevent font size less than 10px
+            saveFontSize();
+        }
+    
+        function saveFontSize() {
+            const root = document.documentElement;
+            const fontSize = getComputedStyle(root).fontSize;
+            localStorage.setItem('preferredFontSize', fontSize);
+        }
+    
+        function loadPreferredFontSize() {
+            const preferredFontSize = localStorage.getItem('preferredFontSize');
+            if (preferredFontSize) {
+            document.documentElement.style.fontSize = preferredFontSize;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPreferredFontSize();
+
+        // Load stars
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            document.querySelectorAll('.star').forEach(star => {
+                const filename = star.dataset.filename;
+                if (favorites.includes(filename)) {
+                    star.classList.add('active');
+                }
+             });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            document.querySelectorAll('.star').forEach(star => {
+                const filename = star.dataset.filename;
+                if (favorites.includes(filename)) {
+                    star.classList.add('active');
+                }
+            });
+        });
+
     </script>
     
