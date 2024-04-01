@@ -27,33 +27,33 @@
     </form>
 </body>
     
-    <script>
-        // Dummy database to store group names
-        const groupDatabase = ['CSC450', 'CSC344', 'STT215']; // Example groups
+<script>
+    // Assuming local storage is used to simulate a database for simplicity
+    document.getElementById('groupForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the form from submitting traditionally
 
-        document.getElementById('groupForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the form from submitting in the traditional way
+        const groupTitle = document.getElementById('title').value;
+        const members = document.getElementById('members').value.split('\n'); // Get members as an array
 
-            const groupTitle = document.getElementById('title').value;
+        // Simulate retrieving groups from a database or local storage
+        let groups = JSON.parse(localStorage.getItem('groups')) || [];
+        
+        if (groups.some(group => group.title === groupTitle)) {
+            alert("Create the group with a different name");
+        } else {
+            try {
+                // Simulated logic to "create" a group, replaces the OneDrive error
+                // In a real application, this would involve an API call to your backend to create the group
+                groups.push({ title: groupTitle, members: members });
+                localStorage.setItem('groups', JSON.stringify(groups));
 
-            // Check if the group title already exists in the dummy database (Simulated database check)
-            const isDuplicateGroup = groupDatabase.includes(groupTitle);
-
-            if (isDuplicateGroup) {
-                alert("Create the group with a different name");
-            } else {
-                try {
-                    // Simulated failure for OneDrive connection (Replace with actual API call handling)
-                    throw new Error("Failed to connect to OneDrive");
-
-                    // Alert on group successfully created
-                    // alert("Group successfully created!");
-                } catch (error) {
-                    // OneDrive connection error message
-                    alert("Cannot connect to OneDrive, please refresh and try again");
-                }
+                alert("Group successfully created!");
+            } catch (error) {
+                alert("An error occurred, please try again.");
             }
-        });
-    </script>
+        }
+    });
+</script>
+
 </body>
 </html>

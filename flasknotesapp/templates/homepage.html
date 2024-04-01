@@ -12,10 +12,13 @@
     <div class="sidebar">
         <h2 style="color: white;">Notes App</h2>
         <a href="#">Dashboard</a>
-        <a href="#">Groups</a>
-        <p> <a href="{{ url_for('group_page') }}">Create Groups</a></p>
-        
+        <a href="#" id="groupsToggle">Groups</a>
+        <div id="groupsList" style="display: none;">
+            <ul id="groupsListItems"></ul>
+        </div>
+        <p><a href="{{ url_for('group_page') }}">Create Groups</a></p>
     </div>
+    
 
     <!-- Main content -->
     <!-- https://www.w3schools.com/tags/tag_ul.asp --> 
@@ -102,4 +105,34 @@
             }
         }
         </script>
-        
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const groupsToggle = document.getElementById('groupsToggle');
+            const groupsList = document.getElementById('groupsList');
+            const groupsListItems = document.getElementById('groupsListItems');
+    
+            groupsToggle.addEventListener('click', () => {
+                if (groupsList.style.display === 'none') {
+                    groupsListItems.innerHTML = ''; // Clear the list before populating it
+    
+                    const groups = JSON.parse(localStorage.getItem('groups')) || [];
+    
+                    groups.forEach(group => {
+                       // Create a new list item and line break for each group
+                       const groupItem = document.createElement('li');
+                       const groupLink = document.createElement('a');
+                       groupLink.href = "#"; // Set a real link or use JavaScript to handle the click
+                       groupLink.textContent = group.title;
+                       groupItem.appendChild(groupLink);
+                       groupsListItems.appendChild(groupItem);
+                       groupsListItems.appendChild(document.createElement('br')); // Add a line break
+                    });
+    
+                    groupsList.style.display = 'block'; // Show the group list
+                } else {
+                    groupsList.style.display = 'none'; // Hide the group list
+                }
+            });
+        });
+    </script>
+    
