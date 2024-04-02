@@ -3,54 +3,51 @@ import os
 import requests
 import sys
 import re
-#pip install iPython
 from IPython.display import display, HTML
 sys.path.append("objects")
 from onedrive import generate_access_token, GRAPH_API_ENDPOINT
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, make_response
 from waitress import serve
 import sqlite3
 sys.path.append("databases")
 import user_database
 import numpy as np 
-from flask_login import LoginManager
-from flask_login import login_required
-from flask_login import login_user
-from flask_login import logout_user
+from flask_login import login_required, login_user, logout_user, UserMixin
 from flask_wtf  import FlaskForm
 from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 sys.path.append("objects")
 from user import User
 
-
-
 # Used this tutorial to figure out login screen 
 #https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
 
 #used this for the sql request for placeholders, https://medium.com/@miguel.amezola/protecting-your-code-from-sql-injection-attacks-when-using-raw-sql-in-python-916466961c97
-
-
-login_manager = LoginManager()
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
-
-login_manager.init_app(app)
-
 app.secret_key = '967b75c111e64965848a7786bda9602f9d208f991036ccc4f793a4199a9f74b4'
-
 access_token = ""
 
-current_user = User(None, None, None, None) # create user instance
 
-def checkdatabase():
-    user_database.create_database() #call the function that creates the database
+from flask_login import LoginManager
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    return current_user
+    connection = sqlite3.connect("user.db")
+    cursor =  connection.cursor()
+    cursor.execute("SELECT user_id, username, password, email  FROM user where (user_id = ?)",(user_id,))
+    row = cursor.fetchall()
+    connection.close()
+    if len(row) == 1:
+        return User(row[0][0],row[0][1],row[0][2],row[0][3])
+    else:
+        return None
+    
+def checkdatabase():
+    user_database.create_database() #call the function that creates the database
 
 @app.route('/')
 def set_up(): 
@@ -60,15 +57,23 @@ def set_up():
 def login():
     get_name = request.form['username'] 
     get_password = request.form['password']
-    if current_user.check_login(get_name, get_password):
+    current_user = User(None,get_name, get_password, None)
+    if current_user.is_authenticated():
         flask.flash('Logged in successfully.')
-        next = flask.request.args.get('next')
-        print(current_user.toString())
+        current_user.set_login_userID()
+        current_user.set_login_email()
         login_user(current_user)
-        return render_template('homepage.html') 
+        next = flask.request.args.get('next')
+        return redirect(url_for('homepage'))
     else:
         error_message = "Incorrect Username or Password!"
         return render_template("loginpage.html", msg = error_message)
+
+@app.route('/homepage')
+@login_required
+def homepage():
+    print("at homepage")
+    return render_template("homepage.html")
         
 @app.route('/register')
 def register(): 
@@ -76,28 +81,20 @@ def register():
 
 @app.route('/form_register',  methods = ['POST','GET'])
 def register_actions():
-
     error_count = 0
-
     fname_message = ""
     lname_message = ""
     email_message = ""
     username_message = ""
     password_message = ""
     confirm_password_message = ""
+
     get_fname = request.form['fname']
     get_lname = request.form['lname']
     get_email = request.form['email']
     get_name = request.form['username'] 
     get_password = request.form['password']
     get_confirmpassword = request.form['confirmpassword']
-
-    print("fname", get_fname, "\n",
-      "lname", get_lname, "\n",
-      "email", get_email, "\n",
-      "username", get_name, "\n",
-      "password", get_password, "\n",
-      "confirmpassword", get_confirmpassword, "\n")
 
     # Check if there are numbers in the first name
 
@@ -206,7 +203,8 @@ def register_actions():
             connection.commit()
             connection.close()
             flask.flash('Logged in successfully.')
-            User_logged_in = True
+            new_user = User(get_user_id, get_name, get_password, get_email)
+            login_user(new_user)
             return render_template('homepage.html')
     else: 
         return render_template('register.html',fname_error = fname_message, lname_error = lname_message, email_error = email_message, username_error = username_message,password_error = password_message, confirm_password_error = confirm_password_message)
@@ -240,12 +238,10 @@ def group_page():
 def favorite_page():
     return render_template("favorite.html")
 
-
 @app.route('/settings')
 @login_required
 def setting():
     pass
-
 
 @app.route('/logout')
 @login_required
@@ -253,12 +249,18 @@ def logoutpage_page():
     if os.path.exists("ms_graph_api_token.json"):
         os.remove("ms_graph_api_token.json")
     else:
-        pass   
+        pass
+    return redirect(url_for('logout_method'))
+
+@app.route('/logout_method')
+def logout_method():
     logout_user()
+    print("User logged out")       
     return render_template("logoutpage.html")
 
 
 @app.route('/onedrive')
+@login_required
 def onedrive():
     APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     SCOPES = ['Files.ReadWrite']
@@ -268,10 +270,6 @@ def onedrive():
     }
     return render_template("homepage.html")
 
-if __name__ == "__main__":
-    serve(app, host = "0.0.0.0", port = 8000)
-    checkdatabase()
-    login()
 
 # Check if the group name is a duplicate in the database
 def check_for_duplicate_group(group_name):
@@ -296,5 +294,10 @@ def create_group():
         # Your group creation logic here
         return "Group successfully created"
 
+#if __name__ == "__main__":
+#    app.run(debug=True)
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    serve(app, host = "0.0.0.0", port = 8000)
+    checkdatabase()
+    login()

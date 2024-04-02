@@ -41,41 +41,28 @@ Windows
 > .venv\Scripts\activate
 ```
 
-## Other Necessary Packages
+## Packages Included and their Documenation 
 
 * [Waitress Documentation](https://pypi.org/project/waitress)
-```bash
-$ pip install waitress
-```
 * [Pillow Documentation](https://pypi.org/project/pillow/)
-```bash
-$ pip install pillow
-```
 * [sqlite3 Documentation](https://docs.python.org/3/library/sqlite3.html)
-```bash
-$ pip install sqlite3
-```
 * [numpy Documentation](https://numpy.org/doc/)
-```bash
-$ pip install numpy 
-```
 * [Flask-login Documentation](https://flask-login.readthedocs.io/en/latest/)
-```bash
-$ pip install flask-login
-```
 * [msal Documentation](https://pypi.org/project/msal/)
-```bash
-$ pip install msal
-```
 * [requests Documentation](https://pypi.org/project/requests/)
-```bash
-$ pip install requests
-```
 * [ipython Documentation](https://ipython.org/)
-```bash
-$ pip install ipython
-```
+* [Flask_wtf Documentation](https://flask-wtf.readthedocs.io/en/1.2.x/)
 
+### Install Packages via Pip packages
+
+```bash
+$ pip install waitress pillow numpy flask-login msal requests ipython flask_wtf
+```
+### or via Requirments document
+
+```bash
+$ pip install -r requirements.txt
+```
 
 ## Running the flask project: 
 * Run the server.py file and enter whatever local host number you want
