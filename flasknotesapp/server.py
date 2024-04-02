@@ -73,7 +73,6 @@ def login():
 @app.route('/homepage')
 @login_required
 def homepage():
-    print("at homepage")
     return render_template("homepage.html")
         
 @app.route('/register')
@@ -255,8 +254,7 @@ def logoutpage_page():
 
 @app.route('/logout_method')
 def logout_method():
-    logout_user()
-    print("User logged out")       
+    logout_user()      
     return render_template("logoutpage.html")
 
 
