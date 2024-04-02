@@ -249,6 +249,21 @@ def upload_page():
     if form.validate_on_submit():
         file = form.file.data
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+        dir_list = os.listdir('static\\files')
+        headers = {
+            'Authorization': 'Bearer ' + access_token['access_token']
+        }
+        for file_path in dir_list:
+            name = file_path
+            file_path = 'static\\files\\' + file_path
+            with open(file_path, 'rb') as upload:
+                media_content = upload.read()
+                response = requests.put(
+                    GRAPH_API_ENDPOINT + f'/me/drive/items/root:/{name}:/content',
+                    headers=headers,
+                    data=media_content
+                )
+                print(response.json())
         return render_template("homepage.html")
     return render_template("upload.html", form=form)
 
@@ -284,6 +299,7 @@ def logoutpage_page():
 def onedrive():
     APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     SCOPES = ['Files.ReadWrite']
+    global access_token
     access_token = generate_access_token(APP_ID, SCOPES)
     headers = {
         'Authorization': 'Bearer ' + access_token['access_token']
