@@ -18,6 +18,7 @@ import sys
 sys.path.append("objects")
 sys.path.append("databases")
 sys.path.append("objects")
+# Don't know if we need 2 of these.
 
 # Used this tutorial to figure out login screen
 # https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
