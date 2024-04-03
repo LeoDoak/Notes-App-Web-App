@@ -22,12 +22,13 @@ sys.path.append("objects")
 # Used this tutorial to figure out login screen
 # https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
 
-# used this for the sql request for placeholders, 
+# used this for the sql request for placeholders,
 # https://medium.com/@miguel.amezola/protecting-your-code-from-sql-injection-attacks-when-using-raw-sql-in-python-916466961c97
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
-app.secret_key = '967b75c111e64965848a7786bda9602f9d208f991036ccc4f793a4199a9f74b4'
+app.secret_key = '''967b75c111e64965848a7786bda9602
+        f9d208f991036ccc4f793a4199a9f74b4'''
 access_token = ""
 
 
@@ -40,7 +41,8 @@ def load_user(user_id):
     connection = sqlite3.connect("user.db")
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT user_id, username, password, email  FROM user where (user_id = ?)",
+        """SELECT user_id, username, password,
+        email FROM user where (user_id = ?)""",
         (user_id,))
     row = cursor.fetchall()
     connection.close()
@@ -51,7 +53,8 @@ def load_user(user_id):
 
 
 def checkdatabase():
-    user_database.create_database()  # call the function that creates the database
+    # call the function that creates the database
+    user_database.create_database()
 
 
 @app.route('/')
@@ -143,7 +146,7 @@ def register_actions():
         error_count += 1
         email_message = "Invalid email entered"
 
-    # Check if the password meets criteria with length being >= 9 
+    # Check if the password meets criteria with length being >= 9
     # and having a number and special character:
 
     # criteria_length = 9
@@ -151,7 +154,8 @@ def register_actions():
     password_num_count = 0
     criteria_special = 1
     password_special_count = 0
-    special_characters = ['!', '@', '#', '$', '%', '^', '&', '*', '<', '>', '?']
+    special_characters = ['!', '@', '#', '$', '%', 
+                          '^', '&', '*', '<', '>', '?']
 
     if len(get_password) < 10:
         password_message = 'Password does not meet criteria'
@@ -183,7 +187,7 @@ def register_actions():
 
     # print("ERROR COUNT", error_count)
 
-    # Check if email is associated with account already, 
+    # Check if email is associated with account already,
     # if so send them to login / forgot password
 
     connection = sqlite3.connect("user.db")
@@ -204,7 +208,8 @@ def register_actions():
     if error_count == 0:
         if is_account is True:
             error_message = (
-                "Account with that email has alreday been created, please proceed to login. ")
+                """Account with that email has already 
+                been created, please proceed to login. """)
             return render_template('register.html', msg=error_message)
         else:
             # create user id (placeholder until I can figure some more useful)
@@ -213,7 +218,8 @@ def register_actions():
             connection = sqlite3.connect("user.db")
             cursor = connection.cursor()
             cursor.execute(
-                "INSERT INTO user VALUES (?,? ,? ,?)",(get_user_id, get_name, get_password, get_email,))
+                "INSERT INTO user VALUES (?,? ,? ,?)",
+                (get_user_id, get_name, get_password, get_email,))
             connection.commit()
             connection.close()
             flask.flash('Logged in successfully.')
@@ -222,9 +228,11 @@ def register_actions():
             return render_template('homepage.html')
     else:
         return render_template(
-            'register.html', fname_error=fname_message, lname_error=lname_message, 
-            email_error=email_message, username_error=username_message, 
-            password_error=password_message, confirm_password_error=confirm_password_message)
+            'register.html', fname_error=fname_message,
+            lname_error=lname_message,
+            email_error=email_message, username_error=username_message,
+            password_error=password_message, 
+            confirm_password_error=confirm_password_message)
 
 
 @app.route('/forgotpsd')
@@ -257,7 +265,7 @@ def upload_page():
             with open(file_path, 'rb') as upload:
                 media_content = upload.read()
                 response = requests.put(
-                    GRAPH_API_ENDPOINT + 
+                    GRAPH_API_ENDPOINT +
                     f'/me/drive/items/root:/{name}:/content',
                     headers=headers,
                     data=media_content
@@ -318,7 +326,9 @@ def onedrive():
 def check_for_duplicate_group(group_name):
     connection = sqlite3.connect("group.db")
     cursor = connection.cursor()
-    cursor.execute("SELECT group_name FROM groups WHERE group_name = ?", (group_name,))
+    cursor.execute(
+        "SELECT group_name FROM groups WHERE group_name = ?", 
+        (group_name,))
     existing_group = cursor.fetchone()
     connection.close()
     return existing_group is not None
@@ -332,7 +342,8 @@ def create_group():
     # Check for duplicate group name
     if check_for_duplicate_group(group_name):
         error_message = "Create the group with a different name"
-        return render_template("create_group.html", error_message=error_message)
+        return render_template(
+            "create_group.html", error_message=error_message)
     else:
         # If group name is unique, continue with group creation logic
         # Your group creation logic here
