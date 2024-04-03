@@ -10,7 +10,6 @@ import sqlite3
 def create_database(): 
 	connection = sqlite3.connect("user.db")
 	#check to see if database is created 
-	print(connection.total_changes)
 	cursor =  connection.cursor()
 	#check for admin access 
 	cursor.execute("CREATE TABLE IF NOT EXISTS user(user_id INTEGER, username TEXT, password TEXT,email TEXT)")
@@ -19,13 +18,14 @@ def create_database():
 	#if no admin access found then it'll add one
 	if (len(row) == 0 ):
 		cursor.execute("INSERT INTO user VALUES(0, 'admin','1234','admin@uncw.edu')") #create admin access
-		print("Admin access has been added to the database")
+		#print("Admin access has been added to the database")
 	else:
-		print("Admin access already in system")
+		pass
+		#print("Admin access already in system")
 	connection.commit()
 	cursor.execute("SELECT * FROM user")
 	rows = cursor.fetchall()
-	print(rows)
+	#print(rows)
 	connection.close()
 
 
