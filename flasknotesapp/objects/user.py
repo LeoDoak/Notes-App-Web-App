@@ -95,9 +95,9 @@ class User():
 
 SAMPLE_USERS = [
     # Sample List
-        User("1", "JohnSmith1", "Random12", "js7456@uncw.edu"),
-        User("2", "AliceBarnes", "Password10", "ab1234@uncw.edu"),
-        User("3", "BobbyHill123", "Qwerty123", "bh4201@uncw.edu"),
-        User("4", "JettHoward", "Random12", "jh4321@uncw.edu"),
-        User("0", "Admin", "1234", "admin@uncw.edu")  # admin access
+    User("1", "JohnSmith1", "Random12", "js7456@uncw.edu"),
+    User("2", "AliceBarnes", "Password10", "ab1234@uncw.edu"),
+    User("3", "BobbyHill123", "Qwerty123", "bh4201@uncw.edu"),
+    User("4", "JettHoward", "Random12", "jh4321@uncw.edu"),
+    User("0", "Admin", "1234", "admin@uncw.edu")  # admin access
     ]
