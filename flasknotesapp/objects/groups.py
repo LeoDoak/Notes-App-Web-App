@@ -1,5 +1,5 @@
-from typing import Annotated, TypeAlias
 class Groups:
+
     # A class representing Groups created by user
     # group_id: int
     # group_name: str
