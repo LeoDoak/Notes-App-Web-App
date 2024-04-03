@@ -19,16 +19,16 @@ def create_database():
     cursor.execute("SELECT username, password FROM user where user_id = 0 and email = 'admin@uncw.edu'")
     row = cursor.fetchall()
     #if no admin access found then it'll add one
-	if (len(row) == 0 ):
-		cursor.execute("INSERT INTO user VALUES(0, 'admin','1234','admin@uncw.edu')") #create admin access
+    if (len(row) == 0 ):
+        cursor.execute("INSERT INTO user VALUES(0, 'admin','1234','admin@uncw.edu')") #create admin access
 		#print("Admin access has been added to the database")
-	else:
-		pass
+    else:
+        pass
 		#print("Admin access already in system")
-	connection.commit()
-	cursor.execute("SELECT * FROM user")
-	rows = cursor.fetchall()
+    connection.commit()
+    cursor.execute("SELECT * FROM user")
+    rows = cursor.fetchall()
 	#print(rows)
-	connection.close()
+    connection.close()
 
 
