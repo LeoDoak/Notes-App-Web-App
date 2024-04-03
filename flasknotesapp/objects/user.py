@@ -19,7 +19,8 @@ class User():
         self.email = email
 
     def toString(self):
-        String = ("User ID: " + str(self.user_id)+ " Username: " + str(self.username) + " Password: " + str(self.password) + " email: " + str(self.email))
+        String = (
+            "User ID: " + str(self.user_id)+ " Username: " + str(self.username) + " Password: " + str(self.password) + " email: " + str(self.email))
         return String
 
     def get_id(self):
@@ -40,15 +41,17 @@ class User():
     def is_authenticated(self):
         connection = sqlite3.connect("user.db")
         cursor =  connection.cursor()
-        cursor.execute("SELECT user_id, username, password, email  FROM user where (username = ? and password = ?)",(self.username, self.password))
+        cursor.execute(
+            "SELECT user_id, username, password, email  FROM user where (username = ? and password = ?)",(self.username, self.password))
         row = cursor.fetchall()
         connection.close()
-        return len(row) == 1 
+        return len(row) == 1
 
     def get_user_from_id(self,user_id):
         connection = sqlite3.connect("user.db")
         cursor =  connection.cursor()
-        cursor.execute("SELECT user_id, username, password, email  FROM user where (user_id = ?)",(user_id,))
+        cursor.execute(
+            "SELECT user_id, username, password, email  FROM user where (user_id = ?)",(user_id,))
         row = cursor.fetchall()
         connection.close()
         self.user_id = row[0][0]
@@ -60,7 +63,8 @@ class User():
     def set_login_userID(self):
         connection = sqlite3.connect("user.db")
         cursor =  connection.cursor()
-        cursor.execute("SELECT user_id FROM user where (username = ? and password = ?)",(self.username, self.password))
+        cursor.execute(
+            "SELECT user_id FROM user where (username = ? and password = ?)",(self.username, self.password))
         row = cursor.fetchall()
         if len(row) == 1:
             self.user_id = row[0][0]
@@ -70,7 +74,8 @@ class User():
     def set_login_email(self):
         connection = sqlite3.connect("user.db")
         cursor =  connection.cursor()
-        cursor.execute("SELECT email FROM user where (username = ? and password = ?)",(self.username, self.password))
+        cursor.execute(
+            "SELECT email FROM user where (username = ? and password = ?)",(self.username, self.password))
         row = cursor.fetchall()
         if len(row) == 1:
             self.email = row[0][0]

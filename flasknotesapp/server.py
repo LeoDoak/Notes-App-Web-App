@@ -1,5 +1,5 @@
 import re
-import flask 
+import flask
 import os
 import requests
 import sys
@@ -12,7 +12,7 @@ from waitress import serve
 import sqlite3
 sys.path.append("databases")
 import user_database
-import numpy as np 
+import numpy as np
 from flask_login import login_required, login_user, logout_user, UserMixin
 from flask_wtf  import FlaskForm
 from wtforms import FileField, SubmitField
@@ -20,8 +20,8 @@ from werkzeug.utils import secure_filename
 sys.path.append("objects")
 from user import User
 
-# Used this tutorial to figure out login screen 
-#https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
+# Used this tutorial to figure out login screen
+# https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
 
 #used this for the sql request for placeholders, https://medium.com/@miguel.amezola/protecting-your-code-from-sql-injection-attacks-when-using-raw-sql-in-python-916466961c97
 app = Flask(__name__)
@@ -48,15 +48,15 @@ def load_user(user_id):
         return None
     
 def checkdatabase():
-    user_database.create_database() #call the function that creates the database
+    user_database.create_database() # call the function that creates the database
 
 @app.route('/')
-def set_up(): 
+def set_up():
     return render_template('loginpage.html')
 
 @app.route('/form_login', methods = ['POST','GET'])
 def login():
-    get_name = request.form['username'] 
+    get_name = request.form['username']
     get_password = request.form['password']
     current_user = User(None,get_name, get_password, None)
     if current_user.is_authenticated():
@@ -76,7 +76,7 @@ def homepage():
     return render_template("homepage.html")
         
 @app.route('/register')
-def register(): 
+def register():
     return render_template("register.html")
 
 @app.route('/form_register',  methods = ['POST','GET'])
@@ -92,27 +92,27 @@ def register_actions():
     get_fname = request.form['fname']
     get_lname = request.form['lname']
     get_email = request.form['email']
-    get_name = request.form['username'] 
+    get_name = request.form['username']
     get_password = request.form['password']
     get_confirmpassword = request.form['confirmpassword']
 
     # Check if there are numbers in the first name
 
-    for character in [*get_fname]: 
+    for character in [*get_fname]:
         if character.isdigit():
-            error_count += 1 
+            error_count += 1
             fname_message = 'invalid first name entered (no numbers)'
             break
 
     # Check if there are numbers in the last name
 
-    for character in [*get_lname]: 
+    for character in [*get_lname]:
         if character.isdigit():
-            error_count += 1 
+            error_count += 1
             lname_message = 'invalid last name entered (no numbers)'
             break
 
-    # Check if username is already taken 
+    # Check if username is already taken
 
     connection = sqlite3.connect("user.db")
     cursor =  connection.cursor()
@@ -120,77 +120,78 @@ def register_actions():
     row = cursor.fetchall()
     connection.close()
     if len(row) ==  1:
-        error_count += 1 
+        error_count += 1
         username_message = 'Username is already taken'
 
-    # Check if the email is valid 
-    #https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/  # Used for email validification 
+    # Check if the email is valid
+    # https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/
+    # Used for email validification
 
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     if(re.fullmatch(regex, get_email)):
         pass
     else:
-        error_count += 1 
+        error_count += 1
         email_message = "Invalid email entered"
 
-    # Check if the password meets criterua with length being >= 9 and having a number and special character: 
+    # Check if the password meets criterua with length being >= 9 and having a number and special character:
 
-    criteria_length = 9 
-    criteria_number = 1 
-    password_num_count = 0 
-    criteria_special = 1 
-    password_special_count = 0 
+    criteria_length = 9
+    criteria_number = 1
+    password_num_count = 0
+    criteria_special = 1
+    password_special_count = 0
     special_characters = ['!','@','#','$','%','^','&','*','<','>','?']
 
     if len(get_password) < 10:
-        password_message = 'Password does not meet criteria' 
-    else: 
+        password_message = 'Password does not meet criteria'
+    else:
         for character in [*get_password]:
-            if character.isdigit(): 
-                password_num_count +=1 
-            else: 
+            if character.isdigit():
+                password_num_count +=1
+            else:
                 pass
-            if character in special_characters: 
-                password_special_count +=1 
-            else: 
+            if character in special_characters:
+                password_special_count +=1
+            else:
                 pass
 
-    if password_num_count < criteria_number : 
-        password_message = 'Password does not meet criteria' 
-        error_count += 1 
-    else: 
+    if password_num_count < criteria_number :
+        password_message = 'Password does not meet criteria'
+        error_count += 1
+    else:
         pass
     if password_special_count < criteria_special :
         password_message = 'Password does not meet criteria'
-        error_count += 1 
-    else: 
-        pass 
+        error_count += 1
+    else:
+        pass
 
     # Check if the password and the confirmpassword are the same
     if get_password != get_confirmpassword:
         confirm_password_message = 'Passwords do not match'
 
-    #print("ERROR COUNT", error_count)
+    # print("ERROR COUNT", error_count)
 
-    # Check if email is associated with account already, if so send them to login / forgot password 
+    # Check if email is associated with account already, if so send them to login / forgot password
 
     connection = sqlite3.connect("user.db")
     cursor =  connection.cursor()
     cursor.execute("SELECT email FROM user where email = ?",(get_email,))
     row = cursor.fetchall()
     connection.close()
-    if len(row) == 1: 
-        is_account = True 
+    if len(row) == 1:
+        is_account = True
     else:
-        is_account = False 
+        is_account = False
 
     # Returns the correct page
     # ERROR COUNT > 1 -> Page with criteria messages
     # Email already in systmem -> MSG saying go to login or forgot password
-    # No error -> to homepage  
+    # No error -> to homepage
 
-    if error_count == 0: 
-        if is_account == True: 
+    if error_count == 0:
+        if is_account == True:
             error_message = ("Account with that email has alreday been created, please proceed to login. ")
             return render_template('register.html', msg = error_message)
         else:
@@ -206,8 +207,9 @@ def register_actions():
             new_user = User(get_user_id, get_name, get_password, get_email)
             login_user(new_user)
             return render_template('homepage.html')
-    else: 
-        return render_template('register.html',fname_error = fname_message, lname_error = lname_message, email_error = email_message, username_error = username_message,password_error = password_message, confirm_password_error = confirm_password_message)
+    else:
+        return render_template(
+            'register.html',fname_error = fname_message, lname_error = lname_message, email_error = email_message, username_error = username_message,password_error = password_message, confirm_password_error = confirm_password_message)
 
 
 @app.route('/forgotpsd')
@@ -220,11 +222,12 @@ class UploadFileForm(FlaskForm):
 
 @app.route('/upload', methods =['GET', "POST"])
 @login_required
-def upload_page(): 
+def upload_page():
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
-        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
+        file.save(
+            os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename)))
         dir_list = os.listdir('static\\files')
         headers = {
             'Authorization': 'Bearer ' + access_token['access_token']
@@ -269,7 +272,7 @@ def logoutpage_page():
 
 @app.route('/logout_method')
 def logout_method():
-    logout_user()      
+    logout_user()
     return render_template("logoutpage.html")
 
 
@@ -309,10 +312,11 @@ def create_group():
         # Your group creation logic here
         return "Group successfully created"
 
-#if __name__ == "__main__":
+# if __name__ == "__main__":
 #    app.run(debug=True)
 
 if __name__ == "__main__":
     serve(app, host = "0.0.0.0", port = 8000)
     checkdatabase()
     login()
+    
