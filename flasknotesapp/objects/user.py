@@ -22,8 +22,8 @@ class User():
 
     def toString(self):
         String = (
-            "User ID: " + str(self.user_id) + " Username: " + 
-            str(self.username) + " Password: " + str(self.password) + 
+            "User ID: " + str(self.user_id) + " Username: " +
+            str(self.username) + " Password: " + str(self.password) +
             " email: " + str(self.email))
         return String
 
@@ -46,8 +46,8 @@ class User():
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
-            """SELECT user_id, username, password, 
-            email FROM user where (username = ? and password = ?)""", 
+            """SELECT user_id, username, password,
+            email FROM user where (username = ? and password = ?)""",
             (self.username, self.password))
         row = cursor.fetchall()
         connection.close()
@@ -57,7 +57,7 @@ class User():
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
-            """SELECT user_id, username, password, 
+            """SELECT user_id, username, password,
             email FROM user where (user_id = ?)""",
             (user_id,))
         row = cursor.fetchall()
@@ -93,8 +93,8 @@ class User():
             self.email = None
 
 
-    # sample list
 SAMPLE_USERS = [
+    # Sample List
         User("1", "JohnSmith1", "Random12", "js7456@uncw.edu"),
         User("2", "AliceBarnes", "Password10", "ab1234@uncw.edu"),
         User("3", "BobbyHill123", "Qwerty123", "bh4201@uncw.edu"),

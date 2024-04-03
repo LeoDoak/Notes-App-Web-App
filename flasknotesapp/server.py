@@ -154,7 +154,7 @@ def register_actions():
     password_num_count = 0
     criteria_special = 1
     password_special_count = 0
-    special_characters = ['!', '@', '#', '$', '%', 
+    special_characters = ['!', '@', '#', '$', '%',
                           '^', '&', '*', '<', '>', '?']
 
     if len(get_password) < 10:
@@ -208,7 +208,7 @@ def register_actions():
     if error_count == 0:
         if is_account is True:
             error_message = (
-                """Account with that email has already 
+                """Account with that email has already
                 been created, please proceed to login. """)
             return render_template('register.html', msg=error_message)
         else:
@@ -231,7 +231,7 @@ def register_actions():
             'register.html', fname_error=fname_message,
             lname_error=lname_message,
             email_error=email_message, username_error=username_message,
-            password_error=password_message, 
+            password_error=password_message,
             confirm_password_error=confirm_password_message)
 
 
@@ -327,7 +327,7 @@ def check_for_duplicate_group(group_name):
     connection = sqlite3.connect("group.db")
     cursor = connection.cursor()
     cursor.execute(
-        "SELECT group_name FROM groups WHERE group_name = ?", 
+        "SELECT group_name FROM groups WHERE group_name = ?",
         (group_name,))
     existing_group = cursor.fetchone()
     connection.close()
