@@ -2,12 +2,13 @@
 from PIL import Image
 import sqlite3
 import re
-import numpy as np 
+import numpy as np
+
 
 # https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/
 
-class User():
 
+class User():
     user_id: str
     username: str
     password: str
@@ -25,9 +26,9 @@ class User():
 
     def toString(self):
         String = (
-            "User ID: " + str(self.user_id) + " Username: " +
-            str(self.username) + " Password: " + str(self.password) +
-            " email: " + str(self.email))
+                "User ID: " + str(self.user_id) + " Username: " +
+                str(self.username) + " Password: " + str(self.password) +
+                " email: " + str(self.email))
         return String
 
     def get_id(self):
@@ -117,10 +118,10 @@ class User():
     def check_username(self):
         message = self.check_valid_username()
         if message == '':
-           message = self.check_duplicate_username()
-           return message
+            message = self.check_duplicate_username()
+            return message
         else:
-            return message 
+            return message
 
     def check_valid_email(self):
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -139,23 +140,23 @@ class User():
             return "Email already registered for account"
         else:
             return ''
-            
+
     def check_email(self):
         message = self.check_valid_email()
         if message == '':
-           message = self.check_duplicate_email()
-           return message
+            message = self.check_duplicate_email()
+            return message
         else:
             return message
 
     def validate_password(self):
         pattern = r'^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{9,}$'
         if re.match(pattern, self.password):
-            return ''
+            return ""
         else:
-            return 'Password does not meet criteria'
+            return "Password does not meet criteria"
 
-    def check_confirm_password(self,confirm_password):
+    def check_confirm_password(self, confirm_password):
         if self.password == confirm_password:
             return ''
         else:
@@ -194,4 +195,4 @@ SAMPLE_USERS = [
     User("3", "BobbyHill123", "Qwerty123", "bh4201@uncw.edu"),
     User("4", "JettHoward", "Random12", "jh4321@uncw.edu"),
     User("0", "Admin", "1234", "admin@uncw.edu")  # admin access
-    ]
+]

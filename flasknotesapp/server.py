@@ -1,13 +1,13 @@
 import sys  # noqa: E402
+
 sys.path.append("objects")  # noqa: E402
-sys.path.append("databases") # noqa: E402
+sys.path.append("databases")  # noqa: E402
 sys.path.append("objects")  # noqa: E402
 from onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from flask import Flask, render_template, request, redirect, url_for
 from waitress import serve
 import sqlite3
 import user_database
-import numpy as np
 from flask_login import login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
@@ -31,7 +31,6 @@ app.config['UPLOAD_FOLDER'] = 'static\\files'
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
 access_token = ""
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -91,7 +90,7 @@ def register():
     return render_template("register.html")
 
 
-@app.route('/form_register',  methods=['POST', 'GET'])
+@app.route('/form_register', methods=['POST', 'GET'])
 def register_actions():
     get_email = request.form['email']
     get_name = request.form['username']
@@ -102,9 +101,10 @@ def register_actions():
     new_user = User(None, get_name, get_password, get_email)
 
     # check user
-    username_message, email_message, password_message, confirm_password_message, Register_status = new_user.check_new_user(get_confirmpassword)
+    username_message, email_message, password_message, confirm_password_message, Register_status = new_user.check_new_user(
+        get_confirmpassword)
 
-    if Register_status == False:
+    if Register_status is False:
         print("not able to regster")
         return render_template(
             "register.html",
@@ -116,6 +116,7 @@ def register_actions():
         flask.flash('Logged in successfully.')
         login_user(new_user)
         return render_template('homepage.html')
+
 
 @app.route('/forgotpsd')
 def forgot_password():
@@ -230,6 +231,7 @@ def create_group():
         # If group name is unique, continue with group creation logic
         # Your group creation logic here
         return "Group successfully created"
+
 
 # if __name__ == "__main__":
 #    app.run(debug=True)
