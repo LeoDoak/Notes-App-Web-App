@@ -1,13 +1,12 @@
 import sys  # noqa: E402
-
 sys.path.append("objects")  # noqa: E402
 sys.path.append("databases")  # noqa: E402
 sys.path.append("objects")  # noqa: E402
-import sqlite3
-import user_database
-import flask
-import os
-import requests
+import sqlite3  # noqa: E402
+import user_database # noqa: E402
+import flask # noqa: E402
+import os # noqa: E402
+import requests # noqa: E402
 from onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from flask import Flask, render_template, request, redirect, url_for
 from waitress import serve
