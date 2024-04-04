@@ -3,20 +3,20 @@ import sys  # noqa: E402
 sys.path.append("objects")  # noqa: E402
 sys.path.append("databases")  # noqa: E402
 sys.path.append("objects")  # noqa: E402
+import sqlite3
+import user_database
+import flask
+import os
+import requests
 from onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from flask import Flask, render_template, request, redirect, url_for
 from waitress import serve
-import sqlite3
-import user_database
 from flask_login import login_required, login_user, logout_user
 from flask_wtf import FlaskForm
 from wtforms import FileField, SubmitField
 from werkzeug.utils import secure_filename
 from user import User
 from flask_login import LoginManager
-import flask
-import os
-import requests
 
 # Don't know if we need 2 of these.
 
