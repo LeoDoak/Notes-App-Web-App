@@ -16,20 +16,13 @@
             <h3>&emsp;Create Account</h3>
             <p>&emsp;Create Account with email, username, and password</p>
             <ul>
-              <li>Passwords must be 9 character long and include a number and a special character</li>
+              <li> Passwords must be 9 character long and include a number and a special character</li>
+              <li> Username must be a minimum of 5 characters and have atleast 5 letters </li>
             </ul>
         </div>
 
         <!-- Main container for all inputs -->
         <div class="mainContainer">
-
-            <!-- First Name -->
-            <label for="fname">First Name <span class = 'error_msg'> {{fname_error}} </span> </label>
-            <input type="text" placeholder="Enter First Name" name="fname" required>
-
-            <!-- Last Name  -->
-            <label for="lname">Last Name <span class = 'error_msg'>{{lname_error}}</span> </label>
-            <input type="text" placeholder="Enter Last Name" name="lname" required>
 
             <!-- email -->
             <label for="email">Valid E-mail <span class = 'error_msg'>{{email_error}}</span></label>
@@ -52,9 +45,6 @@
 
             <!-- Back to Login Page Link -->
             <p class="login"><a href="{{url_for('set_up')}}">Back to login page</a></p>
-
-            <!-- Error Message --> 
-            <p><span class = 'main_error_msg'>{{msg}}</span></p>
 
         </div>
     </form>

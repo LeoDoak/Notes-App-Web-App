@@ -1,7 +1,10 @@
 "Image library, need to 'pip install Pillow'"
 from PIL import Image
 import sqlite3
+import re
+import numpy as np 
 
+# https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/
 
 class User():
 
@@ -91,6 +94,97 @@ class User():
             self.email = row[0][0]
         else:
             self.email = None
+
+    def check_valid_username(self):
+        pattern = r'^(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z]).{5,}$'
+        if re.match(pattern, self.username):
+            return ''
+        else:
+            return 'Username does not meet criteria'
+
+    def check_duplicate_username(self):
+        connection = sqlite3.connect("user.db")
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT username FROM user where username = ?", (self.username,))
+        row = cursor.fetchall()
+        connection.close()
+        if len(row) == 1:
+            return 'Username is already taken'
+        else:
+            return ''
+
+    def check_username(self):
+        message = self.check_valid_username()
+        if message == '':
+           message = self.check_duplicate_username()
+           return message
+        else:
+            return message 
+
+    def check_valid_email(self):
+        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+        if (re.fullmatch(regex, self.email)):
+            return ''
+        else:
+            return "Invalid email entered"
+
+    def check_duplicate_email(self):
+        connection = sqlite3.connect("user.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT email FROM user where email = ?", (self.email,))
+        row = cursor.fetchall()
+        connection.close()
+        if len(row) == 1:
+            return "Email already registered for account"
+        else:
+            return ''
+            
+    def check_email(self):
+        message = self.check_valid_email()
+        if message == '':
+           message = self.check_duplicate_email()
+           return message
+        else:
+            return message
+
+    def validate_password(self):
+        pattern = r'^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{9,}$'
+        if re.match(pattern, self.password):
+            return ''
+        else:
+            return 'Password does not meet criteria'
+
+    def check_confirm_password(self,confirm_password):
+        if self.password == confirm_password:
+            return ''
+        else:
+            return 'Passwords do not match'
+
+    def check_new_user(self, confirm_password):
+        username_message = self.check_username()
+        email_message = self.check_email()
+        password_message = self.validate_password()
+        confirm_password_message = self.check_confirm_password(confirm_password)
+        Register_status = False
+        if username_message == '' and email_message == '' and password_message == '' and confirm_password_message == '':
+            Register_status = True
+            self.set_userID()
+        return username_message, email_message, password_message, confirm_password_message, Register_status
+
+    def set_userID(self):
+        id_num = np.random.randint(0, 99, 2)
+        get_user_id = str(id_num[0]) + str(id_num[1])
+        self.user_id = get_user_id
+
+    def update_database(self):
+        connection = sqlite3.connect("user.db")
+        cursor = connection.cursor()
+        cursor.execute(
+            "INSERT INTO user VALUES (?,? ,? ,?)",
+            (self.user_id, self.username, self.password, self.email,))
+        connection.commit()
+        connection.close()
 
 
 SAMPLE_USERS = [

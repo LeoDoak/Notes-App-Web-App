@@ -47,8 +47,8 @@ def generate_access_token(app_id, scopes):
     return token_response
 
 
-if __name__ == '__main__':
-    ...
+#if __name__ == '__main__':
+#    ...
 
 
 def get_user_code():
