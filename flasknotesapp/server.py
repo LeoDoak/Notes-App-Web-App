@@ -116,6 +116,7 @@ def register_actions():
         login_user(new_user)
         return render_template('homepage.html')
 
+
 @app.route('/forgotpsd')
 def forgot_password():
     return render_template("forgot_pswd.html")
