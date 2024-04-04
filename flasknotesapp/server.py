@@ -3,7 +3,7 @@ sys.path.append("objects")  # noqa: E402
 sys.path.append("databases")  # noqa: E402
 sys.path.append("objects")  # noqa: E402
 import sqlite3  # noqa: E402
-import user_database # noqa: E402
+import user_database  # noqa: E402
 import flask  # noqa: E402
 import os  # noqa: E402
 import requests  # noqa: E402
