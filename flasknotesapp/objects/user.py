@@ -171,6 +171,7 @@ class User():
         if username_message == '' and email_message == '' and password_message == '' and confirm_password_message == '':
             Register_status = True
             self.set_userID()
+            self.update_database()
         return username_message, email_message, password_message, confirm_password_message, Register_status
 
     def set_userID(self):
