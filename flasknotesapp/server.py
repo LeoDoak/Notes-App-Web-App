@@ -10,10 +10,10 @@ from waitress import serve
 from werkzeug.utils import secure_filename
 from wtforms import FileField, SubmitField
 sys.path.append("objects")  # noqa: E402
-from onedrive import generate_access_token, GRAPH_API_ENDPOINT
-from user import User
+from onedrive import generate_access_token, GRAPH_API_ENDPOINT  # noqa: E402
+from user import User  # noqa: E402
 sys.path.append("databases")  # noqa: E402
-import user_database
+import user_database  # noqa: E402
 
 # Don't know if we need 2 of these.
 
@@ -330,6 +330,8 @@ def onedrive():
     headers = {
         'Authorization': 'Bearer ' + ACCESS_TOKEN['access_token']
      }
+   if len(headers) == 1: 
+        return headers
     return render_template("homepage.html")
 
 
