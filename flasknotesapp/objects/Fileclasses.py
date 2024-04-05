@@ -1,3 +1,5 @@
+""" Module containing methods related to files"""
+
 class File:
     """A class representing a File.
 
@@ -17,6 +19,43 @@ class File:
         self.title = title
         self.tags = tags
         self.shared_with = shared_with
+
+    def get_file_id(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.file_id
+
+    def get_title(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.title
+
+    def get_tags(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.tags
+
+    def get_shared_with(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.shared_with
+
 
 
 # A sample list of files to play with.

@@ -1,16 +1,14 @@
 # https://www.ionos.com/digitalguide/websites/web-development/sqlite3-python/
 
-'''
-Run this file to create the database, checks the database to make sure that it
-already has admin access in it and has the names,
-nobody should have to run this since the database should be created and
-stored within the user databse folder
-'''
-
 import sqlite3
 
-
 def create_database():
+    '''
+    Run this file to create the database, checks the database to make sure that it
+    already has admin access in it and has the names,
+    nobody should have to run this since the database should be created and
+    sqlite3stored within the user databse folder
+    '''
     connection = sqlite3.connect("user.db")
     # check to see if database is created
     cursor = connection.cursor()
@@ -28,11 +26,7 @@ def create_database():
             "INSERT INTO user VALUES(0, 'admin','1234','admin@uncw.edu')")
         # create admin access
         # print("Admin access has been added to the database")
-    else:
-        pass
-        # print("Admin access already in system")
-    connection.commit()
-    cursor.execute("SELECT * FROM user")
+        connection.commit()
     # rows = cursor.fetchall()
     # print(rows)
     connection.close()

@@ -1,3 +1,5 @@
+""" Module relating to groups and such  """
+
 class Groups:
     """A class represemtiomg groups created by user
 
@@ -13,6 +15,30 @@ class Groups:
         self.group_name = group_name
         self.is_private = is_private
 
+    def get_group_id(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.group_id
+    def get_group_name(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.group_name
+    def get_is_private(self):
+            """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.is_private
 
 SAMPLE_GROUP = [
     Groups(12, 'Mat 111', True),
