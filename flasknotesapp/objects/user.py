@@ -14,7 +14,6 @@ class User():
     Parameters:
 
     Returns:
-
     """
     user_id: str
     username: str
@@ -37,8 +36,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
         String = (
                 "User ID: " + str(self.user_id) + " Username: " +
@@ -52,8 +49,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         return str(self.user_id)
@@ -64,8 +59,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         return True
@@ -76,8 +69,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         return False
@@ -88,8 +79,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         self.access_token = ac
@@ -100,8 +89,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         return self.access_token
@@ -112,8 +99,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         connection = sqlite3.connect("user.db")
@@ -132,8 +117,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         connection = sqlite3.connect("user.db")
@@ -156,8 +139,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         connection = sqlite3.connect("user.db")
@@ -177,8 +158,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         connection = sqlite3.connect("user.db")
@@ -198,8 +177,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         pattern = r'^(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z]).{5,}$'
@@ -214,8 +191,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         connection = sqlite3.connect("user.db")
@@ -235,8 +210,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         message = self._check_valid_username()
@@ -252,8 +225,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -268,8 +239,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         connection = sqlite3.connect("user.db")
@@ -288,8 +257,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         message = self._check_valid_email()
@@ -305,8 +272,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         pattern = r'^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{9,}$'
@@ -321,8 +286,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         if self.password == confirm_password:
@@ -336,8 +299,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         username_message = self._check_username()
@@ -357,8 +318,6 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
 
         id_num = np.random.randint(0, 99, 2)
@@ -371,9 +330,8 @@ class User():
         Parameters:
 
         Returns:
-        
-
         """
+        
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(

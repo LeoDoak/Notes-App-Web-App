@@ -45,7 +45,6 @@ def load_user(user_id):
     Returns:
     object: User
     None  
-
     """
 
     connection = sqlite3.connect("user.db")
@@ -70,7 +69,6 @@ def checkdatabase():
     Returns:
     object: User
     None  
-
     """
 
     # call the function that creates the database
@@ -86,7 +84,6 @@ def set_up():
     Returns:
     object: User
     None  
-
     """
 
     return render_template('loginpage.html')
@@ -101,7 +98,6 @@ def login():
     Returns:
     object: User
     None  
-
     """
 
     get_name = request.form['username']
@@ -129,7 +125,6 @@ def homepage():
     Returns:
     object: User
     None  
-
     """
 
     return render_template("homepage.html")
@@ -144,7 +139,6 @@ def register():
     Returns:
     object: User
     None  
-
     """
 
     return render_template("register.html")
@@ -159,7 +153,6 @@ def register_actions():
     Returns:
     object: User
     None  
-
     """
 
     get_email = request.form['email']
@@ -197,7 +190,6 @@ def forgot_password():
     Returns:
     object: User
     None  
-
     """
 
     return render_template("forgot_pswd.html")
@@ -211,7 +203,6 @@ class UploadFileForm(FlaskForm):
     Returns:
     object: User
     None  
-
     """
 
     file = FileField("File")
@@ -228,7 +219,6 @@ def upload_page():
     Returns:
     object: User
     None  
-
     """
 
     form = UploadFileForm()
@@ -268,7 +258,6 @@ def group_page():
     Returns:
     object: User
     None  
-
     """
 
     return render_template("groups.html")
@@ -284,7 +273,6 @@ def favorite_page():
     Returns:
     object: User
     None  
-
     """
 
     return render_template("favorite.html")
@@ -300,7 +288,6 @@ def setting():
     Returns:
     object: User
     None  
-
     """
 
     pass
@@ -316,7 +303,6 @@ def logoutpage_page():
     Returns:
     object: User
     None  
-
     """
 
     if os.path.exists("ms_graph_api_token.json"):
@@ -335,7 +321,6 @@ def logout_method():
     Returns:
     object: User
     None  
-
     """
 
     logout_user()
@@ -352,7 +337,6 @@ def onedrive():
     Returns:
     object: User
     None  
-
     """
 
     APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
@@ -374,7 +358,6 @@ def check_for_duplicate_group(group_name):
     Returns:
     object: User
     None  
-
     """
 
     connection = sqlite3.connect("group.db")
@@ -396,7 +379,6 @@ def create_group():
     Returns:
     object: User
     None  
-
     """
 
     # Get form data
