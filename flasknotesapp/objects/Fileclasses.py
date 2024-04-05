@@ -4,11 +4,11 @@ class File:
     A file has a unique identifier, a title, a list of tags,
     and a list of entities with whom the file is shared.
     """
-    
     file_id: int
     title: str
     tags: list[str]
     shared_with: list[int]
+
     # Assuming shared_with is a list of UserIDs or GroupIDs for simplicity
 
     def __init__(self, file_id: int, title: str, tags: list[str],

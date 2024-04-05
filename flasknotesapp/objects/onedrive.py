@@ -26,7 +26,7 @@ def generate_access_token(app_id, scopes):
     if os.path.exists('ms_graph_api_token.json'):
         access_token_cache.deserialize(
             open("ms_graph_api_token.json", "r").read())
-        token_detail = json.load(open('ms_graph_api_token.json',))
+        token_detail = json.load(open('ms_graph_api_token.json', ))
         token_detail_key = list(token_detail['AccessToken'].keys())[0]
         token_expiration = datetime.fromtimestamp(
             int(token_detail['AccessToken'][token_detail_key]['expires_on']))

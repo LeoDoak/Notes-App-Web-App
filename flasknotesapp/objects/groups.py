@@ -9,7 +9,6 @@ class Groups:
         
 
     """
-
     def __init__(self, group_id: int, group_name: str, is_private: bool):
 
         self.group_id = group_id

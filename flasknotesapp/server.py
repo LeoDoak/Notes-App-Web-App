@@ -1,4 +1,5 @@
 import sys  # noqa: E402
+
 sys.path.append("objects")  # noqa: E402
 sys.path.append("databases")  # noqa: E402
 sys.path.append("objects")  # noqa: E402
@@ -130,7 +131,7 @@ def homepage():
     None  
 
     """
-    
+
     return render_template("homepage.html")
 
 

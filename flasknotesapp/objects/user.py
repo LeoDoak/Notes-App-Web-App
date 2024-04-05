@@ -14,7 +14,6 @@ class User():
     Parameters:
 
     Returns:
-    
 
     """
     user_id: str
@@ -92,7 +91,7 @@ class User():
         
 
         """
-        
+
         self.access_token = ac
 
     def get_access_token(self):
@@ -193,7 +192,6 @@ class User():
         else:
             self.email = None
 
-    
     def _check_valid_username(self):
         """Summary or Description of the function
 
@@ -210,7 +208,6 @@ class User():
         else:
             return 'Username does not meet criteria'
 
-    
     def _check_duplicate_username(self):
         """Summary or Description of the function
 
@@ -232,7 +229,6 @@ class User():
         else:
             return ''
 
-    
     def _check_username(self):
         """Summary or Description of the function
 
@@ -250,7 +246,6 @@ class User():
         else:
             return message
 
-    
     def _check_valid_email(self):
         """Summary or Description of the function
 
@@ -267,7 +262,6 @@ class User():
         else:
             return "Invalid email entered"
 
- 
     def _check_duplicate_email(self):
         """Summary or Description of the function
 
@@ -288,7 +282,6 @@ class User():
         else:
             return ''
 
- 
     def _check_email(self):
         """Summary or Description of the function
 
@@ -306,7 +299,6 @@ class User():
         else:
             return message
 
-    
     def _validate_password(self):
         """Summary or Description of the function
 
@@ -323,7 +315,6 @@ class User():
         else:
             return "Password does not meet criteria"
 
-   
     def _check_confirm_password(self, confirm_password):
         """Summary or Description of the function
 
@@ -338,7 +329,6 @@ class User():
             return ''
         else:
             return 'Passwords do not match'
-
 
     def check_new_user(self, confirm_password):
         """Summary or Description of the function
@@ -360,7 +350,7 @@ class User():
             self._set_userID()
             self._update_database()
         return username_message, email_message, password_message, confirm_password_message, Register_status
-   
+
     def _set_userID(self):
         """Summary or Description of the function
 
