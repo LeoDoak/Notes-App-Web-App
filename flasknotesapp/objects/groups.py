@@ -32,7 +32,7 @@ class Groups:
         """
         return self.group_name
     def get_is_private(self):
-            """Summary or Description of the function
+        """Summary or Description of the function
 
         Parameters:
 
