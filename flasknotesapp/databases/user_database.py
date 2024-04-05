@@ -2,6 +2,7 @@
 
 import sqlite3
 
+
 def create_database():
     '''
     Run this file to create the database, checks the database to make sure that it

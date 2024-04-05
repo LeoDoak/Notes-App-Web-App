@@ -2,7 +2,7 @@ import os
 import sys
 import sqlite3
 import requests
-import flask 
+import flask
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
@@ -10,10 +10,12 @@ from waitress import serve
 from werkzeug.utils import secure_filename
 from wtforms import FileField, SubmitField
 sys.path.append("objects")  # noqa: E402
-from onedrive import generate_access_token, GRAPH_API_ENDPOINT
-from user import User
+from onedrive import generate_access_token, GRAPH_API_ENDPOINT  
+from user import User 
 sys.path.append("databases")  # noqa: E402
-import user_database
+import user_database 
+
+
 
 # Don't know if we need 2 of these.
 
@@ -53,7 +55,7 @@ def load_user(user_id):
     row = cursor.fetchall()
     connection.close()
     if len(row) == 1:
-        return User(row[0][0], row[0][1], row[0][2], row[0][3])  
+        return User(row[0][0], row[0][1], row[0][2], row[0][3])
     return None
 
 
@@ -160,8 +162,7 @@ def register_actions():
 
     # check user
     (username_message, email_message, password_message,
-    confirm_password_message, register_status) = new_user.check_new_user(get_confirmpassword)
-
+        confirm_password_message, register_status) = new_user.check_new_user(get_confirmpassword)
 
     if register_status is False:
         print("not able to regster")
@@ -199,35 +200,16 @@ class UploadFileForm(FlaskForm):
     object: User
     None
     """
-    def __init__(self, file, submit):
-        self.file = file
-        self.submit = submit
-
-    def get_file(self):
-        """Summary or Description of the function
-
-        Parameters:
-
-        Returns:
-        object: User
-        None
-        """
-        return self.file
-
-    def get_submit(self):
-        """Summary or Description of the function
-
-        Parameters:
-
-        Returns:
-        object: User
-        None
-        """
-        return self.submit
-
-
     file = FileField("File")
     submit = SubmitField("Upload File")
+
+    def method1(self):
+        """Placeholder method 1."""
+        pass
+
+    def method2(self):
+        """Placeholder method 2."""
+        pass
 
 
 @app.route('/upload', methods=['GET', "POST"])
@@ -241,7 +223,6 @@ def upload_page():
     object: User
     None
     """
-
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data

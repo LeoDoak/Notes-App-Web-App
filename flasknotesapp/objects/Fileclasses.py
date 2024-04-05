@@ -1,5 +1,7 @@
 """ Module containing methods related to files"""
 
+
+
 class File:
     """A class representing a File.
 
@@ -55,7 +57,6 @@ class File:
         Returns:
         """
         return self.shared_with
-
 
 
 # A sample list of files to play with.
