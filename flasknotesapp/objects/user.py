@@ -50,7 +50,6 @@ class User():
 
         Returns:
         """
-
         return str(self.user_id)
 
     def is_active(self):
@@ -60,7 +59,6 @@ class User():
 
         Returns:
         """
-
         return True
 
     def is_anonymous(self):
@@ -70,7 +68,6 @@ class User():
 
         Returns:
         """
-
         return False
 
     def set_access_token(self, ac):
@@ -80,7 +77,6 @@ class User():
 
         Returns:
         """
-
         self.access_token = ac
 
     def get_access_token(self):
@@ -90,7 +86,6 @@ class User():
 
         Returns:
         """
-
         return self.access_token
 
     def is_authenticated(self):
@@ -100,7 +95,6 @@ class User():
 
         Returns:
         """
-
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -118,7 +112,6 @@ class User():
 
         Returns:
         """
-
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -140,7 +133,6 @@ class User():
 
         Returns:
         """
-
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -159,7 +151,6 @@ class User():
 
         Returns:
         """
-
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -178,7 +169,6 @@ class User():
 
         Returns:
         """
-
         pattern = r'^(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z]).{5,}$'
         if re.match(pattern, self.username):
             return ''
@@ -192,7 +182,6 @@ class User():
 
         Returns:
         """
-
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -211,7 +200,6 @@ class User():
 
         Returns:
         """
-
         message = self._check_valid_username()
         if message == '':
             message = self._check_duplicate_username()
@@ -226,7 +214,6 @@ class User():
 
         Returns:
         """
-
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
         if (re.fullmatch(regex, self.email)):
             return ''
@@ -240,7 +227,6 @@ class User():
 
         Returns:
         """
-
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute("SELECT email FROM user where email = ?", (self.email,))
@@ -258,7 +244,6 @@ class User():
 
         Returns:
         """
-
         message = self._check_valid_email()
         if message == '':
             message = self._check_duplicate_email()
@@ -273,7 +258,6 @@ class User():
 
         Returns:
         """
-
         pattern = r'^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{9,}$'
         if re.match(pattern, self.password):
             return ""
@@ -287,7 +271,6 @@ class User():
 
         Returns:
         """
-
         if self.password == confirm_password:
             return ''
         else:
@@ -300,7 +283,6 @@ class User():
 
         Returns:
         """
-
         username_message = self._check_username()
         email_message = self._check_email()
         password_message = self._validate_password()
@@ -319,7 +301,6 @@ class User():
 
         Returns:
         """
-
         id_num = np.random.randint(0, 99, 2)
         get_user_id = str(id_num[0]) + str(id_num[1])
         self.user_id = get_user_id
@@ -331,7 +312,6 @@ class User():
 
         Returns:
         """
-        
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(

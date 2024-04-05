@@ -15,8 +15,6 @@ def generate_access_token(app_id, scopes):
     Parameters:
 
     Returns:
-        
-
     """
 
     # Save Session Token as a token file
@@ -66,8 +64,6 @@ def get_user_code():
     Parameters:
 
     Returns:
-        
-
     """
 
     return user_code
