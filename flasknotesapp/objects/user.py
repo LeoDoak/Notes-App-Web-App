@@ -9,6 +9,14 @@ import numpy as np
 
 
 class User():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    
+
+    """
     user_id: str
     username: str
     password: str
@@ -25,6 +33,14 @@ class User():
         self.email = email
 
     def toString(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
         String = (
                 "User ID: " + str(self.user_id) + " Username: " +
                 str(self.username) + " Password: " + str(self.password) +
@@ -32,21 +48,75 @@ class User():
         return String
 
     def get_id(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         return str(self.user_id)
 
     def is_active(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         return True
 
     def is_anonymous(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         return False
 
     def set_access_token(self, ac):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+        
         self.access_token = ac
 
     def get_access_token(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         return self.access_token
 
     def is_authenticated(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -58,6 +128,15 @@ class User():
         return len(row) == 1
 
     def get_user_from_id(self, user_id):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -73,6 +152,15 @@ class User():
         # return user
 
     def set_login_userID(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -85,6 +173,15 @@ class User():
             self.user_id = None
 
     def set_login_email(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -96,14 +193,34 @@ class User():
         else:
             self.email = None
 
-    def check_valid_username(self):
+    
+    def _check_valid_username(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         pattern = r'^(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z]).{5,}$'
         if re.match(pattern, self.username):
             return ''
         else:
             return 'Username does not meet criteria'
 
-    def check_duplicate_username(self):
+    
+    def _check_duplicate_username(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(
@@ -115,22 +232,52 @@ class User():
         else:
             return ''
 
-    def check_username(self):
-        message = self.check_valid_username()
+    
+    def _check_username(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
+        message = self._check_valid_username()
         if message == '':
-            message = self.check_duplicate_username()
+            message = self._check_duplicate_username()
             return message
         else:
             return message
 
-    def check_valid_email(self):
+    
+    def _check_valid_email(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
         if (re.fullmatch(regex, self.email)):
             return ''
         else:
             return "Invalid email entered"
 
-    def check_duplicate_email(self):
+ 
+    def _check_duplicate_email(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute("SELECT email FROM user where email = ?", (self.email,))
@@ -141,45 +288,102 @@ class User():
         else:
             return ''
 
-    def check_email(self):
-        message = self.check_valid_email()
+ 
+    def _check_email(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
+        message = self._check_valid_email()
         if message == '':
-            message = self.check_duplicate_email()
+            message = self._check_duplicate_email()
             return message
         else:
             return message
 
-    def validate_password(self):
+    
+    def _validate_password(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         pattern = r'^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{9,}$'
         if re.match(pattern, self.password):
             return ""
         else:
             return "Password does not meet criteria"
 
-    def check_confirm_password(self, confirm_password):
+   
+    def _check_confirm_password(self, confirm_password):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         if self.password == confirm_password:
             return ''
         else:
             return 'Passwords do not match'
 
+
     def check_new_user(self, confirm_password):
-        username_message = self.check_username()
-        email_message = self.check_email()
-        password_message = self.validate_password()
-        confirm_password_message = self.check_confirm_password(confirm_password)
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
+
+        username_message = self._check_username()
+        email_message = self._check_email()
+        password_message = self._validate_password()
+        confirm_password_message = self._check_confirm_password(confirm_password)
         Register_status = False
         if username_message == '' and email_message == '' and password_message == '' and confirm_password_message == '':
             Register_status = True
-            self.set_userID()
-            self.update_database()
+            self._set_userID()
+            self._update_database()
         return username_message, email_message, password_message, confirm_password_message, Register_status
+   
+    def _set_userID(self):
+        """Summary or Description of the function
 
-    def set_userID(self):
+        Parameters:
+
+        Returns:
+        
+
+        """
+
         id_num = np.random.randint(0, 99, 2)
         get_user_id = str(id_num[0]) + str(id_num[1])
         self.user_id = get_user_id
 
-    def update_database(self):
+    def _update_database(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        
+
+        """
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
         cursor.execute(

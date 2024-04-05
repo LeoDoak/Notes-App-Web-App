@@ -10,6 +10,15 @@ user_code = "placement_code"
 
 
 def generate_access_token(app_id, scopes):
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+        
+
+    """
+
     # Save Session Token as a token file
     access_token_cache = msal.SerializableTokenCache()
 
@@ -52,6 +61,15 @@ if __name__ == '__main__':
 
 
 def get_user_code():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+        
+
+    """
+
     return user_code
 
 # #pip install msal

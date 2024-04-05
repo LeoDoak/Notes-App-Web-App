@@ -37,6 +37,16 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     connection = sqlite3.connect("user.db")
     cursor = connection.cursor()
     cursor.execute(
@@ -52,17 +62,47 @@ def load_user(user_id):
 
 
 def checkdatabase():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     # call the function that creates the database
     user_database.create_database()
 
 
 @app.route('/')
 def set_up():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     return render_template('loginpage.html')
 
 
 @app.route('/form_login', methods=['POST', 'GET'])
 def login():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     get_name = request.form['username']
     get_password = request.form['password']
     current_user = User(None, get_name, get_password, None)
@@ -81,16 +121,46 @@ def login():
 @app.route('/homepage')
 @login_required
 def homepage():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+    
     return render_template("homepage.html")
 
 
 @app.route('/register')
 def register():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     return render_template("register.html")
 
 
 @app.route('/form_register', methods=['POST', 'GET'])
 def register_actions():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     get_email = request.form['email']
     get_name = request.form['username']
     get_password = request.form['password']
@@ -119,10 +189,30 @@ def register_actions():
 
 @app.route('/forgotpsd')
 def forgot_password():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     return render_template("forgot_pswd.html")
 
 
 class UploadFileForm(FlaskForm):
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     file = FileField("File")
     submit = SubmitField("Upload File")
 
@@ -130,6 +220,16 @@ class UploadFileForm(FlaskForm):
 @app.route('/upload', methods=['GET', "POST"])
 @login_required
 def upload_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -160,24 +260,64 @@ def upload_page():
 @app.route('/group')
 @login_required
 def group_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     return render_template("groups.html")
 
 
 @app.route('/favorite')
 @login_required
 def favorite_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     return render_template("favorite.html")
 
 
 @app.route('/settings')
 @login_required
 def setting():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     pass
 
 
 @app.route('/logout')
 @login_required
 def logoutpage_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     if os.path.exists("ms_graph_api_token.json"):
         os.remove("ms_graph_api_token.json")
     else:
@@ -187,6 +327,16 @@ def logoutpage_page():
 
 @app.route('/logout_method')
 def logout_method():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     logout_user()
     return render_template("logoutpage.html")
 
@@ -194,6 +344,16 @@ def logout_method():
 @app.route('/onedrive')
 @login_required
 def onedrive():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     SCOPES = ['Files.ReadWrite']
     global access_token
@@ -206,6 +366,16 @@ def onedrive():
 
 # Check if the group name is a duplicate in the database
 def check_for_duplicate_group(group_name):
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     connection = sqlite3.connect("group.db")
     cursor = connection.cursor()
     cursor.execute(
@@ -218,6 +388,16 @@ def check_for_duplicate_group(group_name):
 
 @app.route('/form_create_group', methods=['POST'])
 def create_group():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None  
+
+    """
+
     # Get form data
     group_name = request.form['group_name']
 

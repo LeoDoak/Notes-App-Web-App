@@ -1,9 +1,14 @@
 class Groups:
+    """A class represemtiomg groups created by user
 
-    # A class representing Groups created by user
-    # group_id: int
-    # group_name: str
-    # isPrivate: bool
+    Parameters: 
+
+    Returns:
+    str: group_name
+    bool: is_private
+        
+
+    """
 
     def __init__(self, group_id: int, group_name: str, is_private: bool):
 
