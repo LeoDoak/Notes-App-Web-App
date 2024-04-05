@@ -1,7 +1,6 @@
 """ Module containing methods related to files"""
 
 
-
 class File:
     """A class representing a File.
 
