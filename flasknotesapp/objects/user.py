@@ -281,12 +281,12 @@ class User():
         confirm_password_message = self._check_confirm_password(confirm_password)
         register_status = False
         if (username_message == '' and
-            email_message == '' and
-            password_message == '' and
-            confirm_password_message == ''):
-                register_status = True
-                self._set_user_id()
-                self._update_database()
+                email_message == '' and
+                password_message == '' and
+                confirm_password_message == ''):
+            register_status = True
+            self._set_user_id()
+            self._update_database()
         return (
             username_message,
             email_message,
