@@ -51,7 +51,7 @@ def generate_access_token(app_id, scopes):
         webbrowser.open('https://microsoft.com/devicelogin')
         token_response = client.acquire_token_by_device_flow(flow)
 
-    with open('ms_graph_api_token.json', 'w') as _f:
+    with open('ms_graph_api_token.json', 'w', encoding='utf-8') as _f:
         _f.write(access_token_cache.serialize())
 
     return token_response
