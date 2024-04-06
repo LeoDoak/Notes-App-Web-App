@@ -222,7 +222,7 @@ def upload_page():
     object: User
     None
     """
-    headers = onedrive()
+    headers, access_token = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -336,7 +336,7 @@ def onedrive():
          }
         return render_template("homepage.html")
     else:
-        return headers
+        return access_token,headers
 
    
 # Check if the group name is a duplicate in the database
