@@ -45,6 +45,8 @@ six==1.16.0
 stack-data==0.6.3
 threadwrapper==0.14.0
 traitlets==5.14.2
+types-requests==2.31.0.20240406
+types-waitress==2.1.4.20240106
 unencryptedsocket==2.2.0
 urllib3==2.2.1
 waitress==3.0.0
