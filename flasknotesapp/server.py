@@ -223,7 +223,7 @@ def upload_page():
     object: User
     None
     """
-    timout = 60 
+    timeout = 60 
     headers, access_token = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
@@ -245,7 +245,8 @@ def upload_page():
                     GRAPH_API_ENDPOINT +
                     f'/me/drive/items/root:/{name}:/content',
                     headers=headers,
-                    data=media_content,timeout = timeout 
+                    data=media_content,
+                    timeout = timeout 
                 )
                 print(response.json())
         return render_template("homepage.html")
