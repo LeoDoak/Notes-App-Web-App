@@ -1,11 +1,12 @@
 """ Main Server Page  """
+
+import sys # noqa: E402
 sys.path.append("objects")  # noqa: E402
 from onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from user import User 
 sys.path.append("databases")  # noqa: E402
 import user_database  
 import os
-import sys
 import sqlite3
 import requests
 import flask
