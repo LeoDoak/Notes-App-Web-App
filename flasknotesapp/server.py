@@ -330,9 +330,8 @@ def onedrive():
     headers = {
         'Authorization': 'Bearer ' + ACCESS_TOKEN['access_token']
      }
-if len(headers) == 1:
-    return headers
-return render_template("homepage.html")
+    print(headers)
+    return render_template("homepage.html")
 
 
 # Check if the group name is a duplicate in the database
