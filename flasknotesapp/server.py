@@ -205,7 +205,7 @@ class UploadFileForm(FlaskForm):
     def method1(self):
         """Placeholder method 1."""
         # placeholder
-        print("Method 1")  
+        print("Method 1")
 
     def method2(self):
         """Placeholder method 2."""
@@ -337,11 +337,9 @@ def onedrive():
             'Authorization': 'Bearer ' + access_token['access_token']
          }
         return render_template("homepage.html")
-    else:
-        return access_token, headers
+    return access_token, headers
 
- 
-# Check if the group name is a duplicate in the database
+
 def check_for_duplicate_group(group_name):
     """Summary or Description of the function
 
