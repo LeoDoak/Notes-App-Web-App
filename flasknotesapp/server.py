@@ -1,21 +1,18 @@
-import sys  # noqa: E402
-sys.path.append("objects")  # noqa: E402
-sys.path.append("databases")  # noqa: E402
-sys.path.append("objects")  # noqa: E402
-import sqlite3  # noqa: E402
-import user_database  # noqa: E402
-import flask  # noqa: E402
-import os  # noqa: E402
-import requests  # noqa: E402
-from onedrive import generate_access_token, GRAPH_API_ENDPOINT  # noqa: E402
-from flask import Flask, render_template, request, redirect, url_for  # noqa: E402
-from waitress import serve  # noqa: E402
-from flask_login import login_required, login_user, logout_user  # noqa: E402
-from flask_wtf import FlaskForm  # noqa: E402
-from wtforms import FileField, SubmitField  # noqa: E402
-from werkzeug.utils import secure_filename  # noqa: E402
-from user import User  # noqa: E402
-from flask_login import LoginManager  # noqa: E402
+""" Main Server Page  """
+
+import os
+import sqlite3
+import flask
+import requests
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import login_required, login_user, logout_user, LoginManager
+from flask_wtf import FlaskForm
+from waitress import serve
+from werkzeug.utils import secure_filename
+from wtforms import FileField, SubmitField
+from databases import user_database
+from objects.onedrive import generate_access_token, GRAPH_API_ENDPOINT
+from objects.user import User
 
 # Don't know if we need 2 of these.
 
@@ -29,7 +26,8 @@ app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
-access_token = ""
+
+# ACCESS_TOKEN = ""  "Global variable that flake8 does not like"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -37,6 +35,15 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     connection = sqlite3.connect("user.db")
     cursor = connection.cursor()
     cursor.execute(
@@ -47,50 +54,102 @@ def load_user(user_id):
     connection.close()
     if len(row) == 1:
         return User(row[0][0], row[0][1], row[0][2], row[0][3])
-    else:
-        return None
+    return None
 
 
 def checkdatabase():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     # call the function that creates the database
     user_database.create_database()
 
 
 @app.route('/')
 def set_up():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     return render_template('loginpage.html')
 
 
 @app.route('/form_login', methods=['POST', 'GET'])
 def login():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     get_name = request.form['username']
     get_password = request.form['password']
     current_user = User(None, get_name, get_password, None)
     if current_user.is_authenticated():
         flask.flash('Logged in successfully.')
-        current_user.set_login_userID()
+        current_user.set_login_user_id()
         current_user.set_login_email()
         login_user(current_user)
         # next = flask.request.args.get('next')
         return redirect(url_for('homepage'))
-    else:
-        error_message = "Incorrect Username or Password!"
-        return render_template("loginpage.html", msg=error_message)
+    error_message = "Incorrect Username or Password!"
+    return render_template("loginpage.html", msg=error_message)
 
 
 @app.route('/homepage')
 @login_required
 def homepage():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     return render_template("homepage.html")
 
 
 @app.route('/register')
 def register():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     return render_template("register.html")
 
 
 @app.route('/form_register', methods=['POST', 'GET'])
 def register_actions():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     get_email = request.form['email']
     get_name = request.form['username']
     get_password = request.form['password']
@@ -100,36 +159,72 @@ def register_actions():
     new_user = User(None, get_name, get_password, get_email)
 
     # check user
-    username_message, email_message, password_message, confirm_password_message, Register_status = new_user.check_new_user(
-        get_confirmpassword)
+    (username_message, email_message, password_message,
+        confirm_password_message, register_status) = new_user.check_new_user(get_confirmpassword)
 
-    if Register_status is False:
+    if register_status is False:
         print("not able to regster")
         return render_template(
             "register.html",
             email_error=email_message, username_error=username_message,
             password_error=password_message,
             confirm_password_error=confirm_password_message)
-    else:
-        print("registered")
-        flask.flash('Logged in successfully.')
-        login_user(new_user)
-        return render_template('homepage.html')
+    print("registered")
+    flask.flash('Logged in successfully.')
+    login_user(new_user)
+    return render_template('homepage.html')
 
 
 @app.route('/forgotpsd')
 def forgot_password():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     return render_template("forgot_pswd.html")
 
 
 class UploadFileForm(FlaskForm):
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
     file = FileField("File")
     submit = SubmitField("Upload File")
+
+    def method1(self):
+        """Placeholder method 1."""
+        # placeholder
+        print("Method 1")
+
+    def method2(self):
+        """Placeholder method 2."""
+        # placeholder
+        print("Method 2")
 
 
 @app.route('/upload', methods=['GET', "POST"])
 @login_required
 def upload_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+    timeout = 60
+    headers, access_token = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -150,7 +245,8 @@ def upload_page():
                     GRAPH_API_ENDPOINT +
                     f'/me/drive/items/root:/{name}:/content',
                     headers=headers,
-                    data=media_content
+                    data=media_content,
+                    timeout=timeout
                 )
                 print(response.json())
         return render_template("homepage.html")
@@ -160,24 +256,44 @@ def upload_page():
 @app.route('/group')
 @login_required
 def group_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     return render_template("groups.html")
 
 
 @app.route('/favorite')
 @login_required
 def favorite_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
     return render_template("favorite.html")
-
-
-@app.route('/settings')
-@login_required
-def setting():
-    pass
 
 
 @app.route('/logout')
 @login_required
 def logoutpage_page():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     if os.path.exists("ms_graph_api_token.json"):
         os.remove("ms_graph_api_token.json")
     else:
@@ -187,6 +303,15 @@ def logoutpage_page():
 
 @app.route('/logout_method')
 def logout_method():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     logout_user()
     return render_template("logoutpage.html")
 
@@ -194,18 +319,38 @@ def logout_method():
 @app.route('/onedrive')
 @login_required
 def onedrive():
-    APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
-    SCOPES = ['Files.ReadWrite']
-    global access_token
-    access_token = generate_access_token(APP_ID, SCOPES)
-    # headers = {
-    #    'Authorization': 'Bearer ' + access_token['access_token']
-    # }
-    return render_template("homepage.html")
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
+    headers = ''
+    app_id = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
+    scopes = ['Files.ReadWrite']
+    # global ACCESS_TOKEN
+    access_token = generate_access_token(app_id, scopes)
+    if headers == '':
+        headers = {
+            'Authorization': 'Bearer ' + access_token['access_token']
+         }
+        return render_template("homepage.html")
+    return access_token, headers
 
 
-# Check if the group name is a duplicate in the database
 def check_for_duplicate_group(group_name):
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     connection = sqlite3.connect("group.db")
     cursor = connection.cursor()
     cursor.execute(
@@ -218,6 +363,15 @@ def check_for_duplicate_group(group_name):
 
 @app.route('/form_create_group', methods=['POST'])
 def create_group():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+
     # Get form data
     group_name = request.form['group_name']
 
@@ -226,10 +380,9 @@ def create_group():
         error_message = "Create the group with a different name"
         return render_template(
             "create_group.html", error_message=error_message)
-    else:
-        # If group name is unique, continue with group creation logic
-        # Your group creation logic here
-        return "Group successfully created"
+    # If group name is unique, continue with group creation logic
+    # Your group creation logic here
+    return "Group successfully created"
 
 
 # if __name__ == "__main__":

@@ -1,3 +1,6 @@
+""" Module containing methods related to files"""
+
+
 class File:
     """A class representing a File.
 
@@ -8,6 +11,7 @@ class File:
     title: str
     tags: list[str]
     shared_with: list[int]
+
     # Assuming shared_with is a list of UserIDs or GroupIDs for simplicity
 
     def __init__(self, file_id: int, title: str, tags: list[str],
@@ -16,6 +20,42 @@ class File:
         self.title = title
         self.tags = tags
         self.shared_with = shared_with
+
+    def get_file_id(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.file_id
+
+    def get_title(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.title
+
+    def get_tags(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.tags
+
+    def get_shared_with(self):
+        """Summary or Description of the function
+
+        Parameters:
+
+        Returns:
+        """
+        return self.shared_with
 
 
 # A sample list of files to play with.
