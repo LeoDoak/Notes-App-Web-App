@@ -1,3 +1,5 @@
+""" Main Server Page  """
+
 import os
 import sys
 import sqlite3
