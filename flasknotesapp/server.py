@@ -223,7 +223,7 @@ def upload_page():
     object: User
     None
     """
-    timeout = 60 
+    timeout = 60
     headers, access_token = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
@@ -246,7 +246,7 @@ def upload_page():
                     f'/me/drive/items/root:/{name}:/content',
                     headers=headers,
                     data=media_content,
-                    timeout = timeout 
+                    timeout=timeout
                 )
                 print(response.json())
         return render_template("homepage.html")
