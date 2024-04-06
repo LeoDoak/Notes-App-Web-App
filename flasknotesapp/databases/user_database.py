@@ -1,3 +1,5 @@
+""" Module containing methods related to files"""
+
 # https://www.ionos.com/digitalguide/websites/web-development/sqlite3-python/
 
 import sqlite3
@@ -22,7 +24,7 @@ def create_database():
         and email = 'admin@uncw.edu'""")
     row = cursor.fetchall()
     # if no admin access found then it'll add one
-    if (len(row) == 0):
+    if len(row) == 0:
         cursor.execute(
             "INSERT INTO user VALUES(0, 'admin','1234','admin@uncw.edu')")
         # create admin access

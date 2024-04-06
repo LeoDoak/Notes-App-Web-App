@@ -27,7 +27,8 @@ app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
-ACCESS_TOKEN = ""
+
+ # ACCESS_TOKEN = ""  "Global variable that flake8 does not like"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -101,7 +102,7 @@ def login():
     current_user = User(None, get_name, get_password, None)
     if current_user.is_authenticated():
         flask.flash('Logged in successfully.')
-        current_user.set_login_userID()
+        current_user.set_login_user_id()
         current_user.set_login_email()
         login_user(current_user)
         # next = flask.request.args.get('next')
@@ -203,11 +204,11 @@ class UploadFileForm(FlaskForm):
 
     def method1(self):
         """Placeholder method 1."""
-        pass
+        print("Method 1")  # placeholder 
 
     def method2(self):
         """Placeholder method 2."""
-        pass
+        print("Method 2")  # placeholder 
 
 
 @app.route('/upload', methods=['GET', "POST"])
@@ -323,17 +324,20 @@ def onedrive():
     None
     """
 
+    headers = '' 
     app_id = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     scopes = ['Files.ReadWrite']
     # global ACCESS_TOKEN
-    ACCESS_TOKEN = generate_access_token(app_id, scopes)
-    headers = {
-        'Authorization': 'Bearer ' + ACCESS_TOKEN['access_token']
-     }
-    print(headers)
-    return render_template("homepage.html")
+    access_token = generate_access_token(app_id, scopes)
+    if headers == '':
+        headers = {
+            'Authorization': 'Bearer ' + access_token['access_token']
+         }
+        return render_template("homepage.html")
+    else:
+        return headers
 
-
+   
 # Check if the group name is a duplicate in the database
 def check_for_duplicate_group(group_name):
     """Summary or Description of the function

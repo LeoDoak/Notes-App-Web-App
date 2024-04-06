@@ -1,7 +1,7 @@
 "Image library, need to 'pip install Pillow'"
-from PIL import Image
 import sqlite3
 import re
+from PIL import Image
 import numpy as np
 
 
@@ -30,14 +30,14 @@ class User():
         self.password = password
         self.email = email
 
-    def toString(self):
+    def __str__(self):
         """Summary or Description of the function
 
         Parameters:
 
         Returns:
         """
-        String = (
+        string = (
                 "User ID: " + str(self.user_id) + " Username: " +
                 str(self.username) + " Password: " + str(self.password) +
                 " email: " + str(self.email))
@@ -126,7 +126,7 @@ class User():
         self.email = row[0][3]
         # return user
 
-    def set_login_userID(self):
+    def set_login_user_id(self):
         """Summary or Description of the function
 
         Parameters:
@@ -172,8 +172,7 @@ class User():
         pattern = r'^(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z]).{5,}$'
         if re.match(pattern, self.username):
             return ''
-        else:
-            return 'Username does not meet criteria'
+        return 'Username does not meet criteria'
 
     def _check_duplicate_username(self):
         """Summary or Description of the function
@@ -190,8 +189,7 @@ class User():
         connection.close()
         if len(row) == 1:
             return 'Username is already taken'
-        else:
-            return ''
+        return ''
 
     def _check_username(self):
         """Summary or Description of the function
@@ -204,8 +202,7 @@ class User():
         if message == '':
             message = self._check_duplicate_username()
             return message
-        else:
-            return message
+        return message
 
     def _check_valid_email(self):
         """Summary or Description of the function
@@ -215,10 +212,9 @@ class User():
         Returns:
         """
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-        if (re.fullmatch(regex, self.email)):
+        if re.fullmatch(regex, self.email):
             return ''
-        else:
-            return "Invalid email entered"
+        return "Invalid email entered"
 
     def _check_duplicate_email(self):
         """Summary or Description of the function
@@ -234,8 +230,7 @@ class User():
         connection.close()
         if len(row) == 1:
             return "Email already registered for account"
-        else:
-            return ''
+        return ''
 
     def _check_email(self):
         """Summary or Description of the function
@@ -248,8 +243,7 @@ class User():
         if message == '':
             message = self._check_duplicate_email()
             return message
-        else:
-            return message
+        return message
 
     def _validate_password(self):
         """Summary or Description of the function
@@ -261,8 +255,7 @@ class User():
         pattern = r'^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{9,}$'
         if re.match(pattern, self.password):
             return ""
-        else:
-            return "Password does not meet criteria"
+        return "Password does not meet criteria"
 
     def _check_confirm_password(self, confirm_password):
         """Summary or Description of the function
@@ -273,8 +266,7 @@ class User():
         """
         if self.password == confirm_password:
             return ''
-        else:
-            return 'Passwords do not match'
+        return 'Passwords do not match'
 
     def check_new_user(self, confirm_password):
         """Summary or Description of the function
@@ -287,14 +279,24 @@ class User():
         email_message = self._check_email()
         password_message = self._validate_password()
         confirm_password_message = self._check_confirm_password(confirm_password)
-        Register_status = False
-        if username_message == '' and email_message == '' and password_message == '' and confirm_password_message == '':
+        register_status = False
+        if (username_message == '' and 
+            email_message == '' and 
+            password_message == '' and 
+            confirm_password_message == ''
+        ):
             Register_status = True
-            self._set_userID()
+            self._set_user_id()
             self._update_database()
-        return username_message, email_message, password_message, confirm_password_message, Register_status
+        return (
+            username_message, 
+            email_message,
+            password_message,
+            confirm_password_message, 
+            register_status
+        )
 
-    def _set_userID(self):
+    def _set_user_id(self):
         """Summary or Description of the function
 
         Parameters:
