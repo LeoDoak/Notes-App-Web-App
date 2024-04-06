@@ -10,6 +10,7 @@ import msal
 
 GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0'
 
+
 def generate_access_token(app_id, scopes):
     """Summary or Description of the function
 
@@ -24,7 +25,7 @@ def generate_access_token(app_id, scopes):
     # read the token file
     if os.path.exists('ms_graph_api_token.json'):
         with open("ms_graph_api_token.json", "r") as file:
-            access_token_cache.deserialize(file.read())  
+            access_token_cache.deserialize(file.read())
         with open("ms_graph_api_token.json", "r") as file:
             token_detail = json.load(file)
         token_detail_key = list(token_detail['AccessToken'].keys())[0]

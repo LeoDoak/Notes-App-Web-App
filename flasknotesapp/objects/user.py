@@ -280,19 +280,19 @@ class User():
         password_message = self._validate_password()
         confirm_password_message = self._check_confirm_password(confirm_password)
         register_status = False
-        if (username_message == '' and 
-            email_message == '' and 
-            password_message == '' and 
+        if (username_message == '' and
+            email_message == '' and
+            password_message == '' and
             confirm_password_message == ''
-        ):
-            Register_status = True
+            ):
+            register_status = True
             self._set_user_id()
             self._update_database()
         return (
-            username_message, 
+            username_message,
             email_message,
             password_message,
-            confirm_password_message, 
+            confirm_password_message,
             register_status
         )
 

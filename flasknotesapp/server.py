@@ -28,7 +28,7 @@ app.config['UPLOAD_FOLDER'] = 'static\\files'
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
 
- # ACCESS_TOKEN = ""  "Global variable that flake8 does not like"
+# ACCESS_TOKEN = ""  "Global variable that flake8 does not like"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -204,11 +204,13 @@ class UploadFileForm(FlaskForm):
 
     def method1(self):
         """Placeholder method 1."""
-        print("Method 1")  # placeholder 
+        # placeholder
+        print("Method 1")    
 
     def method2(self):
         """Placeholder method 2."""
-        print("Method 2")  # placeholder 
+        # placeholder
+        print("Method 2") 
 
 
 @app.route('/upload', methods=['GET', "POST"])
@@ -325,7 +327,7 @@ def onedrive():
     None
     """
 
-    headers = '' 
+    headers = ''
     app_id = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     scopes = ['Files.ReadWrite']
     # global ACCESS_TOKEN
@@ -336,7 +338,7 @@ def onedrive():
          }
         return render_template("homepage.html")
     else:
-        return access_token,headers
+        return access_token, headers
 
    
 # Check if the group name is a duplicate in the database
