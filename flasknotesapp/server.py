@@ -1,23 +1,16 @@
-import sys
 import os
 import sqlite3
 import requests
-
 import flask
+from databases import user_database
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
-
 from waitress import serve
 from werkzeug.utils import secure_filename
 from wtforms import FileField, SubmitField
-
-sys.path.append("objects")
-from onedrive import generate_access_token, GRAPH_API_ENDPOINT
-from user import User
-
-sys.path.append("databases")
-import user_database
+from objects.onedrive import generate_access_token, GRAPH_API_ENDPOINT
+from objects.user import User
 
 """ Main Server Page  """
 
