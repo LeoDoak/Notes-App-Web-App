@@ -13,11 +13,11 @@ from werkzeug.utils import secure_filename
 from wtforms import FileField, SubmitField
 
 sys.path.append("objects")
-from onedrive import generate_access_token, GRAPH_API_ENDPOINT
-from user import User
+from onedrive import generate_access_token, GRAPH_API_ENDPOINT  # noqa: E402
+from user import User  # noqa: E402
 
 sys.path.append("databases")
-import user_database
+import user_database  # noqa: E402
 
 """ Main Server Page  """
 
