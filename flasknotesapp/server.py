@@ -1,3 +1,5 @@
+""" Main Server Page  """
+
 import os
 import sqlite3
 import requests
@@ -11,8 +13,6 @@ from werkzeug.utils import secure_filename
 from wtforms import FileField, SubmitField
 from objects.onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from objects.user import User
-
-""" Main Server Page  """
 
 # Don't know if we need 2 of these.
 
