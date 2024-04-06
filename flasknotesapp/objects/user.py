@@ -284,9 +284,9 @@ class User():
             email_message == '' and
             password_message == '' and
             confirm_password_message == ''):
-            register_status = True
-            self._set_user_id()
-            self._update_database()
+                register_status = True
+                self._set_user_id()
+                self._update_database()
         return (
             username_message,
             email_message,
