@@ -1,5 +1,9 @@
 """ Main Server Page  """
-
+sys.path.append("objects")  # noqa: E402
+from onedrive import generate_access_token, GRAPH_API_ENDPOINT
+from user import User 
+sys.path.append("databases")  # noqa: E402
+import user_database  
 import os
 import sys
 import sqlite3
@@ -11,11 +15,7 @@ from flask_wtf import FlaskForm
 from waitress import serve
 from werkzeug.utils import secure_filename
 from wtforms import FileField, SubmitField
-sys.path.append("objects")  # noqa: E402
-from onedrive import generate_access_token, GRAPH_API_ENDPOINT  # noqa: E402
-from user import User  # noqa: E402
-sys.path.append("databases")  # noqa: E402
-import user_database  # noqa: E402
+
 
 # Don't know if we need 2 of these.
 
