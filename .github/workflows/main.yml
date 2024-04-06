@@ -24,7 +24,8 @@ jobs:
         python -m pip install --upgrade pip
         python -m venv .venv
         source .venv/bin/activate    
-        pip install flake8 pylint Flask
+        pip install flake8 pylint 
+	pip install -r requirements.txt 
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         # stop the build if there are Python syntax errors or undefined names
         flake8 $PROJECT_DIR --count --select=E9,F63,F7,F82 --show-source --statistics
