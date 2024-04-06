@@ -25,7 +25,7 @@ def generate_access_token(app_id, scopes):
     if os.path.exists('ms_graph_api_token.json'):
         with open("ms_graph_api_token.json", "r") as file:
             access_token_cache.deserialize(file.read())  
-        with ooen("ms_graph_api_token.json", "r") as file:
+        with open("ms_graph_api_token.json", "r") as file:
             token_detail = json.load(file)
         token_detail_key = list(token_detail['AccessToken'].keys())[0]
         token_expiration = datetime.fromtimestamp(
@@ -58,17 +58,6 @@ def generate_access_token(app_id, scopes):
 
 if __name__ == '__main__':
     ...
-
-
-def get_user_code():
-    """Summary or Description of the function
-
-    Parameters:
-
-    Returns:
-    """
-
-    return user_code
 
 # #pip install msal
 # #video https://www.youtube.com/watch?v=1Jyd7SA-0kI&t=141s

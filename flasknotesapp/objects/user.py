@@ -41,7 +41,7 @@ class User():
                 "User ID: " + str(self.user_id) + " Username: " +
                 str(self.username) + " Password: " + str(self.password) +
                 " email: " + str(self.email))
-        return String
+        return string
 
     def get_id(self):
         """Summary or Description of the function

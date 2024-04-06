@@ -222,6 +222,7 @@ def upload_page():
     object: User
     None
     """
+    headers = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -231,7 +232,7 @@ def upload_page():
                          secure_filename(file.filename)))
         dir_list = os.listdir('static\\files')
         headers = {
-            'Authorization': 'Bearer ' + ACCESS_TOKEN['access_token']
+            'Authorization': 'Bearer ' + access_token['access_token']
         }
         for file_path in dir_list:
             name = file_path
