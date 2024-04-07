@@ -393,14 +393,15 @@ def filefinder():
     object: User
     None
     """
-    URL = 'https://graph.microsoft.com/v1.0/'
+    url = 'https://graph.microsoft.com/v1.0/'
     headers = onedrive()
     file_list = ''
     timeout = 30
     if len(headers) == 1:  # make sure that the app is already authenticated
-        items = json.loads(requests.get(URL + 'me/drive/root/children', headers=headers, timeout=timeout).text)
+        items = json.loads(requests.get(url + 'me/drive/root/children',
+            headers=headers, timeout=timeout).text)
         items = items['value']
-        for i, entries in enumerate(items):
+        for entries in items:
             # get folders
             print(items[entries]['name'], '| item-id >', items[entries]['id'])
             file_list = file_list + "\n" + str(items[entries]['name']) + "\n"
@@ -409,7 +410,7 @@ def filefinder():
             new_url = URL + 'me/drive/items/' + current_folder + '/children'
             sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
             sub_items = sub_items['value']
-            for i, sub_entries in enumerate(sub_items):
+            for sub_entries in sub_items:
                 print(sub_items[sub_entries]['name'], '| item-id >', sub_items[sub_entries]['id'])
                 file_list = file_list + "\n" + '\t' + "- " + sub_items[sub_entries]['name'] + '\n'
         print(file_list)
