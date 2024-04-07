@@ -273,7 +273,16 @@ def group_page():
 @app.route('/group_details')
 @login_required
 def group_details_page():
-    # Get the value of the 'title' query parameter
+    """
+    Render the group details page.
+
+    This function retrieves the value of the 'title' query parameter from the request.
+    If the parameter is not provided, it defaults to 'Default Group Name'.
+    The function then renders the 'group_details.html' template, passing the retrieved group name.
+
+    Returns:
+    rendered_template: HTML content of the rendered template.
+    """
     group_name = request.args.get('title', 'Default Group Name')
     return render_template("group_details.html", group_name=group_name)
 
@@ -436,3 +445,4 @@ if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=8000)
     checkdatabase()
     login()
+
