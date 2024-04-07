@@ -2,6 +2,7 @@
 
 import os
 import sqlite3
+import json
 import flask
 import requests
 from flask import Flask, render_template, request, redirect, url_for
@@ -24,6 +25,7 @@ from objects.user import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
+# app.config['UPLOAD_FOLDER'] = 'static/files' (*mac)
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
 
@@ -224,7 +226,7 @@ def upload_page():
     None
     """
     timeout = 60
-    headers, access_token = onedrive()
+    headers = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -233,9 +235,9 @@ def upload_page():
                          app.config['UPLOAD_FOLDER'],
                          secure_filename(file.filename)))
         dir_list = os.listdir('static\\files')
-        headers = {
-            'Authorization': 'Bearer ' + access_token['access_token']
-        }
+        #  headers = {
+        #    'Authorization': 'Bearer ' + access_token['access_token']
+        #  }
         for file_path in dir_list:
             name = file_path
             file_path = 'static\\files\\' + file_path
@@ -327,18 +329,14 @@ def onedrive():
     object: User
     None
     """
-
-    headers = ''
     app_id = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     scopes = ['Files.ReadWrite']
     # global ACCESS_TOKEN
     access_token = generate_access_token(app_id, scopes)
-    if headers == '':
-        headers = {
-            'Authorization': 'Bearer ' + access_token['access_token']
-         }
-        return render_template("homepage.html")
-    return access_token, headers
+    headers = {
+        'Authorization': 'Bearer ' + access_token['access_token']
+    }
+    return headers
 
 
 def check_for_duplicate_group(group_name):
@@ -383,6 +381,43 @@ def create_group():
     # If group name is unique, continue with group creation logic
     # Your group creation logic here
     return "Group successfully created"
+
+
+@app.route('/filefinder')
+@login_required
+def filefinder():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+    url = 'https://graph.microsoft.com/v1.0/'
+    headers = onedrive()
+    file_list = ''
+    timeout = 30
+    items = json.loads(requests.get(url + 'me/drive/root/children',
+                                    headers=headers, timeout=timeout).text)
+    items = items['value']
+    #  for entries in range(len(items)):
+
+    for _, entry in enumerate(items):
+        # get folders
+        print(entry['name'], '| item-id >', entry['id'])
+        file_list += "\n" + str(entry['name']) + "\n"
+        current_folder = entry['id']
+        # get files
+        new_url = url + 'me/drive/items/' + current_folder + '/children'
+        sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
+        sub_items = sub_items['value']
+        #  for sub_entries in range(len(sub_items)):
+        for _, sub_entry in enumerate(sub_items):
+            print(sub_entry['name'], '| item-id >', sub_entry['id'])
+            file_list += "\n" + '\t' + "- " + sub_entry['name'] + '\n'
+    print(file_list)
+    return render_template("fileexplorer.html", folders=file_list)
 
 
 # if __name__ == "__main__":
