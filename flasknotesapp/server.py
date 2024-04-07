@@ -269,6 +269,13 @@ def group_page():
 
     return render_template("groups.html")
 
+@app.route('/group_details.html')
+@login_required
+def group_details_page():
+    # Get the value of the 'title' query parameter
+    group_name = request.args.get('title', 'Default Group Name')
+    return render_template("group_details.html", group_name=group_name)
+
 
 @app.route('/favorite')
 @login_required
