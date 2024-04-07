@@ -398,7 +398,7 @@ def filefinder():
     file_list = ''
     timeout = 30
     if len(headers) == 1:  # make sure that the app is already authenticated
-        items = json.loads(requests.get(URL + 'me/drive/root/children', headers=headers, timeout = timeout).text)
+        items = json.loads(requests.get(URL + 'me/drive/root/children', headers=headers, timeout=timeout).text)
         items = items['value']
         for entries in range(len(items)):
             # get folders
