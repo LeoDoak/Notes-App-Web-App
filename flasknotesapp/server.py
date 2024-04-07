@@ -223,7 +223,7 @@ def upload_page():
     object: User
     None
     """
-    timeout = 60
+    timeout = 15
     headers, access_token = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
@@ -241,13 +241,16 @@ def upload_page():
             file_path = 'static\\files\\' + file_path
             with open(file_path, 'rb') as upload:
                 media_content = upload.read()
-                response = requests.put(
-                    GRAPH_API_ENDPOINT +
-                    f'/me/drive/items/root:/{name}:/content',
-                    headers=headers,
-                    data=media_content,
-                    timeout=timeout
-                )
+                try:
+                    response = requests.put(
+                        GRAPH_API_ENDPOINT +
+                        f'/me/drive/items/root:/{name}:/content',
+                        headers=headers,
+                        data=media_content,
+                        timeout=timeout
+                    )
+                except requests.exceptions.Timeout:
+                    print("Timed out")
                 print(response.json())
         return render_template("homepage.html")
     return render_template("upload.html", form=form)
