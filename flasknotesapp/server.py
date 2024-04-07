@@ -90,7 +90,7 @@ def set_up():
 
 @app.route('/form_login', methods=['POST', 'GET'])
 def login():
-    """Handles the user login functionality. 
+    """Handles the user login functionality.
 
     Parameters:
     None.
