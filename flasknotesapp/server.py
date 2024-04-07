@@ -4,6 +4,7 @@ import os
 import sqlite3
 import flask
 import requests
+import json
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
@@ -327,17 +328,13 @@ def onedrive():
     object: User
     None
     """
-
-    headers = ''
     app_id = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     scopes = ['Files.ReadWrite']
     # global ACCESS_TOKEN
     access_token = generate_access_token(app_id, scopes)
-    if headers == '':
-        headers = {
-            'Authorization': 'Bearer ' + access_token['access_token']
-         }
-        return render_template("homepage.html")
+    headers = {
+        'Authorization': 'Bearer ' + access_token['access_token']
+    }
     return access_token, headers
 
 
@@ -383,6 +380,42 @@ def create_group():
     # If group name is unique, continue with group creation logic
     # Your group creation logic here
     return "Group successfully created"
+
+
+@app.route('/filefinder')
+@login_required
+def filefinder():
+    """Summary or Description of the function
+
+    Parameters:
+
+    Returns:
+    object: User
+    None
+    """
+    URL = 'https://graph.microsoft.com/v1.0/'
+    access_token, headers = onedrive()
+    file_list = ''
+    timeout = 30
+    if len(headers) == 1:  # make sure that the app is already authenticated
+        items = json.loads(requests.get(URL + 'me/drive/root/children', headers=headers, timeout = timeout).text)
+        items = items['value']
+        for entries in range(len(items)):
+            # get folders
+            print(items[entries]['name'], '| item-id >', items[entries]['id'])
+            file_list = file_list + "\n" + str(items[entries]['name']) + "\n"
+            current_folder = items[entries]['id']
+            # get files
+            new_url = URL + 'me/drive/items/' + current_folder + '/children'
+            sub_items = json.loads(requests.get(new_url, headers=headers).text)
+            sub_items = sub_items['value']
+            for sub_entries in range(len(sub_items)):
+                print(sub_items[sub_entries]['name'], '| item-id >', sub_items[sub_entries]['id'])
+                file_list = file_list + "\n" + '\t' + "- " + sub_items[sub_entries]['name'] + '\n'
+        print(file_list)
+        return render_template("fileexplorer.html", folders=file_list)
+    else:
+        print('None')
 
 
 # if __name__ == "__main__":
