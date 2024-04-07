@@ -32,7 +32,7 @@ class User():
         None.
 
         Returns:
-        str: string representation of class. 
+        str: string representation of class.
         """
         string = (
                 "User ID: " + str(self.user_id) + " Username: " +
@@ -41,7 +41,7 @@ class User():
         return string
 
     def get_id(self):
-        """Part of necessary flask-login module. Gets the user_id. 
+        """Part of necessary flask-login module. Gets the user_id.
 
         Parameters:
         None.
@@ -58,7 +58,7 @@ class User():
         None.
 
         Returns:
-        bool: True since the users are active if logged in. 
+        bool: True since the users are active if logged in.
         """
         return True
 
@@ -76,7 +76,7 @@ class User():
 
     def set_access_token(self, ac):
         """Sets the access token , part of necessary flask-login
-        module. 
+        module.
 
         Parameters:
         None.
@@ -87,13 +87,13 @@ class User():
         self.access_token = ac
 
     def get_access_token(self):
-        """Part of necesary flask-login module. 
+        """Part of necesary flask-login module.
 
         Parameters:
         None.
 
         Returns:
-        str: The access token associated with the user. 
+        str: The access token associated with the user.
         """
         return self.access_token
 
@@ -104,7 +104,7 @@ class User():
         None.
 
         Returns:
-        bool: True if user is authenticated. False otherwise. 
+        bool: True if user is authenticated. False otherwise.
         """
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
@@ -120,10 +120,10 @@ class User():
         """gets the user object from the user_id
 
         Parameters:
-        user_id (int): The unique identifier of the user. 
+        user_id (int): The unique identifier of the user.
 
         Returns:
-        None. Sets the instance variables. 
+        None. Sets the instance variables.
         """
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
@@ -140,7 +140,7 @@ class User():
         # return user
 
     def set_login_user_id(self):
-        """Sets the login user_id from the database. 
+        """Sets the login user_id from the database.
 
         Parameters:
         None.
@@ -160,7 +160,7 @@ class User():
             self.user_id = None
 
     def set_login_email(self):
-        """Sets the login email from the database. 
+        """Sets the login email from the database.
 
         Parameters:
         None.
@@ -180,13 +180,13 @@ class User():
             self.email = None
 
     def _check_valid_username(self):
-        """checks if username fits criteria. 
+        """checks if username fits criteria.
 
         Parameters:
-        None. 
+        None.
 
         Returns:
-        str: empty string if valid, error message if not. 
+        str: empty string if valid, error message if not.
         """
         pattern = r'^(?=.*[a-zA-Z].*[a-zA-Z].*[a-zA-Z].*[a-zA-Z]).{5,}$'
         if re.match(pattern, self.username):
@@ -194,13 +194,13 @@ class User():
         return 'Username does not meet criteria'
 
     def _check_duplicate_username(self):
-        """Checks for duplicate username within database. 
+        """Checks for duplicate username within database.
 
         Parameters:
-        None. 
+        None.
 
         Returns:
-        str: empty string or error message. 
+        str: empty string or error message.
         """
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
@@ -213,13 +213,13 @@ class User():
         return ''
 
     def _check_username(self):
-        """Checks if username is not already taken and valid. 
+        """Checks if username is not already taken and valid.
 
         Parameters:
         None.
 
         Returns:
-        str: empty string or error message. 
+        str: empty string or error message.
         """
         message = self._check_valid_username()
         if message == '':
@@ -228,13 +228,13 @@ class User():
         return message
 
     def _check_valid_email(self):
-        """Checks to make sure for valid email. 
+        """Checks to make sure for valid email.
 
         Parameters:
-        None. 
+        None.
 
         Returns:
-        str: empty if email passes, error mesage if not. 
+        str: empty if email passes, error mesage if not.
         """
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
         if re.fullmatch(regex, self.email):
@@ -242,12 +242,13 @@ class User():
         return "Invalid email entered"
 
     def _check_duplicate_email(self):
-        """Checks the database that email isn't already in the system
+        """Checks the database that email isn't already in the system.
 
         Parameters:
+        None.
 
         Returns:
-        str: empty if not, error message if so. 
+        str: empty if not, error message if so.
         """
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
@@ -259,13 +260,13 @@ class User():
         return ''
 
     def _check_email(self):
-        """method that checks the email criteria. 
+        """method that checks the email criteria.
 
         Parameters:
-        None. 
+        None.
 
         Returns:
-        str: error message or empty string. 
+        str: error message or empty string.
         """
         message = self._check_valid_email()
         if message == '':
@@ -280,7 +281,7 @@ class User():
         None.
 
         Returns:
-        str: empty string if password passes, message if it doesn't
+        str: empty string if password passes, message if it doesn't.
         """
         pattern = r'^(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{9,}$'
         if re.match(pattern, self.password):
@@ -301,17 +302,17 @@ class User():
         return 'Passwords do not match'
 
     def check_new_user(self, confirm_password):
-        """Public method that handles all the private check methods
+        """Public method that handles all the private check methods.
 
         Parameters:
-        confirm_password (int) : the confirm password the user enters
+        confirm_password (int) : the confirm password the user enters.
 
         Returns:
-        String username_message : username error message
-        String email_message : email error message
-        String password_message : password not match criteria message 
-        String confirm_password_message : confirm password message 
-        String register_status : User registriation credentials pass all checks
+        String username_message : username error message.
+        String email_message : email error message.
+        String password_message : password not match criteria message.
+        String confirm_password_message : confirm password message.
+        String register_status : User registriation credentials pass all checks.
         """
         username_message = self._check_username()
         email_message = self._check_email()
@@ -334,25 +335,25 @@ class User():
         )
 
     def _set_user_id(self):
-        """Sets the user ID from numpy random int 
+        """Sets the user ID from numpy random int.
 
         Parameters:
-        None
+        None.
 
         Returns:
-        None
+        None.
         """
         id_num = np.random.randint(0, 99, 2)
         get_user_id = str(id_num[0]) + str(id_num[1])
         self.user_id = get_user_id
 
     def _update_database(self):
-        """Updates the database with the new user information
+        """Updates the database with the new user information.
 
         Parameters:
 
         Returns:
-        None
+        None.
         """
         connection = sqlite3.connect("user.db")
         cursor = connection.cursor()
