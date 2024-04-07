@@ -25,6 +25,7 @@ from objects.user import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
+# app.config['UPLOAD_FOLDER'] = 'static/files' (*mac)
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
 
@@ -225,7 +226,7 @@ def upload_page():
     None
     """
     timeout = 60
-    headers, access_token = onedrive()
+    headers = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -234,9 +235,9 @@ def upload_page():
                          app.config['UPLOAD_FOLDER'],
                          secure_filename(file.filename)))
         dir_list = os.listdir('static\\files')
-        headers = {
-            'Authorization': 'Bearer ' + access_token['access_token']
-        }
+        #  headers = {
+        #    'Authorization': 'Bearer ' + access_token['access_token']
+        #  }
         for file_path in dir_list:
             name = file_path
             file_path = 'static\\files\\' + file_path
@@ -335,7 +336,7 @@ def onedrive():
     headers = {
         'Authorization': 'Bearer ' + access_token['access_token']
     }
-    return access_token, headers
+    return headers
 
 
 def check_for_duplicate_group(group_name):
@@ -400,7 +401,7 @@ def filefinder():
     items = json.loads(requests.get(url + 'me/drive/root/children',
                                     headers=headers, timeout=timeout).text)
     items = items['value']
-    for entries in items:
+    for entries in range(len(items)):
         # get folders
         print(items[entries]['name'], '| item-id >', items[entries]['id'])
         file_list = file_list + "\n" + str(items[entries]['name']) + "\n"
@@ -409,7 +410,7 @@ def filefinder():
         new_url = url + 'me/drive/items/' + current_folder + '/children'
         sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
         sub_items = sub_items['value']
-        for sub_entries in sub_items:
+        for sub_entries in range(len(sub_items)):
             print(sub_items[sub_entries]['name'], '| item-id >', sub_items[sub_entries]['id'])
             file_list = file_list + "\n" + '\t' + "- " + sub_items[sub_entries]['name'] + '\n'
     print(file_list)
