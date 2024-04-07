@@ -414,7 +414,6 @@ def filefinder():
             file_list = file_list + "\n" + '\t' + "- " + sub_items[sub_entries]['name'] + '\n'
     print(file_list)
     return render_template("fileexplorer.html", folders=file_list)
- 
 
 
 # if __name__ == "__main__":
