@@ -407,7 +407,7 @@ def filefinder():
             file_list = file_list + "\n" + str(items[entries]['name']) + "\n"
             current_folder = items[entries]['id']
             # get files
-            new_url = URL + 'me/drive/items/' + current_folder + '/children'
+            new_url = url + 'me/drive/items/' + current_folder + '/children'
             sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
             sub_items = sub_items['value']
             for sub_entries in sub_items:
