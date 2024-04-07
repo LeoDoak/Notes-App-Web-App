@@ -402,7 +402,7 @@ def filefinder():
                                     headers=headers, timeout=timeout).text)
     items = items['value']
     #  for entries in range(len(items)):
- 
+
     for _, entry in enumerate(items):
         # get folders
         print(entry['name'], '| item-id >', entry['id'])
