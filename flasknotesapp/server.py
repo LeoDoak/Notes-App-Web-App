@@ -402,7 +402,8 @@ def filefinder():
                                     headers=headers, timeout=timeout).text)
     items = items['value']
     #  for entries in range(len(items)):
-    for index, entry in enumerate(items):
+ 
+    for _, entry in enumerate(items):
         # get folders
         print(entry['name'], '| item-id >', entry['id'])
         file_list += "\n" + str(entry['name']) + "\n"
@@ -412,7 +413,7 @@ def filefinder():
         sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
         sub_items = sub_items['value']
         #  for sub_entries in range(len(sub_items)):
-        for sub_index, sub_entry in enumerate(sub_items):
+        for _, sub_entry in enumerate(sub_items):
             print(sub_entry['name'], '| item-id >', sub_entry['id'])
             file_list += "\n" + '\t' + "- " + sub_entry['name'] + '\n'
     print(file_list)
