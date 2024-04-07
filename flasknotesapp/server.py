@@ -401,18 +401,20 @@ def filefinder():
     items = json.loads(requests.get(url + 'me/drive/root/children',
                                     headers=headers, timeout=timeout).text)
     items = items['value']
-    for entries in range(len(items)):
+    #  for entries in range(len(items)):
+    for index, entry in enumerate(items):
         # get folders
-        print(items[entries]['name'], '| item-id >', items[entries]['id'])
-        file_list = file_list + "\n" + str(items[entries]['name']) + "\n"
-        current_folder = items[entries]['id']
+        print(entry['name'], '| item-id >', entry['id'])
+        file_list += "\n" + str(entry['name']) + "\n"
+        current_folder = entry['id']
         # get files
         new_url = url + 'me/drive/items/' + current_folder + '/children'
         sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
         sub_items = sub_items['value']
-        for sub_entries in range(len(sub_items)):
-            print(sub_items[sub_entries]['name'], '| item-id >', sub_items[sub_entries]['id'])
-            file_list = file_list + "\n" + '\t' + "- " + sub_items[sub_entries]['name'] + '\n'
+        #  for sub_entries in range(len(sub_items)):
+        for sub_index, sub_entry in enumerate(sub_items):
+            print(sub_entry['name'], '| item-id >', sub_entry['id'])
+            file_list += "\n" + '\t' + "- " + sub_entry['name'] + '\n'
     print(file_list)
     return render_template("fileexplorer.html", folders=file_list)
 
