@@ -269,9 +269,8 @@ def group_page():
 
     return render_template("groups.html")
 
+
 @app.route('/group_details')
-
-
 @login_required
 def group_details_page():
     # Get the value of the 'title' query parameter
