@@ -116,28 +116,34 @@
             const groupsList = document.getElementById('groupsList');
             const groupsListItems = document.getElementById('groupsListItems');
     
+            // Toggle display of groups list
             groupsToggle.addEventListener('click', () => {
                 if (groupsList.style.display === 'none') {
-                    groupsListItems.innerHTML = ''; // Clear the list before populating it
-    
-                    const groups = JSON.parse(localStorage.getItem('groups')) || [];
-    
-                    groups.forEach(group => {
-                       // Create a new list item and line break for each group
-                       const groupItem = document.createElement('li');
-                       const groupLink = document.createElement('a');
-                       groupLink.href = "#"; // Set a real link or use JavaScript to handle the click
-                       groupLink.textContent = group.title;
-                       groupItem.appendChild(groupLink);
-                       groupsListItems.appendChild(groupItem);
-                       groupsListItems.appendChild(document.createElement('br')); // Add a line break
-                    });
-    
+                    // Populate sidebar with group titles
+                    populateGroupsList();
                     groupsList.style.display = 'block'; // Show the group list
                 } else {
                     groupsList.style.display = 'none'; // Hide the group list
                 }
             });
+    
+            // Retrieve groups from local storage and populate the sidebar
+            function populateGroupsList() {
+                groupsListItems.innerHTML = ''; // Clear the list before populating it
+                const groups = JSON.parse(localStorage.getItem('groups')) || [];
+                groups.forEach(group => {
+                    const groupItem = document.createElement('li');
+                    const groupLink = document.createElement('a');
+                    groupLink.href = `group_details.html?title=${encodeURIComponent(group.title)}`;
+                    groupLink.textContent = group.title;
+                    groupLink.addEventListener('click', (event) => {
+                        event.preventDefault(); // Prevent the default link behavior
+                        window.location.href = groupLink.href; // Redirect to the group details page
+                    });
+                    groupItem.appendChild(groupLink);
+                    groupsListItems.appendChild(groupItem);
+                });
+            }
         });
     </script>
     <script>

@@ -258,16 +258,32 @@ def upload_page():
 @app.route('/group')
 @login_required
 def group_page():
-    """Summary or Description of the function
+    """Render the group page.
 
-    Parameters:
+    This function renders the 'groups.html' template, which represents the group creation page.
 
     Returns:
-    object: User
-    None
+    rendered_template: HTML content of the rendered template.
     """
 
     return render_template("groups.html")
+
+
+@app.route('/group_details')
+@login_required
+def group_details_page():
+    """
+    Render the group details page.
+
+    This function retrieves the value of the 'title' query parameter from the request.
+    If the parameter is not provided, it defaults to 'Default Group Name'.
+    The function then renders the 'group_details.html' template, passing the retrieved group name.
+
+    Returns:
+    rendered_template: HTML content of the rendered template.
+    """
+    group_name = request.args.get('title', 'Default Group Name')
+    return render_template("group_details.html", group_name=group_name)
 
 
 @app.route('/favorite')
@@ -340,13 +356,17 @@ def onedrive():
 
 
 def check_for_duplicate_group(group_name):
-    """Summary or Description of the function
+    """Check for the existence of a group with the given name in the database.
+
+    This function connects to the 'group.db' SQLite database and executes a query to select
+    a group with the provided group_name from the 'groups' table. If a group with the given
+    name exists, it returns the group; otherwise, it returns None.
 
     Parameters:
+    group_name (str): The name of the group to check for duplicates.
 
     Returns:
-    object: User
-    None
+    object: The existing group if found, None otherwise.
     """
 
     connection = sqlite3.connect("group.db")
@@ -361,13 +381,18 @@ def check_for_duplicate_group(group_name):
 
 @app.route('/form_create_group', methods=['POST'])
 def create_group():
-    """Summary or Description of the function
+    """Create a new group.
 
-    Parameters:
+    This function retrieves the group name from the form data submitted by the user.
+    It then checks if a group with the same name already exists by calling the
+    check_for_duplicate_group function. If a duplicate group name is found, it renders
+    the 'create_group.html' template with an error message. Otherwise, it proceeds
+    with the group creation logic, which would typically involve adding the new group
+    to the database or performing any other necessary actions.
 
     Returns:
-    object: User
-    None
+    str or rendered_template: If a duplicate group name is found, a rendered HTML template
+    with an error message. Otherwise, a string indicating that the group was successfully created.
     """
 
     # Get form data
