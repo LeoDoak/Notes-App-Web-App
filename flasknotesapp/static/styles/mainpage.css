@@ -13,9 +13,14 @@
 }
 
 .navbar {
-    width: 1350px;
-    height: 75px;
+    display: flex; /* Enable flexbox */
+    justify-content: space-between; /* This will space out the child elements */
+    align-items: center; /* This will align the items vertically */
+    width: 100%;
+    height: auto;
     margin: auto;
+    padding: 0 1rem; /* Add horizontal padding */
+    box-sizing: border-box; /* Include padding in the width calculation */
 }
 
 .icon {
@@ -62,14 +67,15 @@ ul li a:hover {
 }
 
 .search {
-    width: 330px;
-    float: left;
-    margin-left: 270px;
+    max-width: 330px; /* Set a max-width for larger screens */
+    width: 100%; /* Make it flexible */
+    margin: auto;
+    display: block;
 }
 
 .srch {
     font-family: 'Times New Roman';
-    width: 200px;
+    width: calc(100% - 100px);
     height: 40px;
     background: transparent;
     border: 1px #00c8ff;
@@ -78,7 +84,7 @@ ul li a:hover {
     border-right: none;
     font-size: 16px;
     float: left;
-    padding: 10px;
+    padding: 0.5em;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
 }
@@ -98,6 +104,33 @@ ul li a:hover {
 
 .btn:focus {
     outline: none;
+}
+
+@media (max-width: 800px) {
+    .file-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust grid columns */
+        gap: 10px; /* Adjust gap */
+        padding: 10px; /* Adjust padding */
+        margin: auto; /* Center the grid */
+    }
+
+    .file-list li {
+        height: auto; /* Make height flexible */
+    }
+    
+    /* Search bar adjustments */
+    .search {
+        width: 100%; /* Full width */
+        margin-top: 20px; /* Add some margin above on smaller screens */
+    }
+
+    .srch {
+        width: calc(100% - 120px); /* Adjust the input width */
+    }
+    
+    .btn {
+        width: 120px; /* Adjust the button width if necessary */
+    }
 }
 
 .srch:focus {
