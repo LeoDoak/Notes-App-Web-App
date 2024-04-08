@@ -8,11 +8,10 @@ print(resultant_token)
 
 
 def create_folder(access_token, parent_id, folder_name):
-    """
-    The `create_folder` function creates a new folder on a user's OneDrive via the Microsoft Graph API, 
-    using an `access_token` for authentication. It posts a request with the desired `folder_name`, 
-    handles any errors, and returns the API's response. 
-
+    """The `create_folder` function creates a new folder on a user's OneDrive via the Microsoft Graph API, 
+       
+        using an `access_token` for authentication. It posts a request with the desired `folder_name`, 
+        handles any errors, and returns the API's response. 
     """
     url = f"https://graph.microsoft.com/v1.0/me/drive/root/children"
     headers = {
