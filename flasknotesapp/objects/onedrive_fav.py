@@ -9,6 +9,7 @@ scopes = ['Files.ReadWrite']
 access_token = generate_access_token(app_id, scopes)['access_token']
 print(access_token)
 
+
 def create_folder(access_token, folder_name):
     """The `create_folder` function creates a new folder on a user's OneDrive via the Microsoft Graph API,
     using an `access_token` for authentication. It posts a request with the desired `folder_name`,
@@ -23,6 +24,7 @@ def create_folder(access_token, folder_name):
     response.raise_for_status()
     return response.json()
 
+
 def move_file(access_token, file_id, target_folder_id):
     url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/move"
     headers = {
@@ -33,6 +35,7 @@ def move_file(access_token, file_id, target_folder_id):
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
     return response.json()
+
 
 # Example usage
 parent_folder_id = "root"  # ID of the parent folder where you want to create the new folder
