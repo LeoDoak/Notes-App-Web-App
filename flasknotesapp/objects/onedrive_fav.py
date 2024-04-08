@@ -1,23 +1,23 @@
-"""
-This module interacts with the Microsoft OneDrive API to create and move folders within a user's OneDrive.
-"""
-
 import requests
 
-# Simulated 'onedrive' module's 'generate_access_token' function
-# Replace with the actual import and function based on your 'onedrive' module
+# Import the 'onedrive' module's 'generate_access_token' function
+# This assumes that the 'onedrive' module is correctly installed and available in the PYTHONPATH.
 from onedrive import generate_access_token
 
 # Constants should be in uppercase
 APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
 SCOPES = ['Files.ReadWrite']
+
+# Generating an access token and printing it
 ACCESS_TOKEN = generate_access_token(APP_ID, SCOPES)['access_token']
 print(ACCESS_TOKEN)
 
 
 def create_folder(token, folder_name):
-    """Creates a new folder on a user's OneDrive via the Microsoft Graph API, using an access token for
-    authentication. Posts a request with the desired folder name, handles errors, and returns the API's response.
+    """
+    Creates a new folder on a user's OneDrive via the Microsoft Graph API,
+    using an access token for authentication. Posts a request with the desired folder name,
+    handles errors, and returns the API's response.
 
     Args:
         token: The access token for authentication.
@@ -31,14 +31,20 @@ def create_folder(token, folder_name):
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",
     }
-    data = {"name": folder_name, "folder": {}}
-    response = requests.post(url, headers=headers, json=data, timeout=10)
+    # Breaking down the request for readability
+    response = requests.post(
+        url,
+        headers=headers,
+        json={"name": folder_name, "folder": {}},
+        timeout=10
+    )
     response.raise_for_status()
     return response.json()
 
 
 def move_file(token, file_id, target_id):
-    """Moves a file identified by file_id within the user's OneDrive to a specified target folder id.
+    """
+    Moves a file identified by file_id within the user's OneDrive to a specified target folder id.
 
     Args:
         token: The access token for authentication.
@@ -48,13 +54,21 @@ def move_file(token, file_id, target_id):
     Returns:
         The response from the OneDrive API as a JSON object.
     """
-    url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/move"
+    # Breaking down the URL for readability
+    url = (
+        f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/move"
+    )
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json",
     }
-    data = {"parentReference": {"id": target_id}}
-    response = requests.post(url, headers=headers, json=data, timeout=10)
+    # Breaking down the request for readability
+    response = requests.post(
+        url,
+        headers=headers,
+        json={"parentReference": {"id": target_id}},
+        timeout=10
+    )
     response.raise_for_status()
     return response.json()
 
