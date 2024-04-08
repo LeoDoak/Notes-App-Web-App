@@ -115,10 +115,10 @@ def login():
 @login_required
 def homepage():
     """Summary or Description of the function
+    returns homepage template
+    Parameters: None
 
-    Parameters:
-
-    Returns:
+    Returns: homepage template
     object: User
     None
     """
@@ -192,10 +192,10 @@ def forgot_password():
 
 class UploadFileForm(FlaskForm):
     """Summary or Description of the function
+    Gives the file that is uploaded
+    Parameters: specified formdata
 
-    Parameters:
-
-    Returns:
+    Returns: file
     object: User
     None
     """
@@ -216,11 +216,10 @@ class UploadFileForm(FlaskForm):
 @app.route('/upload', methods=['GET', "POST"])
 @login_required
 def upload_page():
-    """Summary or Description of the function
+    """Uploads a file to onedrive
+    Parameters: None
 
-    Parameters:
-
-    Returns:
+    Returns: Main page template
     object: User
     None
     """
@@ -335,10 +334,10 @@ def logout_method():
 @login_required
 def onedrive():
     """Summary or Description of the function
-
+    Authenticates with onedrive account
     Parameters:
-
-    Returns:
+    None
+    Returns: headers to access onedrive account
     object: User
     None
     """
