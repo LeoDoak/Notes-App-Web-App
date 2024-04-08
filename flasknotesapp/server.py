@@ -230,30 +230,41 @@ def upload_page():
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
-        file.save(
-            os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                         app.config['UPLOAD_FOLDER'],
-                         secure_filename(file.filename)))
-        dir_list = os.listdir('static\\files')
+        try:
+            response = requests.put(
+            GRAPH_API_ENDPOINT +
+            f'/me/drive/items/root:/{file.filename}:/content',
+            headers=headers,
+            data=file,
+            timeout=timeout
+            )
+        except requests.exceptions.Timeout:
+            print("Timed out")
+        print(response.json())
+        # file.save(
+        #     os.path.join(os.path.abspath(os.path.dirname(__file__)),
+        #                  app.config['UPLOAD_FOLDER'],
+        #                  secure_filename(file.filename)))
+        # dir_list = os.listdir('static\\files')
         #  headers = {
         #    'Authorization': 'Bearer ' + access_token['access_token']
         #  }
-        for file_path in dir_list:
-            name = file_path
-            file_path = 'static\\files\\' + file_path
-            with open(file_path, 'rb') as upload:
-                media_content = upload.read()
-                try:
-                    response = requests.put(
-                        GRAPH_API_ENDPOINT +
-                        f'/me/drive/items/root:/{name}:/content',
-                        headers=headers,
-                        data=media_content,
-                        timeout=timeout
-                    )
-                except requests.exceptions.Timeout:
-                    print("Timed out")
-                print(response.json())
+        # for file_path in dir_list:
+        #     name = file_path
+        #     file_path = 'static\\files\\' + file_path
+        #     with open(file_path, 'rb') as upload:
+        #         media_content = upload.read()
+        #         try:
+        #             response = requests.put(
+        #                 GRAPH_API_ENDPOINT +
+        #                 f'/me/drive/items/root:/{name}:/content',
+        #                 headers=headers,
+        #                 data=media_content,
+        #                 timeout=timeout
+        #             )
+        #         except requests.exceptions.Timeout:
+        #             print("Timed out")
+        #         print(response.json())
         return render_template("homepage.html")
     return render_template("upload.html", form=form)
 
