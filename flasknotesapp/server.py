@@ -3,7 +3,6 @@
 import os
 import sqlite3
 import json
-import json
 import flask
 import requests
 from flask import Flask, render_template, request, redirect, url_for
@@ -352,10 +351,6 @@ def onedrive():
         'Authorization': 'Bearer ' + access_token['access_token']
     }
     return headers
-    headers = {
-        'Authorization': 'Bearer ' + access_token['access_token']
-    }
-    return headers
 
 
 def check_for_duplicate_group(group_name):
@@ -400,43 +395,6 @@ def create_group():
     # If group name is unique, continue with group creation logic
     # Your group creation logic here
     return "Group successfully created"
-
-
-@app.route('/filefinder')
-@login_required
-def filefinder():
-    """Summary or Description of the function
-
-    Parameters:
-
-    Returns:
-    object: User
-    None
-    """
-    url = 'https://graph.microsoft.com/v1.0/'
-    headers = onedrive()
-    file_list = ''
-    timeout = 30
-    items = json.loads(requests.get(url + 'me/drive/root/children',
-                                    headers=headers, timeout=timeout).text)
-    items = items['value']
-    #  for entries in range(len(items)):
-
-    for _, entry in enumerate(items):
-        # get folders
-        print(entry['name'], '| item-id >', entry['id'])
-        file_list += "\n" + str(entry['name']) + "\n"
-        current_folder = entry['id']
-        # get files
-        new_url = url + 'me/drive/items/' + current_folder + '/children'
-        sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-        sub_items = sub_items['value']
-        #  for sub_entries in range(len(sub_items)):
-        for _, sub_entry in enumerate(sub_items):
-            print(sub_entry['name'], '| item-id >', sub_entry['id'])
-            file_list += "\n" + '\t' + "- " + sub_entry['name'] + '\n'
-    print(file_list)
-    return render_template("fileexplorer.html", folders=file_list)
 
 
 @app.route('/filefinder')
