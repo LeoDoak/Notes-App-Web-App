@@ -37,13 +37,14 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    """Summary or Description of the function
+    """Load a user object from the database given its user ID.
 
     Parameters:
+    user_id (int): the User_ID given to each of the users.
 
     Returns:
-    object: User
-    None
+    User or None: User object which is the same user with that ID.
+    None: object doesn't exist.
     """
 
     connection = sqlite3.connect("user.db")
@@ -60,13 +61,13 @@ def load_user(user_id):
 
 
 def checkdatabase():
-    """Summary or Description of the function
+    """calls the function that creates the database from the user_database file.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    None.
     """
 
     # call the function that creates the database
@@ -75,13 +76,13 @@ def checkdatabase():
 
 @app.route('/')
 def set_up():
-    """Summary or Description of the function
+    """Sets up the loginpage to set up the flask project.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method: render_template with String loginpage.html.
     """
 
     return render_template('loginpage.html')
@@ -89,13 +90,14 @@ def set_up():
 
 @app.route('/form_login', methods=['POST', 'GET'])
 def login():
-    """Summary or Description of the function
+    """Handles the user login functionality.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method: that redirects to homepage or render_template
+    with loginpage.html and the errors messages with it.
     """
 
     get_name = request.form['username']
@@ -115,13 +117,13 @@ def login():
 @app.route('/homepage')
 @login_required
 def homepage():
-    """Summary or Description of the function
+    """Loads the homepage.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    Flask method with homepage.html.
     """
 
     return render_template("homepage.html")
@@ -129,13 +131,13 @@ def homepage():
 
 @app.route('/register')
 def register():
-    """Summary or Description of the function
+    """Loads the register page.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method that has the register.html page.
     """
 
     return render_template("register.html")
@@ -143,15 +145,15 @@ def register():
 
 @app.route('/form_register', methods=['POST', 'GET'])
 def register_actions():
-    """Summary or Description of the function
+    """Handles the register form and adds the user to database.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method with register.html with the error messages or
+    flask method with homepage.html.
     """
-
     get_email = request.form['email']
     get_name = request.form['username']
     get_password = request.form['password']
@@ -179,26 +181,24 @@ def register_actions():
 
 @app.route('/forgotpsd')
 def forgot_password():
-    """Summary or Description of the function
+    """Function that loads the forgot password page.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    Flask method that has the 'forgot_pswd.html' page.
     """
 
     return render_template("forgot_pswd.html")
 
 
 class UploadFileForm(FlaskForm):
-    """Summary or Description of the function
+    """Summary
 
     Parameters:
 
     Returns:
-    object: User
-    None
     """
     file = FileField("File")
     submit = SubmitField("Upload File")
@@ -222,8 +222,6 @@ def upload_page():
     Parameters:
 
     Returns:
-    object: User
-    None
     """
     timeout = 60
     headers = onedrive()
@@ -263,7 +261,10 @@ def group_page():
     This function renders the 'groups.html' template, which represents the group creation page.
 
     Returns:
+<<<<<<< HEAD
+=======
     rendered_template: HTML content of the rendered template.
+>>>>>>> main
     """
 
     return render_template("groups.html")
@@ -289,13 +290,11 @@ def group_details_page():
 @app.route('/favorite')
 @login_required
 def favorite_page():
-    """Summary or Description of the function
+    """Summary or Description of the function.
 
     Parameters:
 
     Returns:
-    object: User
-    None
     """
     return render_template("favorite.html")
 
@@ -308,8 +307,6 @@ def logoutpage_page():
     Parameters:
 
     Returns:
-    object: User
-    None
     """
 
     if os.path.exists("ms_graph_api_token.json"):
@@ -327,7 +324,7 @@ def logout_method():
 
     Returns:
     object: User
-    None
+    None.
     """
 
     logout_user()
@@ -411,13 +408,13 @@ def create_group():
 @app.route('/filefinder')
 @login_required
 def filefinder():
-    """Summary or Description of the function
+    """Function that lists the files in a User's onedrive.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method with the filexplorer.html page with the OneDrive files.
     """
     url = 'https://graph.microsoft.com/v1.0/'
     headers = onedrive()
