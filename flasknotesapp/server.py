@@ -231,11 +231,11 @@ def upload_page():
         file = form.file.data
         try:
             response = requests.put(
-            GRAPH_API_ENDPOINT +
-            f'/me/drive/items/root:/{file.filename}:/content',
-            headers=headers,
-            data=file,
-            timeout=timeout
+                GRAPH_API_ENDPOINT +
+                f'/me/drive/items/root:/{file.filename}:/content',
+                headers=headers,
+                data=file,
+                timeout=timeout
             )
         except requests.exceptions.Timeout:
             print("Timed out")
