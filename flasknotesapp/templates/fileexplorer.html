@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folders in One Drive</title>
+    <link href="{{ url_for('static', filename='styles/style.css')}} " rel="stylesheet" />
+</head>
+<body>
+    <h3> Will print all the folders and files currently in your One Drive <h3>
+    <pre><font size="5">{{folders | safe }}</font></pre>
+</body>
+</html>
