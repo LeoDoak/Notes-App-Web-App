@@ -1,21 +1,21 @@
 import requests
+
+# Simulated 'onedrive' module's 'generate_access_token' function
+# Replace with the actual import and function based on your 'onedrive' module
 from onedrive import generate_access_token
+
 app_id = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
 scopes = ['Files.ReadWrite']
-access_token = generate_access_token(app_id, scopes)
-resultant_token = access_token["access_token"]
-print(resultant_token)
+access_token = generate_access_token(app_id, scopes)['access_token']
+print(access_token)
 
-
-def create_folder(access_token, parent_id, folder_name):
-    """The `create_folder` function creates a new folder on a user's OneDrive via the Microsoft Graph API, 
-       
-        using an `access_token` for authentication. It posts a request with the desired `folder_name`, 
-        handles any errors, and returns the API's response. 
-    """
-    url = f"https://graph.microsoft.com/v1.0/me/drive/root/children"
+def create_folder(access_token, folder_name):
+    """The `create_folder` function creates a new folder on a user's OneDrive via the Microsoft Graph API,
+    using an `access_token` for authentication. It posts a request with the desired `folder_name`,
+    handles any errors, and returns the API's response."""
+    url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
     headers = {
-        "Authorization": "Bearer " + resultant_token,
+        "Authorization": "Bearer " + access_token,
         "Content-Type": "application/json",
     }
     data = {"name": folder_name, "folder": {}}
@@ -23,11 +23,10 @@ def create_folder(access_token, parent_id, folder_name):
     response.raise_for_status()
     return response.json()
 
-
 def move_file(access_token, file_id, target_folder_id):
     url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/move"
     headers = {
-        "Authorization": "Bearer " + resultant_token,
+        "Authorization": "Bearer " + access_token,
         "Content-Type": "application/json",
     }
     data = {"parentReference": {"id": target_folder_id}}
@@ -35,13 +34,10 @@ def move_file(access_token, file_id, target_folder_id):
     response.raise_for_status()
     return response.json()
 
-
 # Example usage
-access_token = generate_access_token(app_id, scopes)
-parent_folder_id = "root"  # ID of the parent folder where you want to create the favorite folder
-favorite_folder_name = "Favorites"
+parent_folder_id = "root"  # ID of the parent folder where you want to create the new folder
+folder_name = "Favorites"
 
-
-# Create a favorite folder
-favorite_folder = create_folder(access_token, parent_folder_id, favorite_folder_name)
-favorite_folder_id = favorite_folder["id"]
+# Create a folder
+new_folder = create_folder(access_token, folder_name)
+print(new_folder["id"])
