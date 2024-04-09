@@ -14,9 +14,9 @@ GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0'
 def generate_access_token(app_id, scopes):
     """Summary or Description of the function
 
-    Parameters:
-
-    Returns:cc
+    Parameters: app id token to use onedrive, scopes: permissions onedrive grants the application,
+    in this case read/write files
+    Returns: access token to access onedrive account
     """
 
     # Save Session Token as a token file

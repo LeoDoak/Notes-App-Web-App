@@ -9,7 +9,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
 from waitress import serve
-from werkzeug.utils import secure_filename
 from wtforms import FileField, SubmitField
 from databases import user_database
 from objects.onedrive import generate_access_token, GRAPH_API_ENDPOINT
@@ -25,6 +24,7 @@ from objects.user import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
+# app.config['UPLOAD_FOLDER'] = 'static/files' (*mac)
 # app.config['UPLOAD_FOLDER'] = 'static/files' (*mac)
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
@@ -270,11 +270,13 @@ def forgot_password():
 
 
 class UploadFileForm(FlaskForm):
-    """Summary
+    """Summary or Description of the function
+    Gives the file that is uploaded
+    Parameters: specified formdata
 
-    Parameters:
-
-    Returns:
+    Returns: uploaded file
+    object: User
+    None
     """
     file = FileField("File")
     submit = SubmitField("Upload File")
@@ -293,38 +295,54 @@ class UploadFileForm(FlaskForm):
 @app.route('/upload', methods=['GET', "POST"])
 @login_required
 def upload_page():
-    """Summary or Description of the function
+    """Uploads a file to onedrive
+    Parameters: None
 
-    Parameters:
-
-    Returns:
+    Returns: Main page template
+    object: User
+    None
     """
     timeout = 60
+    headers = onedrive()
     headers = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
-        file.save(
-            os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                         app.config['UPLOAD_FOLDER'],
-                         secure_filename(file.filename)))
-        dir_list = os.listdir('static\\files')
+        try:
+            response = requests.put(
+                GRAPH_API_ENDPOINT +
+                f'/me/drive/items/root:/{file.filename}:/content',
+                headers=headers,
+                data=file,
+                timeout=timeout
+            )
+        except requests.exceptions.Timeout:
+            print("Timed out")
+        print(response.json())
+        # file.save(
+        #     os.path.join(os.path.abspath(os.path.dirname(__file__)),
+        #                  app.config['UPLOAD_FOLDER'],
+        #                  secure_filename(file.filename)))
+        # dir_list = os.listdir('static\\files')
         #  headers = {
         #    'Authorization': 'Bearer ' + access_token['access_token']
         #  }
-        for file_path in dir_list:
-            name = file_path
-            file_path = 'static\\files\\' + file_path
-            with open(file_path, 'rb') as upload:
-                media_content = upload.read()
-                response = requests.put(
-                    GRAPH_API_ENDPOINT +
-                    f'/me/drive/items/root:/{name}:/content',
-                    headers=headers,
-                    data=media_content,
-                    timeout=timeout
-                )
-                print(response.json())
+        # for file_path in dir_list:
+        #     name = file_path
+        #     file_path = 'static\\files\\' + file_path
+        #     with open(file_path, 'rb') as upload:
+        #         media_content = upload.read()
+        #         try:
+        #             response = requests.put(
+        #                 GRAPH_API_ENDPOINT +
+        #                 f'/me/drive/items/root:/{name}:/content',
+        #                 headers=headers,
+        #                 data=media_content,
+        #                 timeout=timeout
+        #             )
+        #         except requests.exceptions.Timeout:
+        #             print("Timed out")
+        #         print(response.json())
         return render_template("homepage.html")
     return render_template("upload.html", form=form)
 
@@ -337,10 +355,7 @@ def group_page():
     This function renders the 'groups.html' template, which represents the group creation page.
 
     Returns:
-<<<<<<< HEAD
-=======
     rendered_template: HTML content of the rendered template.
->>>>>>> main
     """
 
     return render_template("groups.html")
@@ -411,10 +426,10 @@ def logout_method():
 @login_required
 def onedrive():
     """Summary or Description of the function
-
+    Authenticates with onedrive account
     Parameters:
-
-    Returns:
+    None
+    Returns: headers to access onedrive account
     object: User
     None
     """
