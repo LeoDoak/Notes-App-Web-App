@@ -37,13 +37,14 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    """Summary or Description of the function
+    """Load a user object from the database given its user ID.
 
     Parameters:
+    user_id (int): the User_ID given to each of the users.
 
     Returns:
-    object: User
-    None
+    User or None: User object which is the same user with that ID.
+    None: object doesn't exist.
     """
 
     connection = sqlite3.connect("user.db")
@@ -60,13 +61,13 @@ def load_user(user_id):
 
 
 def checkdatabase():
-    """Summary or Description of the function
+    """calls the function that creates the database from the user_database file.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    None.
     """
 
     # call the function that creates the database
@@ -75,13 +76,13 @@ def checkdatabase():
 
 @app.route('/')
 def set_up():
-    """Summary or Description of the function
+    """Sets up the loginpage to set up the flask project.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method: render_template with String loginpage.html.
     """
 
     return render_template('loginpage.html')
@@ -89,13 +90,14 @@ def set_up():
 
 @app.route('/form_login', methods=['POST', 'GET'])
 def login():
-    """Summary or Description of the function
+    """Handles the user login functionality.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method: that redirects to homepage or render_template
+    with loginpage.html and the errors messages with it.
     """
 
     get_name = request.form['username']
@@ -115,13 +117,13 @@ def login():
 @app.route('/homepage')
 @login_required
 def homepage():
-    """Summary or Description of the function
-    returns homepage template
-    Parameters: None
+    """Loads the homepage.
 
-    Returns: homepage template
-    object: User
-    None
+    Parameters:
+    None.
+
+    Returns:
+    Flask method with homepage.html.
     """
 
     return render_template("homepage.html")
@@ -129,13 +131,13 @@ def homepage():
 
 @app.route('/register')
 def register():
-    """Summary or Description of the function
+    """Loads the register page.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method that has the register.html page.
     """
 
     return render_template("register.html")
@@ -143,15 +145,15 @@ def register():
 
 @app.route('/form_register', methods=['POST', 'GET'])
 def register_actions():
-    """Summary or Description of the function
+    """Handles the register form and adds the user to database.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method with register.html with the error messages or
+    flask method with homepage.html.
     """
-
     get_email = request.form['email']
     get_name = request.form['username']
     get_password = request.form['password']
@@ -179,13 +181,13 @@ def register_actions():
 
 @app.route('/forgotpsd')
 def forgot_password():
-    """Summary or Description of the function
+    """Function that loads the forgot password page.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    Flask method that has the 'forgot_pswd.html' page.
     """
 
     return render_template("forgot_pswd.html")
@@ -196,7 +198,7 @@ class UploadFileForm(FlaskForm):
     Gives the file that is uploaded
     Parameters: specified formdata
 
-    Returns: file
+    Returns: uploaded file
     object: User
     None
     """
@@ -272,28 +274,45 @@ def upload_page():
 @app.route('/group')
 @login_required
 def group_page():
-    """Summary or Description of the function
+    """Render the group page.
 
-    Parameters:
+    This function renders the 'groups.html' template, which represents the group creation page.
 
     Returns:
-    object: User
-    None
+<<<<<<< HEAD
+=======
+    rendered_template: HTML content of the rendered template.
+>>>>>>> main
     """
 
     return render_template("groups.html")
 
 
+@app.route('/group_details')
+@login_required
+def group_details_page():
+    """
+    Render the group details page.
+
+    This function retrieves the value of the 'title' query parameter from the request.
+    If the parameter is not provided, it defaults to 'Default Group Name'.
+    The function then renders the 'group_details.html' template, passing the retrieved group name.
+
+    Returns:
+    rendered_template: HTML content of the rendered template.
+    """
+    group_name = request.args.get('title', 'Default Group Name')
+    return render_template("group_details.html", group_name=group_name)
+
+
 @app.route('/favorite')
 @login_required
 def favorite_page():
-    """Summary or Description of the function
+    """Summary or Description of the function.
 
     Parameters:
 
     Returns:
-    object: User
-    None
     """
     return render_template("favorite.html")
 
@@ -306,8 +325,6 @@ def logoutpage_page():
     Parameters:
 
     Returns:
-    object: User
-    None
     """
 
     if os.path.exists("ms_graph_api_token.json"):
@@ -325,7 +342,7 @@ def logout_method():
 
     Returns:
     object: User
-    None
+    None.
     """
 
     logout_user()
@@ -354,13 +371,17 @@ def onedrive():
 
 
 def check_for_duplicate_group(group_name):
-    """Summary or Description of the function
+    """Check for the existence of a group with the given name in the database.
+
+    This function connects to the 'group.db' SQLite database and executes a query to select
+    a group with the provided group_name from the 'groups' table. If a group with the given
+    name exists, it returns the group; otherwise, it returns None.
 
     Parameters:
+    group_name (str): The name of the group to check for duplicates.
 
     Returns:
-    object: User
-    None
+    object: The existing group if found, None otherwise.
     """
 
     connection = sqlite3.connect("group.db")
@@ -375,13 +396,18 @@ def check_for_duplicate_group(group_name):
 
 @app.route('/form_create_group', methods=['POST'])
 def create_group():
-    """Summary or Description of the function
+    """Create a new group.
 
-    Parameters:
+    This function retrieves the group name from the form data submitted by the user.
+    It then checks if a group with the same name already exists by calling the
+    check_for_duplicate_group function. If a duplicate group name is found, it renders
+    the 'create_group.html' template with an error message. Otherwise, it proceeds
+    with the group creation logic, which would typically involve adding the new group
+    to the database or performing any other necessary actions.
 
     Returns:
-    object: User
-    None
+    str or rendered_template: If a duplicate group name is found, a rendered HTML template
+    with an error message. Otherwise, a string indicating that the group was successfully created.
     """
 
     # Get form data
@@ -400,13 +426,13 @@ def create_group():
 @app.route('/filefinder')
 @login_required
 def filefinder():
-    """Summary or Description of the function
+    """Function that lists the files in a User's onedrive.
 
     Parameters:
+    None.
 
     Returns:
-    object: User
-    None
+    flask method with the filexplorer.html page with the OneDrive files.
     """
     url = 'https://graph.microsoft.com/v1.0/'
     headers = onedrive()
