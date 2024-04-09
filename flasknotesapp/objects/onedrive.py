@@ -16,7 +16,7 @@ def generate_access_token(app_id, scopes):
 
     Parameters:
 
-    Returns:
+    Returns:cc
     """
 
     # Save Session Token as a token file
