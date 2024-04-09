@@ -5,7 +5,9 @@
 __pycache__
 .vscode
 ms_graph_api_token.json
-static/files/mcd.png
+static\files\mcd.png
+static\files\usa.png
+static\files\waterJugClass.pl
 # User Database
 
 user.db
