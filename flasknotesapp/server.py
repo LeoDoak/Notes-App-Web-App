@@ -355,10 +355,7 @@ def group_page():
     This function renders the 'groups.html' template, which represents the group creation page.
 
     Returns:
-<<<<<<< HEAD
-=======
     rendered_template: HTML content of the rendered template.
->>>>>>> main
     """
 
     return render_template("groups.html")
