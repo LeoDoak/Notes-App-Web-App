@@ -35,15 +35,15 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # Constants should be in uppercase
-APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
-SCOPES = ['Files.ReadWrite']
+#APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
+#SCOPES = ['Files.ReadWrite']
 
 # Generating an access token and printing it
-ACCESS_TOKEN = generate_access_token(APP_ID, SCOPES)['access_token']
-print(ACCESS_TOKEN)
+#ACCESS_TOKEN = generate_access_token(APP_ID, SCOPES)['access_token']
+#print(ACCESS_TOKEN)
 
 
-def create_folder(token, folder_name):
+def create_folder(headers, folder_name):
     """
     Creates a new folder on a user's OneDrive via the Microsoft Graph API,
     using an access token for authentication. Posts a request with the desired folder name,
@@ -57,10 +57,10 @@ def create_folder(token, folder_name):
         The response from the OneDrive API as a JSON object.
     """
     url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json",
-    }
+    #  headers = {
+    #      "Authorization": f"Bearer {token}",
+    #     "Content-Type": "application/json",
+    #  }
     # Breaking down the request for readability
     response = requests.post(
         url,
@@ -103,14 +103,17 @@ def move_file(token, file_id, target_id):
     return response.json()
 
 
-# Example usage
-# Use uppercase for constants
-PARENT_FOLDER_ID = "root"
-FOLDER_NAME = "Favorites"
+def folder_action():
 
-# Create a folder
-new_folder = create_folder(ACCESS_TOKEN, FOLDER_NAME)
-print(new_folder["id"])
+    # Example usage
+    # Use uppercase for constants
+    PARENT_FOLDER_ID = "root"
+    FOLDER_NAME = "Favorites"
+    headers = onedrive()
+
+    # Create a folder
+    new_folder = create_folder(headers, FOLDER_NAME)
+    print(new_folder["id"])
 
 
 @login_manager.user_loader
@@ -303,7 +306,6 @@ def upload_page():
     None
     """
     timeout = 60
-    headers = onedrive()
     headers = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
