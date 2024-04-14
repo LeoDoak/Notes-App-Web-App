@@ -104,15 +104,20 @@ def move_file(token, file_id, target_id):
 
 
 def folder_action():
+    '''Summary
 
+    Paramter:
+
+    Returns:
+    '''
     # Example usage
-    # Use uppercase for constants
-    PARENT_FOLDER_ID = "root"
-    FOLDER_NAME = "Favorites"
+    # Use uppercase for constants (no longer global)
+    # parent_folder_id = "root"
+    folder_name = "Favorites"
     headers = onedrive()
 
     # Create a folder
-    new_folder = create_folder(headers, FOLDER_NAME)
+    new_folder = create_folder(headers, folder_name)
     print(new_folder["id"])
 
 
