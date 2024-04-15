@@ -132,6 +132,7 @@ def load_user(user_id):
     User or None: User object which is the same user with that ID.
     None: object doesn't exist.
     """
+
     connection = sqlite3.connect("user.db")
     cursor = connection.cursor()
     cursor.execute(
@@ -139,6 +140,7 @@ def load_user(user_id):
         email FROM user where (user_id = ?)""",
         (user_id,))
     row = cursor.fetchall()
+    print(row, "\n")
     connection.close()
     if len(row) == 1:
         return User(row[0][0], row[0][1], row[0][2], row[0][3])
