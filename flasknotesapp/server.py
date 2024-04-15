@@ -452,7 +452,7 @@ def setcookie(headers):
     Method to set the cookie where the key is the username and the value is the json header
     '''
     resp = make_response('Setting the cookie')
-    json_headers=json.dumps(headers, indent=4)
+    json_headers = json.dumps(headers, indent=4)
     resp.set_cookie(session['username'], json_headers)  # setting the session ID
     return resp
 
