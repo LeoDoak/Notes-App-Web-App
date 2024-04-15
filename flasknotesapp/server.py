@@ -5,7 +5,7 @@ import sqlite3
 import json
 import flask
 import requests
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, make_response
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
 from waitress import serve
@@ -24,8 +24,6 @@ from objects.user import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secretkey'
 app.config['UPLOAD_FOLDER'] = 'static\\files'
-# app.config['UPLOAD_FOLDER'] = 'static/files' (*mac)
-# app.config['UPLOAD_FOLDER'] = 'static/files' (*mac)
 app.secret_key = '''967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4'''
 
@@ -57,11 +55,11 @@ def create_folder(headers, folder_name):
         The response from the OneDrive API as a JSON object.
     """
     url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
-    #  headers = {
-    #      "Authorization": f"Bearer {token}",
-    #     "Content-Type": "application/json",
-    #  }
-    # Breaking down the request for readability
+    json_headers = request.cookies.get(session['username'])
+    headers = json.loads(json_headers)
+    if headers is None:
+        return render_template('homepage.html')
+
     response = requests.post(
         url,
         headers=headers,
@@ -117,8 +115,7 @@ def folder_action():
     headers = onedrive()
 
     # Create a folder
-    new_folder = create_folder(headers, folder_name)
-    print(new_folder["id"])
+    create_folder(headers, folder_name)
 
 
 @login_manager.user_loader
@@ -195,6 +192,7 @@ def login():
         current_user.set_login_email()
         login_user(current_user)
         # next = flask.request.args.get('next')
+        session['username'] = get_name  # set the session key for getting the One Drive header
         return redirect(url_for('homepage'))
     error_message = "Incorrect Username or Password!"
     return render_template("loginpage.html", msg=error_message)
@@ -312,8 +310,11 @@ def upload_page():
     object: User
     None
     """
+    json_headers = request.cookies.get(session['username'])
+    headers = json.loads(json_headers)
+    if headers is None:
+        return render_template('homepage.html')
     timeout = 60
-    headers = onedrive()
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
@@ -396,6 +397,7 @@ def favorite_page():
 
     Returns:
     """
+    folder_action()
     return render_template("favorite.html")
 
 
@@ -449,7 +451,19 @@ def onedrive():
     headers = {
         'Authorization': 'Bearer ' + access_token['access_token']
     }
-    return headers
+    setcookie(headers)  # method to create the cookie
+    return render_template('homepage.html')
+
+
+def setcookie(headers):
+    '''
+    Method to set the cookie where the key is the username and the value is the json header
+    '''
+    resp = make_response('Setting the cookie')
+    json_headers = json.dumps(headers, indent = 4)
+    resp.set_cookie(session['username'],json_headers)  # setting the session ID
+    return resp
+
 
 
 def check_for_duplicate_group(group_name):
@@ -517,14 +531,16 @@ def filefinder():
     flask method with the filexplorer.html page with the OneDrive files.
     """
     url = 'https://graph.microsoft.com/v1.0/'
-    headers = onedrive()
+    json_headers = request.cookies.get(session['username'])
+    headers = json.loads(json_headers)
+    if headers is None:
+        return render_template('homepage.html')
     file_list = ''
     timeout = 30
     items = json.loads(requests.get(url + 'me/drive/root/children',
                                     headers=headers, timeout=timeout).text)
     items = items['value']
     #  for entries in range(len(items)):
-
     for _, entry in enumerate(items):
         # get folders
         print(entry['name'], '| item-id >', entry['id'])
