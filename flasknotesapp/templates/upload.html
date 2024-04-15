@@ -11,6 +11,8 @@
     <form method='POST' enctype='multipart/form-data'>
         {{form.hidden_tag()}}
         {{form.file()}}
+        <p>Group/Folder:</p>
+        <p><input type="text" name="groupinput"/></p>
         {{form.submit()}}
     </form>
     <!-- Sidebar 
