@@ -32,14 +32,6 @@ app.secret_key = '''967b75c111e64965848a7786bda9602
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Constants should be in uppercase
-#APP_ID = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
-#SCOPES = ['Files.ReadWrite']
-
-# Generating an access token and printing it
-#ACCESS_TOKEN = generate_access_token(APP_ID, SCOPES)['access_token']
-#print(ACCESS_TOKEN)
-
 
 def create_folder(headers, folder_name):
     """
@@ -461,9 +453,8 @@ def setcookie(headers):
     '''
     resp = make_response('Setting the cookie')
     json_headers = json.dumps(headers, indent = 4)
-    resp.set_cookie(session['username'],json_headers)  # setting the session ID
+    resp.set_cookie(session['username'], json_headers)  # setting the session ID
     return resp
-
 
 
 def check_for_duplicate_group(group_name):
