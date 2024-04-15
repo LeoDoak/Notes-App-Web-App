@@ -303,9 +303,9 @@ def upload_page():
     None
     """
     json_headers = request.cookies.get(session['username'])
-    headers = json.loads(json_headers)
-    if headers is None:
+    if json_headers is None:
         return render_template('homepage.html')
+    headers = json.loads(json_headers)
     timeout = 60
     form = UploadFileForm()
     if form.validate_on_submit():
@@ -443,17 +443,10 @@ def onedrive():
     headers = {
         'Authorization': 'Bearer ' + access_token['access_token']
     }
-    setcookie(headers)  # method to create the cookie
-    return render_template('homepage.html')
-
-
-def setcookie(headers):
-    '''
-    Method to set the cookie where the key is the username and the value is the json header
-    '''
-    resp = make_response('Setting the cookie')
+    resp = make_response('One Drive login opening in another page')
     json_headers = json.dumps(headers, indent=4)
-    resp.set_cookie(session['username'], json_headers)  # setting the session ID
+    resp.set_cookie(session['username'],json_headers)  # setting the session ID
+    print("Cookie is set")
     return resp
 
 
@@ -523,9 +516,9 @@ def filefinder():
     """
     url = 'https://graph.microsoft.com/v1.0/'
     json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
     headers = json.loads(json_headers)
-    if headers is None:
-        return render_template('homepage.html')
     file_list = ''
     timeout = 30
     items = json.loads(requests.get(url + 'me/drive/root/children',
