@@ -445,7 +445,7 @@ def onedrive():
     }
     resp = make_response('One Drive login opening in another page')
     json_headers = json.dumps(headers, indent=4)
-    resp.set_cookie(session['username'],json_headers)  # setting the session ID
+    resp.set_cookie(session['username'], json_headers)  # setting the session ID
     print("Cookie is set")
     return resp
 
