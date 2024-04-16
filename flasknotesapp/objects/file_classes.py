@@ -49,9 +49,11 @@ class File:
         Returns: Nothing, sets the filetype to the filetype
         '''
         type = re.findall(r'[.][a-z]{3}', self.title)
-        if type is None:
-            self.filetype = folder
-        self.filetype = type
+        print("Type:", type)
+        if len(type) == 0:
+            self.filetype = ['folder']
+        else:
+            self.filetype = type
 
     def get_filetype(self):
         '''Summary: returns the filetype
@@ -60,18 +62,34 @@ class File:
 
         Returns: 
         '''
-        return self.filetype
+        return str(self.filetype)
 
 
-
-    def set_file_icont(self):
+    def set_file_icon(self):
         '''Summary: Sets the file icon to the correct icon, the correct file image address
 
         Paramters:
 
         Returns:
         '''
-        self.fileicon = none
+
+        if self.filetype == ['.doc']:
+            self.fileicon = "static/file_icons/docx_file_icon.png"
+        if self.filetype == ['.jpg']:
+            self.fileicon = "static/file_icons/jpeg_icon.png"
+        if self.filetype == ['.pdf']:
+            self.fileicon = "static/file_icons/pdf_icon.png"
+        if self.filetype == ['folder']:
+            self.fileicon = "static/file_icons/folder_icon.png"
+        if self.filetype == ['.sas']:
+            self.fileicon = "static/file_icons/sas_icon.png"
+        if self.filetype == ['.csv']:
+            self.fileicon = "static/file_icons/csv_icon.png"
+
+
+
+
+
 
 
 

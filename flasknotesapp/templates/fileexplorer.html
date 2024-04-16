@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Folders in One Drive</title>
-    <link href="{{ url_for('static', filename='styles/style.css')}} " rel="stylesheet" />
+    <link href="{{ url_for('static', filename='styles/icon.css')}} " rel="stylesheet" />
 </head>
 <body>
     <h3> Will print all the folders and files currently in your One Drive <h3>
         <ul>
         {% for file in folders %}
-          <li>{{ file.title}}</li>
-          <li>{{ file.file_id}}</li>
-          <li>{{ file.filetype}}</li>
+        <img src= {{file.fileicon}} > 
+        <figcaption> {{file.title}} </figcaption>
         {% endfor %}  
         </ul>
 </body>

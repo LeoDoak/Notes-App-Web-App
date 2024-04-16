@@ -531,20 +531,25 @@ def filefinder():
     for _, entry in enumerate(items):
         # get folders
         print(entry['name'], '| item-id >', entry['id'])
-        new_folder = File(entry['id'], entry['name'],'folder', None)
-        file_list.append(new_folder)
+        new_file = File(entry['id'], entry['name'],None, None)
+        new_file.set_filetype()
+        new_file.set_file_icon()
+        file_list.append(new_file)
         current_folder = entry['id']
         # get files
         new_url = url + 'me/drive/items/' + current_folder + '/children'
         sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
         sub_items = sub_items['value']
+
         #  for sub_entries in range(len(sub_items)):
         for _, sub_entry in enumerate(sub_items):
+            print(sub_entry['name'], '| item-id >', sub_entry['id'])
             new_file = File(sub_entry['id'], sub_entry['name'],None, None)
-            new_file.set_filetype()
+            new_file.set_filetype()  # setting the filetype from the name 
+            new_file.set_file_icon()  #indexing the photo from filetype
             file_list.append(new_file)
-            print(new_file.get_filetype())
-    print(file_list)
+            print(new_file.get_title(),new_file.get_filetype(),"\n")
+    
     return render_template("fileexplorer.html", folders=file_list)
 
 
