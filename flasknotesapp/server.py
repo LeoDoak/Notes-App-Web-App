@@ -316,7 +316,7 @@ def upload_page():
         try:
             response = requests.put(
                 GRAPH_API_ENDPOINT +
-                f'/me/drive/items/root:/{group}/{file.filename}:/content',
+                f'/me/drive/items/root:/notesapp-{group}/{file.filename}:/content',
                 headers=headers,
                 data=file,
                 timeout=timeout
