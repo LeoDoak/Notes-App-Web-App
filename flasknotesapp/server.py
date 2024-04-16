@@ -13,6 +13,7 @@ from wtforms import FileField, SubmitField
 from databases import user_database
 from objects.onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from objects.user import User
+from objects.file_classes import File
 
 # Don't know if we need 2 of these.
 
@@ -503,6 +504,8 @@ def create_group():
     return "Group successfully created"
 
 
+
+
 @app.route('/filefinder')
 @login_required
 def filefinder():
@@ -519,7 +522,7 @@ def filefinder():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    file_list = ''
+    file_list = []
     timeout = 30
     items = json.loads(requests.get(url + 'me/drive/root/children',
                                     headers=headers, timeout=timeout).text)
@@ -528,7 +531,8 @@ def filefinder():
     for _, entry in enumerate(items):
         # get folders
         print(entry['name'], '| item-id >', entry['id'])
-        file_list += "\n" + str(entry['name']) + "\n"
+        new_folder = File(entry['id'], entry['name'],'folder', None)
+        file_list.append(new_folder)
         current_folder = entry['id']
         # get files
         new_url = url + 'me/drive/items/' + current_folder + '/children'
@@ -536,8 +540,10 @@ def filefinder():
         sub_items = sub_items['value']
         #  for sub_entries in range(len(sub_items)):
         for _, sub_entry in enumerate(sub_items):
-            print(sub_entry['name'], '| item-id >', sub_entry['id'])
-            file_list += "\n" + '\t' + "- " + sub_entry['name'] + '\n'
+            new_file = File(sub_entry['id'], sub_entry['name'],None, None)
+            new_file.set_filetype()
+            file_list.append(new_file)
+            print(new_file.get_filetype())
     print(file_list)
     return render_template("fileexplorer.html", folders=file_list)
 

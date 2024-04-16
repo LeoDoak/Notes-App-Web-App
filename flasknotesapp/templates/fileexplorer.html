@@ -8,6 +8,14 @@
 </head>
 <body>
     <h3> Will print all the folders and files currently in your One Drive <h3>
-    <pre><font size="5">{{folders | safe }}</font></pre>
+        <ul>
+        {% for file in folders %}
+          <li>{{ file.title}}</li>
+          <li>{{ file.file_id}}</li>
+          <li>{{ file.filetype}}</li>
+        {% endfor %}  
+        </ul>
 </body>
 </html>
+
+
