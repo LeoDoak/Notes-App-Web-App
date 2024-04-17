@@ -16,8 +16,8 @@ class File:
 
     # Assuming shared_with is a list of UserIDs or GroupIDs for simplicity
 
-    def __init__(self, file_id: int, title: str, filetype:str,
-                 fileicon: str): 
+    def __init__(self, file_id: int, title: str, filetype: str,
+                 fileicon: str):
         self.file_id = file_id
         self.title = title
         self.filetype = filetype
@@ -82,12 +82,3 @@ class File:
             self.fileicon = "static/file_icons/sas_icon.png"
         if self.filetype == ['.csv']:
             self.fileicon = "static/file_icons/csv_icon.png"
-
-
-
-
-
-
-
-
-
