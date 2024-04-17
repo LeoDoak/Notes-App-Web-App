@@ -241,7 +241,7 @@ def register_actions():
 
     # check user
     (username_message, email_message, password_message,
-        confirm_password_message, register_status) = new_user.check_new_user(get_confirmpassword)
+     confirm_password_message, register_status) = new_user.check_new_user(get_confirmpassword)
 
     if register_status is False:
         print("not able to regster")
@@ -538,7 +538,7 @@ def file_groups():
     return render_template("file_groups.html", folders=file_list)
 
 
-@app.route('/get_files_groups',methods = ['POST'])
+@app.route('/get_files_groups', methods=['POST'])
 def get_files_groups():
     '''Summary 
     Params:
@@ -551,7 +551,7 @@ def get_files_groups():
     headers = json.loads(json_headers)
     file_list = []
     url = 'https://graph.microsoft.com/v1.0/'
-    #  get from other flask method
+    #  sget from other flask method
     current_folder = request.form['file_id']
     #  print("Current folder Id:", current_folder)
     new_url = url + 'me/drive/items/' + current_folder + '/children'
@@ -561,17 +561,17 @@ def get_files_groups():
     #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
         #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
-        new_file = File(sub_entry['id'], sub_entry['name'],None, None)
+        new_file = File(sub_entry['id'], sub_entry['name'], None, None)
         # setting the filetype from the name
         new_file.set_filetype()
-        #indexing the photo from filetype
+        # indexing the photo from filetype
         new_file.set_file_icon()
         file_list.append(new_file)
         #  print(new_file.get_title(),new_file.get_filetype(),"\n")
     return render_template("fileexplorer.html", folders=file_list)
 
 
-@app.route('/delete_file',methods = ['POST'])
+@app.route('/delete_file', methods=['POST'])
 @login_required
 def delete_file():
     '''Summary:
@@ -586,16 +586,17 @@ def delete_file():
     file_id = request.form['file_id']
     file_name = request.form['file_title']
     m_url = 'https://graph.microsoft.com/v1.0/'
-    url = '/me/drive/items/'+ file_id
+    url = '/me/drive/items/' + file_id
     url = m_url + url
-    response = requests.delete(url, headers=headers,timeout=timeout)
+    response = requests.delete(url, headers=headers, timeout=timeout)
     if response.status_code == 204:
         message = 'Item gone! If need to recover, please check OneDrive Recycle Bin.'
     else:
         message = 'Item could not be deleted. Go back and try again'
-    return render_template("deleted_file.html", title = file_name, message = message)
+    return render_template("deleted_file.html", title=file_name, message=message)
 
-@app.route('/download_file',methods = ['POST'])
+
+@app.route('/download_file', methods=['POST'])
 @login_required
 def download_file():
     '''Summary: Downloading files from One Drive 
@@ -611,18 +612,18 @@ def download_file():
     m_url = 'https://graph.microsoft.com/v1.0/'
     file_id = request.form['file_id']
     file_title = request.form['file_title']
-    url = 'me/drive/items/'+file_id+'/content'
+    url = 'me/drive/items/' + file_id + '/content'
     url = m_url + url
     file_name = file_title
     save_location = os.path.expanduser('~/Downloads')
-    response_file_contenet = requests.get(url,headers = headers, timeout=timeout)
-    with open(os.path.join(save_location,file_name), 'wb') as _f:
+    response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
+    with open(os.path.join(save_location, file_name), 'wb') as _f:
         _f.write(response_file_contenet.content)
 
-    return render_template("download_file.html", title = file_name)
+    return render_template("download_file.html", title=file_name)
 
 
-@app.route('/favorite_file',methods = ['POST'])
+@app.route('/favorite_file', methods=['POST'])
 @login_required
 def favorite_file():
     '''Summary:
