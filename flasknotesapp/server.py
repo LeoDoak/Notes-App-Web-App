@@ -503,12 +503,8 @@ def create_group():
     # Your group creation logic here
     return "Group successfully created"
 
-
-
-
-@app.route('/filefinder')
-@login_required
-def filefinder():
+@app.route('/file_groups')
+def file_groups():
     """Function that lists the files in a User's onedrive.
 
     Parameters:
@@ -531,30 +527,101 @@ def filefinder():
     for _, entry in enumerate(items):
         # get folders
         print(entry['name'], '| item-id >', entry['id'])
-        new_file = File(entry['id'], entry['name'],None, None)
+        new_file = File(entry['id'], entry['name'], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
-        file_list.append(new_file)
-        current_folder = entry['id']
-        # get files
-        new_url = url + 'me/drive/items/' + current_folder + '/children'
-        sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-        sub_items = sub_items['value']
-
-        #  for sub_entries in range(len(sub_items)):
-        for _, sub_entry in enumerate(sub_items):
-            print(sub_entry['name'], '| item-id >', sub_entry['id'])
-            new_file = File(sub_entry['id'], sub_entry['name'],None, None)
-            new_file.set_filetype()  # setting the filetype from the name 
-            new_file.set_file_icon()  #indexing the photo from filetype
+        print(new_file.get_filetype())
+        if 'folder' in new_file.get_filetype():
             file_list.append(new_file)
-            print(new_file.get_title(),new_file.get_filetype(),"\n")
-    
+    print(file_list)
+    return render_template("file_groups.html", folders=file_list)
+
+@app.route('/get_files_groups',methods = ['POST'])
+def get_files_groups():
+    timeout = 30
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
+    url = 'https://graph.microsoft.com/v1.0/'
+    current_folder = request.form['file_id']  #get from other flask method
+    print("Current folder Id:", current_folder)
+    new_url = url + 'me/drive/items/' + current_folder + '/children'
+    sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
+    print(sub_items)
+    sub_items = sub_items['value']
+    #  for sub_entries in range(len(sub_items)):
+    for _, sub_entry in enumerate(sub_items):
+        print(sub_entry['name'], '| item-id >', sub_entry['id'])
+        new_file = File(sub_entry['id'], sub_entry['name'],None, None)
+        new_file.set_filetype()  # setting the filetype from the name 
+        new_file.set_file_icon()  #indexing the photo from filetype
+        file_list.append(new_file)
+        print(new_file.get_title(),new_file.get_filetype(),"\n")
     return render_template("fileexplorer.html", folders=file_list)
 
 
-# if __name__ == "__main__":
-#    app.run(debug=True)
+@app.route('/delete_file',methods = ['POST'])
+@login_required
+def delete_file():
+    '''Summary:
+    Params:
+    Returns:
+    '''
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_id = request.form['file_id']
+    m_url = 'https://graph.microsoft.com/v1.0/'
+    url = '/me/drive/items/'+ file_id
+    url = m_url + url
+    confirmation = input('Are you sure to delete the Item? (Y/n):')
+    if (confirmation.lower()=='y'):
+        response = requests.delete(url, headers=headers)
+        if (response.status_code == 204):
+            print('Item gone! If need to recover, please check OneDrive Recycle Bin.')
+    else:
+        print("Item not deleted.")
+    return None
+
+@app.route('/download_file',methods = ['POST'])
+@login_required
+def download_file():
+    '''Summary: Downloading files from One Drive 
+    Params:
+    Returns:
+    Credit: 
+    '''
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    m_url = 'https://graph.microsoft.com/v1.0/'
+    file_id = request.form['file_id']
+    file_title = request.form['file_title']
+    print("file id:", file_id)
+    url = 'me/drive/items/'+file_id+'/content'
+    url = m_url + url
+    file_name = file_title
+    save_location = os.path.expanduser('~/Downloads')
+    response_file_contenet = requests.get(url,headers = headers)
+    with open(os.path.join(save_location,file_name), 'wb') as _f:
+        _f.write(response_file_contenet.content)
+
+    return render_template("download_file.html", title = file_name)
+
+
+@app.route('/favorite_file',methods = ['POST'])
+@login_required
+def favorite_file():
+    '''Summary:
+    Params:
+    Returns:
+    '''
+    print("File has been favorited")
+    return get_files_groups()
 
 
 if __name__ == "__main__":
