@@ -538,6 +538,10 @@ def file_groups():
 
 @app.route('/get_files_groups',methods = ['POST'])
 def get_files_groups():
+    '''Summary 
+    Params:
+    Returns:
+    '''
     timeout = 30
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
@@ -546,19 +550,21 @@ def get_files_groups():
     file_list = []
     url = 'https://graph.microsoft.com/v1.0/'
     current_folder = request.form['file_id']  #get from other flask method
-    print("Current folder Id:", current_folder)
+    #  print("Current folder Id:", current_folder)
     new_url = url + 'me/drive/items/' + current_folder + '/children'
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-    print(sub_items)
+    #  print(sub_items)
     sub_items = sub_items['value']
     #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
-        print(sub_entry['name'], '| item-id >', sub_entry['id'])
+        #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
         new_file = File(sub_entry['id'], sub_entry['name'],None, None)
-        new_file.set_filetype()  # setting the filetype from the name 
-        new_file.set_file_icon()  #indexing the photo from filetype
+        # setting the filetype from the name
+        new_file.set_filetype()
+        #indexing the photo from filetype
+        new_file.set_file_icon()
         file_list.append(new_file)
-        print(new_file.get_title(),new_file.get_filetype(),"\n")
+        #  print(new_file.get_title(),new_file.get_filetype(),"\n")
     return render_template("fileexplorer.html", folders=file_list)
 
 
@@ -569,22 +575,22 @@ def delete_file():
     Params:
     Returns:
     '''
+    timeout = 30
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
     file_id = request.form['file_id']
+    file_name = request.form['file_title']
     m_url = 'https://graph.microsoft.com/v1.0/'
     url = '/me/drive/items/'+ file_id
     url = m_url + url
-    confirmation = input('Are you sure to delete the Item? (Y/n):')
-    if (confirmation.lower()=='y'):
-        response = requests.delete(url, headers=headers)
-        if (response.status_code == 204):
-            print('Item gone! If need to recover, please check OneDrive Recycle Bin.')
+    response = requests.delete(url, headers=headers,timeout=timeout)
+    if response.status_code == 204:
+        message = 'Item gone! If need to recover, please check OneDrive Recycle Bin.'
     else:
-        print("Item not deleted.")
-    return None
+        message = 'Item could not be deleted. Go back and try again'
+    return render_template("deleted_file.html", title = file_name, message = message)
 
 @app.route('/download_file',methods = ['POST'])
 @login_required
@@ -594,6 +600,7 @@ def download_file():
     Returns:
     Credit: 
     '''
+    timeout = 30
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
         return render_template("homepage.html")
@@ -601,12 +608,11 @@ def download_file():
     m_url = 'https://graph.microsoft.com/v1.0/'
     file_id = request.form['file_id']
     file_title = request.form['file_title']
-    print("file id:", file_id)
     url = 'me/drive/items/'+file_id+'/content'
     url = m_url + url
     file_name = file_title
     save_location = os.path.expanduser('~/Downloads')
-    response_file_contenet = requests.get(url,headers = headers)
+    response_file_contenet = requests.get(url,headers = headers, timeout=timeout)
     with open(os.path.join(save_location,file_name), 'wb') as _f:
         _f.write(response_file_contenet.content)
 
