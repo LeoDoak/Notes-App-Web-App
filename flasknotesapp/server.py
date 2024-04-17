@@ -627,7 +627,7 @@ def favorite_file():
     Returns:
     '''
     print("File has been favorited")
-    return get_files_groups()
+    return render_template("homepage.html")
 
 
 if __name__ == "__main__":
