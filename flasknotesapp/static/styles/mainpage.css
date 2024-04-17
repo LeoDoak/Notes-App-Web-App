@@ -143,7 +143,10 @@ ul li a:hover {
     position: fixed;
     top: 0;
     left: 0;
-    background-color: cornflowerblue;
+    font-family:sans-serif; 
+    background: -webkit-linear-gradient(to right, #155799, #159957);  
+    background: linear-gradient(to left, #9da7a8, #00c8ff); 
+    color:whitesmoke;
     padding-top: 20px;
     display: flex;
     flex-direction: column;
