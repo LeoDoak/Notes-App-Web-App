@@ -503,6 +503,7 @@ def create_group():
     # Your group creation logic here
     return "Group successfully created"
 
+
 @app.route('/file_groups')
 def file_groups():
     """Function that lists the files in a User's onedrive.
@@ -536,6 +537,7 @@ def file_groups():
     print(file_list)
     return render_template("file_groups.html", folders=file_list)
 
+
 @app.route('/get_files_groups',methods = ['POST'])
 def get_files_groups():
     '''Summary 
@@ -549,7 +551,8 @@ def get_files_groups():
     headers = json.loads(json_headers)
     file_list = []
     url = 'https://graph.microsoft.com/v1.0/'
-    current_folder = request.form['file_id']  #get from other flask method
+    #  get from other flask method
+    current_folder = request.form['file_id']
     #  print("Current folder Id:", current_folder)
     new_url = url + 'me/drive/items/' + current_folder + '/children'
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)

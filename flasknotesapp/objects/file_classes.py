@@ -1,6 +1,6 @@
 """ Module containing methods related to files"""
 
-import re 
+import re
 
 
 class File:
@@ -17,7 +17,7 @@ class File:
     # Assuming shared_with is a list of UserIDs or GroupIDs for simplicity
 
     def __init__(self, file_id: int, title: str, filetype:str,
-                 fileicon: str):
+                 fileicon: str): 
         self.file_id = file_id
         self.title = title
         self.filetype = filetype
@@ -42,9 +42,9 @@ class File:
         return self.title
 
     def set_filetype(self):
-        '''Summary: Sets the filetype from the file name 
+        '''Summary: Sets the filetype from the file name
 
-        Paramters: 
+        Paramters:
 
         Returns: Nothing, sets the filetype to the filetype
         '''
@@ -57,12 +57,11 @@ class File:
     def get_filetype(self):
         '''Summary: returns the filetype
 
-        Paramters: 
+        Paramters:
 
-        Returns: 
+        Returns:
         '''
         return str(self.filetype)
-
 
     def set_file_icon(self):
         '''Summary: Sets the file icon to the correct icon, the correct file image address
@@ -71,7 +70,6 @@ class File:
 
         Returns:
         '''
-
         if self.filetype == ['.doc']:
             self.fileicon = "static/file_icons/docx_file_icon.png"
         if self.filetype == ['.jpg']:
