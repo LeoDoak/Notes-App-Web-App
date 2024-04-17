@@ -540,7 +540,7 @@ def file_groups():
 
 @app.route('/get_files_groups', methods=['POST'])
 def get_files_groups():
-    '''Summary 
+    '''Summary
     Params:
     Returns:
     '''
@@ -599,10 +599,10 @@ def delete_file():
 @app.route('/download_file', methods=['POST'])
 @login_required
 def download_file():
-    '''Summary: Downloading files from One Drive 
+    '''Summary: Downloading files from One Drive
     Params:
     Returns:
-    Credit: 
+    Credit:
     '''
     timeout = 30
     json_headers = request.cookies.get(session['username'])
