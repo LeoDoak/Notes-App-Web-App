@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Sharing Web Application</title>
     <link href="{{ url_for('static', filename='styles/mainpage.css')}}" rel="stylesheet" />
-    
 </head>
 <body>
     <!-- Sidebar -->
@@ -13,15 +12,14 @@
         <h2 style="color: white;">Notes App</h2>
         <a href="#">Dashboard</a>
         <a href="#" id="groupsToggle">Groups</a>
+        <a href="#" id="profileLink">Profile</a>
         <div id="groupsList" style="display: none;">
             <ul id="groupsListItems"></ul>
         </div>
         <p><a href="{{ url_for('group_page') }}">Create Groups</a></p>
     </div>
     
-
     <!-- Main content -->
-    <!-- https://www.w3schools.com/tags/tag_ul.asp --> 
     <div class="main">
         <div class="navbar">
             <div class="icon">
@@ -43,8 +41,8 @@
             </div>
 
             <div class="search">
-                <input class="srch" type="search" name="" placeholder="Search">
-                <a href="#"><button class="btn">Search</button></a>
+                <input class="srch" type="search" placeholder="Search">
+                <button class="btn">Search</button>
             </div>
         </div>
         <div class="file-list">
@@ -63,10 +61,78 @@
                 </li>
             </ul>
         </div>
+        <div id="editProfileModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close" onclick="toggleEditProfileModal()">&times;</span>
+                <h2>Preview Profile</h2>
+                <div class="profile-picture-container">
+                    <div class="profile-picture" id="profilePicture">
+                        <!-- This will be the user's profile picture -->
+                        <p class="initials">K</p>
+                    </div>
+                    <button class="edit-picture-btn" onclick="triggerFileUpload()">Edit Picture</button>
+                    <input type="file" id="pictureInput" hidden>
+                </div>
+                <form id="profileEditForm">
+                    <!-- Name -->
+                    <div class="input-container">
+                        <label for="nameInput">Name</label>
+                        <input type="text" id="nameInput" name="name">
+                    </div>
+                    <!-- Username -->
+                    <div class="input-container">
+                        <label for="usernameInput">Username</label>
+                        <input type="text" id="usernameInput" name="username">
+                    </div>
+                    <div class="save-button-container">
+                        <button type="submit">Save</button>
+                    </div>
+                </form>
+                <p class="note">Changing your name and profile picture will also affect your Quora Profile.</p>
+            </div>
+        </div>       
     </div>
-</head>
-<body>
+    <script>
 
+        document.getElementById('profileLink').addEventListener('click', toggleEditProfileModal);
+
+        function triggerFileUpload() {
+            document.getElementById('pictureInput').click();
+        }
+        
+        document.getElementById('pictureInput').addEventListener('change', function(event) {
+            if (event.target.files.length > 0) {
+                var src = URL.createObjectURL(event.target.files[0]);
+                var preview = document.getElementById('profilePicture');
+                preview.innerHTML = ''; // Clear the initials
+                preview.style.backgroundImage = 'url(' + src + ')';
+            }
+        });
+        
+
+        function toggleEditProfileModal() {
+            const modal = document.getElementById('editProfileModal');
+            modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.getElementById("profileEditForm").addEventListener("submit", function(event){
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            fetch('/update_profile', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Profile updated successfully!');
+                toggleEditProfileModal(); // Close the modal
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+        
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -189,4 +255,10 @@
         });
 
     </script>
+
+</body>
+</html>
+
+
+
     
