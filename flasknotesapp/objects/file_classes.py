@@ -51,8 +51,8 @@ class File:
         if '.' not in self.title:
             self.filetype = ['folder']
         else:
-            type = re.findall(r'[.][a-z]{3}', self.title)
-            self.filetype = type
+            filetype = re.findall(r'[.][a-z]{3}', self.title)
+            self.filetype = filetype
 
     def get_filetype(self):
         '''Summary: returns the filetype
