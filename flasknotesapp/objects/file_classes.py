@@ -1,5 +1,7 @@
 """ Module containing methods related to files"""
 
+import re
+
 
 class File:
     """A class representing a File.
@@ -14,12 +16,12 @@ class File:
 
     # Assuming shared_with is a list of UserIDs or GroupIDs for simplicity
 
-    def __init__(self, file_id: int, title: str, tags: list[str],
-                 shared_with: list[int]):
+    def __init__(self, file_id: int, title: str, filetype: str,
+                 fileicon: str):
         self.file_id = file_id
         self.title = title
-        self.tags = tags
-        self.shared_with = shared_with
+        self.filetype = filetype
+        self.fileicon = fileicon
 
     def get_file_id(self):
         """Summary or Description of the function
@@ -39,28 +41,44 @@ class File:
         """
         return self.title
 
-    def get_tags(self):
-        """Summary or Description of the function
+    def set_filetype(self):
+        '''Summary: Sets the filetype from the file name
 
-        Parameters:
+        Paramters:
+
+        Returns: Nothing, sets the filetype to the filetype
+        '''
+        if '.' not in self.title:
+            self.filetype = ['folder']
+        else:
+            filetype = re.findall(r'[.][a-z]{3}', self.title)
+            self.filetype = filetype
+
+    def get_filetype(self):
+        '''Summary: returns the filetype
+
+        Paramters:
 
         Returns:
-        """
-        return self.tags
+        '''
+        return str(self.filetype)
 
-    def get_shared_with(self):
-        """Summary or Description of the function
+    def set_file_icon(self):
+        '''Summary: Sets the file icon to the correct icon, the correct file image address
 
-        Parameters:
+        Paramters:
 
         Returns:
-        """
-        return self.shared_with
-
-
-# A sample list of files to play with.
-SAMPLE_FILES = [
-    File(1, 'Report.pdf', ['report', 'pdf', 'finance'], [123456789]),
-    File(2, 'Presentation.pptx', ['slides', 'meeting'], [222222222]),
-    File(3, 'Image.png', ['picture', 'sample'], [186918691]),
-]
+        '''
+        if self.filetype == ['.doc']:
+            self.fileicon = "static/file_icons/docx_file_icon.png"
+        if self.filetype == ['.jpg']:
+            self.fileicon = "static/file_icons/jpeg_icon.png"
+        if self.filetype == ['.pdf']:
+            self.fileicon = "static/file_icons/pdf_icon.png"
+        if self.filetype == ['folder']:
+            self.fileicon = "static/file_icons/folder_icon.png"
+        if self.filetype == ['.sas']:
+            self.fileicon = "static/file_icons/sas_icon.png"
+        if self.filetype == ['.csv']:
+            self.fileicon = "static/file_icons/csv_icon.png"
