@@ -7,7 +7,9 @@
     <link href="{{ url_for('static', filename='styles/mainpage.css')}}" rel="stylesheet" />
 </head>
 <body>
+
     <!-- Sidebar -->
+<!--
     <div class="sidebar">
         <h2 style="color: white;">Notes App</h2>
         <a href="#">Dashboard</a>
@@ -18,33 +20,48 @@
         </div>
         <p><a href="{{ url_for('group_page') }}">Create Groups</a></p>
     </div>
+-->
     
     <!-- Main content -->
+
+    
     <div class="main">
-        <div class="navbar">
+        <div class = "logout_button"><a href="{{ url_for('logoutpage_page') }}">Log Out</a></div>
+        <div class="navbar">            
             <div class="icon">
                 <h2 class="logo"></h2>
             </div>
+
             <div class="font-size-controls">
                 <button onclick="changeFontSize(-2)" aria-label="Decrease font size">A-</button>
                 <button onclick="changeFontSize(2)" aria-label="Increase font size">A+</button>
             </div>
 
             <div class="menu">
+                <div class = 'center'>
+
                 <ul>
+                <li class = 'homepage'><a href="{{url_for('homepage')}}">Notes App</a></li>
+
+                </ul>   
+
+                <ul>
+                    <li class = 'Authenticate'><a href="{{ url_for('onedrive') }}">Authenticate</a></li>
                     <li class = 'upload'><a href="{{ url_for('upload_page') }}">Upload</a></li>
                     <li class = 'favorite' ><a href="{{ url_for('favorite_page') }}">Favorites</a></li>
-                    <li class = 'logout'><a href="{{ url_for('logoutpage_page') }}">Log Out</a></li>
-                    <li class = 'Authenticate'><a href="{{ url_for('onedrive') }}">Authenticate</a></li>
-                    <li class = 'file_groups'><a href="{{ url_for('file_groups') }}">Group file Explorer</a></li>
+                    <li class = 'group_page'><a href="{{ url_for('group_page') }}">Create Groups</a></li>
+                    <li class = 'file_groups'><a href="{{ url_for('file_groups') }}">Group File Explorer</a></li>
                 </ul>
-            </div>
 
             <div class="search">
                 <input class="srch" type="search" placeholder="Search">
                 <button class="btn">Search</button>
             </div>
+
+                </div>
+            </div>
         </div>
+        <!--
         <div class="file-list">
             <ul>
                 <li class="file-entry">
@@ -61,6 +78,7 @@
                 </li>
             </ul>
         </div>
+    -->
         <div id="editProfileModal" class="modal">
             <!-- Modal content -->
             <div class="modal-content">
@@ -94,6 +112,8 @@
         </div>       
     </div>
     <script>
+
+
 
         document.getElementById('profileLink').addEventListener('click', toggleEditProfileModal);
 
@@ -133,6 +153,7 @@
         });
         
     </script>
+<!--
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -176,6 +197,8 @@
             }
         }
     </script>
+-->
+<!-- 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const groupsToggle = document.getElementById('groupsToggle');
@@ -212,6 +235,9 @@
             }
         });
     </script>
+-->
+     
+
     <script>
         function changeFontSize(change) {
             const root = document.documentElement;
@@ -234,7 +260,7 @@
         }
         document.addEventListener('DOMContentLoaded', () => {
             loadPreferredFontSize();
-
+      /*
         // Load stars
             const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             document.querySelectorAll('.star').forEach(star => {

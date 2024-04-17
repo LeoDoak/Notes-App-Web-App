@@ -12,6 +12,30 @@
     
 }
 
+.logout_button{
+    position: absolute;
+    right: 0px;
+    top: 5px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+}
+
+.logout_button a {
+    color: white; } 
+
+.logout_button a:hover {
+    color: #00c8ff;
+}
+
+.center {
+  border: 5px solid;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+}
+
 .navbar {
     display: flex; /* Enable flexbox */
     justify-content: space-between; /* This will space out the child elements */
@@ -37,21 +61,22 @@
     float: left;
     padding-top: 10px;
     margin-bottom: 40px;
-    
 }
 
+/* https://www.w3schools.com/css/tryit.asp?filename=trycss_navbar_horizontal_black */
+
 ul {
-    float: left;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 ul li {
+    display: inline-block;    /* chatgpt */
     list-style: none;
-    margin-left: 62px;
+    margin-left: 30px;
     margin-top: 27px;
-    font-size: 14px;
 }
 
 ul li a {
@@ -59,6 +84,7 @@ ul li a {
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
+    font-size: 20px;
     transition: 0.4s ease-in-out;
 }
 
@@ -82,7 +108,7 @@ ul li a:hover {
     margin-top: 13px;
     color: aliceblue;
     border-right: none;
-    font-size: 16px;
+    font-size: 25px;
     float: left;
     padding: 0.5em;
     border-bottom-left-radius: 5px;
@@ -101,42 +127,47 @@ ul li a:hover {
     border-bottom-left-radius: 5px;
 }
 
-
 .btn:focus {
     outline: none;
 }
 
+
+/*
 @media (max-width: 800px) {
     .file-list {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust grid columns */
-        gap: 10px; /* Adjust gap */
-        padding: 10px; /* Adjust padding */
-        margin: auto; /* Center the grid */
+        /*gap: 10px; /* Adjust gap */
+        /*padding: 10px; /* Adjust padding */
+       /* margin: auto; /* Center the grid */
+    /*
     }
 
     .file-list li {
         height: auto; /* Make height flexible */
-    }
+/*    }
     
     /* Search bar adjustments */
-    .search {
+   /*.search {
         width: 100%; /* Full width */
-        margin-top: 20px; /* Add some margin above on smaller screens */
-    }
+        /*margin-top: 20px; /* Add some margin above on smaller screens */
+ /*   }
 
     .srch {
         width: calc(100% - 120px); /* Adjust the input width */
-    }
+ /*   }
     
     .btn {
         width: 120px; /* Adjust the button width if necessary */
-    }
+ /*   }
 }
 
 .srch:focus {
     outline: none;
 }
+*/
+
 /* Additional styles for the sidebar */
+/*
 .sidebar {
     height: 100%;
     width: 200px;
@@ -224,23 +255,26 @@ ul li a:hover {
     display: flex;
     flex-wrap: wrap;
 }
+*/
 
-#groupsListItems li {
-    width: calc(100% - 20px); /* Calculate the width of each group item after reducing 20px for padding */
-    margin: 5px 0; /* Adjust the top and bottom margins to decrease the gap */
-    padding: 10px; /* Add padding to the group item */
-    background-color: black; /* Set a background color for each group item */
-    border-radius: 2px; /* Add border radius for rounded corners */
-    display: flex; /* Enable flexbox for centering */
-    justify-content: center; /* Center the content horizontally */
-    align-items: left; /* Center the content vertically */
-}
+/* groupsListItems li { */
+    /*width: calc(100% - 20px);  Calculate the width of each group item after reducing 20px for padding */
+    /* margin: 5px 0; /* Adjust the top and bottom margins to decrease the gap */
+    /* padding: 10px; /* Add padding to the group item */
+    /* background-color: black; /* Set a background color for each group item */
+    /* border-radius: 2px; /* Add border radius for rounded corners */
+    /* display: flex; /* Enable flexbox for centering */
+    /* justify-content: center; /* Center the content horizontally */
+    /* align-items: left; /* Center the content vertically */
+/*} 
 
+/*
 .font-size-controls {
     position: absolute;
-    right: 10px;
+    left: 10px;
     top: 10px;
 }
+
 
 body, .sidebar, .navbar a, .nav-link, .nav-button, .main, .search, .file-list, .file-entry, .btn, .srch {
     font-size: 1rem; 
@@ -255,8 +289,10 @@ body, .sidebar, .navbar a, .nav-link, .nav-button, .main, .search, .file-list, .
     padding: 0.5rem; 
 }
 
+
 /* Add these styles to your mainpage.css file */
 
+/*
 .modal {
     display: none;
     position: fixed;
@@ -292,7 +328,7 @@ body, .sidebar, .navbar a, .nav-link, .nav-button, .main, .search, .file-list, .
     cursor: pointer;
 }
 
-
+*/
 
 
 
