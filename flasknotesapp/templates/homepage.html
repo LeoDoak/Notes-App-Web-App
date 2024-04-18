@@ -24,43 +24,43 @@
     
     <!-- Main content -->
 
-    
-    <div class="main">
-        <div class = "logout_button"><a href="{{ url_for('logoutpage_page') }}">Log Out</a></div>
-        <div class="navbar">            
-            <div class="icon">
-                <h2 class="logo"></h2>
-            </div>
 
+    <div class="main">
+            <div class = "logout_button"><a href="{{ url_for('logoutpage_page') }}">Log Out</a></div>
             <div class="font-size-controls">
                 <button onclick="changeFontSize(-2)" aria-label="Decrease font size">A-</button>
                 <button onclick="changeFontSize(2)" aria-label="Increase font size">A+</button>
             </div>
-
-            <div class="menu">
-                <div class = 'center'>
-
-                <ul>
-                <li class = 'homepage'><a href="{{url_for('homepage')}}">Notes App</a></li>
-
-                </ul>   
-
-                <ul>
-                    <li class = 'Authenticate'><a href="{{ url_for('onedrive') }}">Authenticate</a></li>
-                    <li class = 'upload'><a href="{{ url_for('upload_page') }}">Upload</a></li>
-                    <li class = 'favorite' ><a href="{{ url_for('favorite_page') }}">Favorites</a></li>
-                    <li class = 'group_page'><a href="{{ url_for('group_page') }}">Create Groups</a></li>
-                    <li class = 'file_groups'><a href="{{ url_for('file_groups') }}">Group File Explorer</a></li>
-                </ul>
-
-            <div class="search">
-                <input class="srch" type="search" placeholder="Search">
-                <button class="btn">Search</button>
-            </div>
-
+        <div class="navbar"> 
+              <div class="parent">
+                <div class="child">
+                    <div class="menu">
+                    <center>
+                        <ul>
+                         <li class = 'homepage'><a href="{{url_for('homepage')}}">Notes App</a></li>
+                        </ul>
+                    </center>
+                            <ul>
+                                <li class = 'Authenticate'><a href="{{ url_for('onedrive') }}">Authenticate</a></li>
+                                <li class = 'upload'><a href="{{ url_for('upload_page') }}">Upload</a></li>
+                                <li class = 'favorite' ><a href="{{ url_for('favorite_page') }}">Favorites</a></li>
+                                <li class = 'group_page'><a href="{{ url_for('group_page') }}">Create Groups</a></li>
+                                <li class = 'file_groups'><a href="{{ url_for('file_groups') }}">Group File Explorer</a></li>
+                            </ul>
+                        <center>
+                            <br>
+                        <div class="search">
+                            <form action= "/searchfiles" method="post">
+                                <input class="srch" type="search" placeholder="Search" name='Search'>
+                                <button class="btn">Search</button>
+                            </form>
+                        </div>
+                    </center>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
         <!--
         <div class="file-list">
             <ul>
@@ -79,27 +79,29 @@
             </ul>
         </div>
     -->
-        <div id="editProfileModal" class="modal">
+
+       <!-- <div id="editProfileModal" class="modal"> --> 
             <!-- Modal content -->
+        <!--
             <div class="modal-content">
                 <span class="close" onclick="toggleEditProfileModal()">&times;</span>
                 <h2>Preview Profile</h2>
                 <div class="profile-picture-container">
-                    <div class="profile-picture" id="profilePicture">
+                    <div class="profile-picture" id="profilePicture"> --> 
                         <!-- This will be the user's profile picture -->
-                        <p class="initials">K</p>
+                       <!-- <p class="initials">K</p>
                     </div>
                     <button class="edit-picture-btn" onclick="triggerFileUpload()">Edit Picture</button>
                     <input type="file" id="pictureInput" hidden>
                 </div>
-                <form id="profileEditForm">
+                <form id="profileEditForm"> --> 
                     <!-- Name -->
-                    <div class="input-container">
+                    <!-- <div class="input-container">
                         <label for="nameInput">Name</label>
                         <input type="text" id="nameInput" name="name">
-                    </div>
+                    </div> --> 
                     <!-- Username -->
-                    <div class="input-container">
+                    <!-- <div class="input-container">
                         <label for="usernameInput">Username</label>
                         <input type="text" id="usernameInput" name="username">
                     </div>
@@ -110,8 +112,8 @@
                 <p class="note">Changing your name and profile picture will also affect your Quora Profile.</p>
             </div>
         </div>       
-    </div>
-    <script>
+    </div> 
+    <script> 
 
 
 
@@ -152,7 +154,7 @@
             .catch(error => console.error('Error:', error));
         });
         
-    </script>
+    </script> --> 
 <!--
     <script>
         document.addEventListener('DOMContentLoaded', () => {
