@@ -82,3 +82,5 @@ class File:
             self.fileicon = "static/file_icons/sas_icon.png"
         if self.filetype == ['.csv']:
             self.fileicon = "static/file_icons/csv_icon.png"
+        if self.filetype == ['.obj']:
+            self.fileicon = "static/file_icons/obj_icon.png"

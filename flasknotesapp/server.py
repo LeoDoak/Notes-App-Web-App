@@ -504,8 +504,58 @@ def create_group():
     return "Group successfully created"
 
 
-@app.route('/file_groups')
-def file_groups():
+@app.route('/get_main_folders')
+def get_main_folders():
+    '''Summary: Gets the shared and personal folders, displays them 
+    Params:
+    Returns:
+    '''
+    shared_folder = File(None,'Shared With Me',None, None )
+    shared_folder.set_filetype()
+    shared_folder.set_file_icon()
+    my_folder = File(None,'My Files',None, None)
+    my_folder.set_filetype()
+    my_folder.set_file_icon()
+
+    return render_template('main_folder.html', shared_folder = shared_folder, my_folder = my_folder)
+
+
+@app.route('/get_shared_folders')
+def get_shared_folders():
+    """Function that lists the files in a User's onedrive.
+
+    Parameters:
+    None.
+
+    Returns:
+    flask method with the filexplorer.html page with the OneDrive files.
+    """
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
+    timeout = 30
+    items = json.loads(requests.get(url + '/me/drive/sharedWithMe',
+                                    headers=headers, timeout=timeout).text)
+    items = items['value']
+    #  for entries in range(len(items)):
+    for _, entry in enumerate(items):
+        # get folders
+        print(entry['name'], '| item-id >', entry['id'])
+        new_file = File(entry['id'], entry['name'], None, None)
+        new_file.set_filetype()
+        new_file.set_file_icon()
+        print(new_file.get_filetype())
+        if 'folder' in new_file.get_filetype():
+            file_list.append(new_file)
+    print(file_list)
+    return render_template("shared_file_groups.html", folders=file_list)
+
+
+@app.route('/get_my_folders')
+def get_my_folders():
     """Function that lists the files in a User's onedrive.
 
     Parameters:
@@ -538,8 +588,41 @@ def file_groups():
     return render_template("file_groups.html", folders=file_list)
 
 
-@app.route('/get_files_groups', methods=['POST'])
-def get_files_groups():
+@app.route('/get_my_personal_files', methods=['POST'])
+def get_my_personal_files():
+    '''Summary
+    Params:
+    Returns:
+    '''
+    timeout = 30
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
+    url = 'https://graph.microsoft.com/v1.0/'
+    #  sget from other flask method
+    current_folder = request.form['file_id']
+    #  print("Current folder Id:", current_folder)
+    new_url = url + 'me/drive/items/' + current_folder + '/children'
+    sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
+    #  print(sub_items)
+    sub_items = sub_items['value']
+    #  for sub_entries in range(len(sub_items)):
+    for _, sub_entry in enumerate(sub_items):
+        #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
+        new_file = File(sub_entry['id'], sub_entry['name'], None, None)
+        # setting the filetype from the name
+        new_file.set_filetype()
+        # indexing the photo from filetype
+        new_file.set_file_icon()
+        file_list.append(new_file)
+        #  print(new_file.get_title(),new_file.get_filetype(),"\n")
+    return render_template("fileexplorer.html", folders=file_list)
+
+
+@app.route('/get_my_shared_files', methods=['POST'])
+def get_my_shared_files():
     '''Summary
     Params:
     Returns:
