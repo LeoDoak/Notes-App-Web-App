@@ -637,6 +637,10 @@ def favorite_file():
 @app.route('/searchfiles', methods=['POST'])
 @login_required
 def searchfiles():
+    '''Summary: Search Files
+    Params:
+    Returns:
+    '''
     search_criteria = request.form['Search']
     print(search_criteria)
     url = 'https://graph.microsoft.com/v1.0/'
