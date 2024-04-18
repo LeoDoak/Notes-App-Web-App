@@ -506,18 +506,18 @@ def create_group():
 
 @app.route('/get_main_folders')
 def get_main_folders():
-    '''Summary: Gets the shared and personal folders, displays them 
+    '''Summary: Gets the shared and personal folders, displays them
     Params:
     Returns:
     '''
-    shared_folder = File(None,'Shared With Me',None, None )
+    shared_folder = File(None, 'Shared With Me', None, None)
     shared_folder.set_filetype()
     shared_folder.set_file_icon()
-    my_folder = File(None,'My Files',None, None)
+    my_folder = File(None, 'My Files', None, None)
     my_folder.set_filetype()
     my_folder.set_file_icon()
 
-    return render_template('main_folder.html', shared_folder = shared_folder, my_folder = my_folder)
+    return render_template('main_folder.html', shared_folder=shared_folder, my_folder=my_folder)
 
 
 @app.route('/get_shared_folders')
