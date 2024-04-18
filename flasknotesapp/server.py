@@ -634,6 +634,53 @@ def favorite_file():
     return render_template("homepage.html")
 
 
+@app.route('/searchfiles', methods=['POST'])
+@login_required
+def searchfiles():
+    '''Summary: Search Files
+    Params:
+    Returns:
+    '''
+    search_criteria = request.form['Search']
+    print(search_criteria)
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
+    timeout = 30
+    items = json.loads(requests.get(url + 'me/drive/root/children',
+                                    headers=headers, timeout=timeout).text)
+    items = items['value']
+    #  for entries in range(len(items)):
+    for _, entry in enumerate(items):
+        # get folders
+        #  print(entry['name'], '| item-id >', entry['id'])
+        new_file = File(entry['id'], entry['name'], None, None)
+        new_file.set_filetype()
+        new_file.set_file_icon()
+        if search_criteria.lower() in entry['name']:
+            file_list.append(new_file)
+        current_folder = entry['id']
+        # get files
+        new_url = url + 'me/drive/items/' + current_folder + '/children'
+        sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
+        sub_items = sub_items['value']
+        #  for sub_entries in range(len(sub_items)):
+        for _, sub_entry in enumerate(sub_items):
+            #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
+            new_file = File(sub_entry['id'], sub_entry['name'], None, None)
+            new_file.set_filetype()
+            #  setting the filetype from the name
+            new_file.set_file_icon()
+            #  indexing the photo from filetype
+            if search_criteria.lower() in sub_entry['name']:
+                file_list.append(new_file)
+            #  print(new_file.get_title(),new_file.get_filetype(),"\n")
+    return render_template("searchtemplate.html", folders=file_list)
+
+
 if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=8000)
     checkdatabase()
