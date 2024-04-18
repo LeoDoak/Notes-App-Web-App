@@ -653,7 +653,7 @@ def searchfiles():
     for _, entry in enumerate(items):
         # get folders
         #  print(entry['name'], '| item-id >', entry['id'])
-        new_file = File(entry['id'], entry['name'],None, None)
+        new_file = File(entry['id'], entry['name'], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
         if search_criteria.lower() in entry['name']:
@@ -666,9 +666,11 @@ def searchfiles():
         #  for sub_entries in range(len(sub_items)):
         for _, sub_entry in enumerate(sub_items):
             #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
-            new_file = File(sub_entry['id'], sub_entry['name'],None, None)
-            new_file.set_filetype()  # setting the filetype from the name 
-            new_file.set_file_icon()  #indexing the photo from filetype
+            new_file = File(sub_entry['id'], sub_entry['name'], None, None)
+            new_file.set_filetype()
+            #  setting the filetype from the name
+            new_file.set_file_icon()
+            #  indexing the photo from filetype
             if search_criteria.lower() in sub_entry['name']:
                 file_list.append(new_file)
             #  print(new_file.get_title(),new_file.get_filetype(),"\n")
