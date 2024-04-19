@@ -5,7 +5,7 @@ import sqlite3
 import json
 import flask
 import requests
-from flask import Flask, render_template, request, redirect, url_for, session, make_response
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, make_response
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
 from waitress import serve
@@ -475,33 +475,37 @@ def check_for_duplicate_group(group_name):
     return existing_group is not None
 
 
-@app.route('/form_create_group', methods=['POST'])
+@app.route('/create_group', methods=['POST'])
 def create_group():
-    """Create a new group.
-
-    This function retrieves the group name from the form data submitted by the user.
-    It then checks if a group with the same name already exists by calling the
-    check_for_duplicate_group function. If a duplicate group name is found, it renders
-    the 'create_group.html' template with an error message. Otherwise, it proceeds
-    with the group creation logic, which would typically involve adding the new group
-    to the database or performing any other necessary actions.
-
+    '''Summary: Creates a seperate folder with the title of the group in onedrive. 
+    Params:
     Returns:
-    str or rendered_template: If a duplicate group name is found, a rendered HTML template
-    with an error message. Otherwise, a string indicating that the group was successfully created.
-    """
+    '''
+    group_name = request.form.get('group_name')
 
-    # Get form data
-    group_name = request.form['group_name']
+    # Retrieve authentication headers
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
 
-    # Check for duplicate group name
-    if check_for_duplicate_group(group_name):
-        error_message = "Create the group with a different name"
-        return render_template(
-            "create_group.html", error_message=error_message)
-    # If group name is unique, continue with group creation logic
-    # Your group creation logic here
-    return "Group successfully created"
+    if json_headers is None:
+        return jsonify({'error': 'Authentication headers not found'}), 401
+
+    headers = json.loads(json_headers)
+
+    # Create folder in OneDrive
+    create_url = url + '/me/drive/root/children'
+    body = {
+        'name': group_name,
+        'folder': {},
+        '@microsoft.graph.conflictBehavior': 'rename'
+    }
+
+    try:
+        response = requests.post(create_url, headers=headers, json=body)
+        response.raise_for_status()  # Raise an error for non-2xx status codes
+        return render_template('groups.html', message='Folder created successfully'),200
+    except requests.exceptions.RequestException as e:
+        return render_template('groups.html', error=f'Failed to create group folder in OneDrive: {str(e)}'), 500
 
 
 @app.route('/get_main_folders')
