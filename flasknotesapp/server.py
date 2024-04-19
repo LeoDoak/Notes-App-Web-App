@@ -501,7 +501,7 @@ def create_group():
     }
 
     try:
-        response = requests.post(create_url, headers=headers, json=body)
+        response = requests.post(create_url, headers=headers, json=body, timeout=30)
         response.raise_for_status()  # Raise an error for non-2xx status codes
         return render_template('groups.html', message='Folder created successfully'), 200
     except requests.exceptions.RequestException as e:
