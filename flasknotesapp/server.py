@@ -5,7 +5,10 @@ import sqlite3
 import json
 import flask
 import requests
-from flask import Flask, jsonify, render_template, request, redirect, url_for, session, make_response
+from flask import (
+    Flask, jsonify, render_template, request,
+    redirect, url_for, session, make_response
+)
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
 from waitress import serve
