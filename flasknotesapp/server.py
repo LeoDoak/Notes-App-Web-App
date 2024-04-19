@@ -505,7 +505,7 @@ def create_group():
         response.raise_for_status()  # Raise an error for non-2xx status codes
         return render_template('groups.html', message='Folder created successfully'), 200
     except requests.exceptions.RequestException as e:
-        return render_template('groups.html', error=f'Failed to create group folder '), 500
+        return render_template('groups.html', error=f'Failed to create group folder in OneDrive: {str(e)}'), 500
 
 
 @app.route('/get_main_folders')
