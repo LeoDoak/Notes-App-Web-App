@@ -15,7 +15,7 @@
     <form id="groupForm" action="/create_group" method="post">
         <div class="section">
             <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
+            <input type="text" id="title" name="group_name" required>
         </div>
         
         <div class="section">
@@ -25,35 +25,5 @@
         
         <button type="submit">Create Group</button>
     </form>
-</body>
-    
-<script>
-    // Assuming local storage is used to simulate a database for simplicity
-    document.getElementById('groupForm').addEventListener('submit', async function(event) {
-        event.preventDefault(); // Prevent the form from submitting traditionally
-
-        const groupTitle = document.getElementById('title').value;
-        const members = document.getElementById('members').value.split('\n'); // Get members as an array
-
-        // Simulate retrieving groups from a database or local storage
-        let groups = JSON.parse(localStorage.getItem('groups')) || [];
-        
-        if (groups.some(group => group.title === groupTitle)) {
-            alert("Create the group with a different name");
-        } else {
-            try {
-                // Simulated logic to "create" a group, replaces the OneDrive error
-                // In a real application, this would involve an API call to your backend to create the group
-                groups.push({ title: groupTitle, members: members });
-                localStorage.setItem('groups', JSON.stringify(groups));
-
-                alert("Group successfully created!");
-            } catch (error) {
-                alert("An error occurred, please try again.");
-            }
-        }
-    });
-</script>
-
 </body>
 </html>

@@ -1,8 +1,9 @@
 
     body {
-        background-color: black;
-        color: white;
-        font-family: Arial, sans-serif;
+        font-family:sans-serif; 
+        background: -webkit-linear-gradient(to right, #155799, #159957);  
+        background: linear-gradient(to left, #9da7a8, #00c8ff); 
+        color:whitesmoke;
     }
 
     .header {
@@ -11,13 +12,13 @@
     }
 
     h1 {
-        color: cornflowerblue;
+        color: gray;
         text-align: left;
         margin-top: 20px;
     }
 
     .logo {
-        color: skyblue;
+        color: navy;
         text-align: left;
         font-size: 20px;
         font-weight: bold;
@@ -36,21 +37,24 @@
     input,
     textarea {
         width: 100%;
-        padding: 5px;
-        margin-top: 5px;
+        margin: 7px 0;
+        border-radius: 5px; 
+        padding: 15px 18px;
+        box-sizing: border-box;
     }
 
     button {
-        padding: 10px 20px;
-        background-color: cornflowerblue;
+        background-color: #030804;
         color: white;
-        border: none;
-        cursor: pointer;
-        display: block;
-        margin: 0 auto;
+        padding: 14px 20px;
+        border-radius: 5px;
+        margin: 7px 0;
+        width: 100%;
+        font-size: 18px;
     }
 
     button:hover {
-        background-color: darkblue;
+        opacity: 0.6;
+        cursor: pointer;
     }
 

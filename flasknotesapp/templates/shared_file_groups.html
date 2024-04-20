@@ -7,7 +7,7 @@
     <link href="{{ url_for('static', filename='styles/icon.css')}} " rel="stylesheet" />
 </head>
 <body>
-    <h3> Will print all the folders and files currently in your One Drive <h3>
+    <h3> All the folders shared with you:<h3>
         <ul>
         {% for file in folders %}
         <!-- code came from : https://www.w3schools.com/html/html_comments.asp -->
@@ -19,19 +19,9 @@
             <div class="dropdown">
               <button class="dropbtn">Options</button>
               <div class="dropdown-content">
-              <form action="{{ url_for('favorite_file') }}" method="post">
-                  <input type="hidden" name="file_id" value="{{ file.file_id }}">
-                  <button type="submit">Favorite</button>
-              </form>
-              <form action="{{ url_for('download_file') }}" method="post">
-                  <input type="hidden" name="file_id" value="{{file.file_id}}">
-                  <input type="hidden" name="file_title" value="{{file.title}}">
-                  <button type="submit">Download</button>
-              </form>
-              <form action="{{ url_for('delete_file') }}" method="post">
-                  <input type="hidden" name="file_id" value="{{ file.file_id }}">
-                  <input type="hidden" name="file_title" value="{{file.title}}">
-                  <button type="submit">Delete</button>
+              <form action="{{ url_for('get_my_shared_files')}}" method="post">
+                  <input type="hidden" name="file_id" value="{{ file.file_id}}">
+                  <button type="submit">Open</button>
               </form>
               </div>
             </div>
@@ -40,6 +30,4 @@
         </ul>
 </body>
 </html>
-
-
 

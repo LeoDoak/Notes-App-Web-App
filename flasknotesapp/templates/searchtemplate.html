@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Folders in One Drive</title>
+    <title>Search Results</title>
     <link href="{{ url_for('static', filename='styles/icon.css')}} " rel="stylesheet" />
 </head>
 <body>
-    <h3> Will print all the folders and files currently in your One Drive <h3>
+    <h3> Files that match Search Criteria <h3>
         <ul>
         {% for file in folders %}
         <!-- code came from : https://www.w3schools.com/html/html_comments.asp -->
@@ -40,6 +40,4 @@
         </ul>
 </body>
 </html>
-
-
 

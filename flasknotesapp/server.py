@@ -5,7 +5,10 @@ import sqlite3
 import json
 import flask
 import requests
-from flask import Flask, render_template, request, redirect, url_for, session, make_response
+from flask import (
+    Flask, jsonify, render_template, request,
+    redirect, url_for, session, make_response
+)
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
 from waitress import serve
@@ -13,6 +16,7 @@ from wtforms import FileField, SubmitField
 from databases import user_database
 from objects.onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from objects.user import User
+from objects.file_classes import File
 
 # Don't know if we need 2 of these.
 
@@ -240,7 +244,7 @@ def register_actions():
 
     # check user
     (username_message, email_message, password_message,
-        confirm_password_message, register_status) = new_user.check_new_user(get_confirmpassword)
+     confirm_password_message, register_status) = new_user.check_new_user(get_confirmpassword)
 
     if register_status is False:
         print("not able to regster")
@@ -477,38 +481,59 @@ def check_for_duplicate_group(group_name):
     return existing_group is not None
 
 
-@app.route('/form_create_group', methods=['POST'])
+@app.route('/create_group', methods=['POST'])
 def create_group():
-    """Create a new group.
-
-    This function retrieves the group name from the form data submitted by the user.
-    It then checks if a group with the same name already exists by calling the
-    check_for_duplicate_group function. If a duplicate group name is found, it renders
-    the 'create_group.html' template with an error message. Otherwise, it proceeds
-    with the group creation logic, which would typically involve adding the new group
-    to the database or performing any other necessary actions.
-
+    '''Summary: Creates a seperate folder with the title of the group in onedrive.
+    Params:
     Returns:
-    str or rendered_template: If a duplicate group name is found, a rendered HTML template
-    with an error message. Otherwise, a string indicating that the group was successfully created.
-    """
+    '''
+    group_name = request.form.get('group_name')
 
-    # Get form data
-    group_name = request.form['group_name']
+    # Retrieve authentication headers
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
 
-    # Check for duplicate group name
-    if check_for_duplicate_group(group_name):
-        error_message = "Create the group with a different name"
+    if json_headers is None:
+        return jsonify({'error': 'Authentication headers not found'}), 401
+
+    headers = json.loads(json_headers)
+
+    # Create folder in OneDrive
+    create_url = url + '/me/drive/root/children'
+    body = {
+        'name': group_name,
+        'folder': {},
+        '@microsoft.graph.conflictBehavior': 'rename'
+    }
+
+    try:
+        response = requests.post(create_url, headers=headers, json=body, timeout=30)
+        response.raise_for_status()  # Raise an error for non-2xx status codes
+        return render_template('groups.html', message='Folder created successfully'), 200
+    except requests.exceptions.RequestException as e:
         return render_template(
-            "create_group.html", error_message=error_message)
-    # If group name is unique, continue with group creation logic
-    # Your group creation logic here
-    return "Group successfully created"
+            'groups.html',
+            error=f'Failed to create group folder in OneDrive: {str(e)}'), 500
 
 
-@app.route('/filefinder')
-@login_required
-def filefinder():
+@app.route('/get_main_folders')
+def get_main_folders():
+    '''Summary: Gets the shared and personal folders, displays them.
+    Params:
+    Returns:
+    '''
+    shared_folder = File(None, 'Shared With Me', None, None)
+    shared_folder.set_filetype()
+    shared_folder.set_file_icon()
+    my_folder = File(None, 'My Files', None, None)
+    my_folder.set_filetype()
+    my_folder.set_file_icon()
+
+    return render_template('main_folder.html', shared_folder=shared_folder, my_folder=my_folder)
+
+
+@app.route('/get_shared_folders')
+def get_shared_folders():
     """Function that lists the files in a User's onedrive.
 
     Parameters:
@@ -522,7 +547,41 @@ def filefinder():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    file_list = ''
+    file_list = []
+    timeout = 30
+    items = json.loads(requests.get(url + '/me/drive/sharedWithMe',
+                                    headers=headers, timeout=timeout).text)
+    items = items['value']
+    #  for entries in range(len(items)):
+    for _, entry in enumerate(items):
+        # get folders
+        print(entry['name'], '| item-id >', entry['id'])
+        new_file = File(entry['id'], entry['name'], None, None)
+        new_file.set_filetype()
+        new_file.set_file_icon()
+        print(new_file.get_filetype())
+        if 'folder' in new_file.get_filetype():
+            file_list.append(new_file)
+    print(file_list)
+    return render_template("shared_file_groups.html", folders=file_list)
+
+
+@app.route('/get_my_folders')
+def get_my_folders():
+    """Function that lists the files in a User's onedrive.
+
+    Parameters:
+    None.
+
+    Returns:
+    flask method with the filexplorer.html page with the OneDrive files.
+    """
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
     timeout = 30
     items = json.loads(requests.get(url + 'me/drive/root/children',
                                     headers=headers, timeout=timeout).text)
@@ -531,7 +590,173 @@ def filefinder():
     for _, entry in enumerate(items):
         # get folders
         print(entry['name'], '| item-id >', entry['id'])
-        file_list += "\n" + str(entry['name']) + "\n"
+        new_file = File(entry['id'], entry['name'], None, None)
+        new_file.set_filetype()
+        new_file.set_file_icon()
+        print(new_file.get_filetype())
+        if 'folder' in new_file.get_filetype():
+            file_list.append(new_file)
+    print(file_list)
+    return render_template("file_groups.html", folders=file_list)
+
+
+@app.route('/get_my_personal_files', methods=['POST'])
+def get_my_personal_files():
+    '''Summary
+    Params:
+    Returns:
+    '''
+    timeout = 30
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
+    url = 'https://graph.microsoft.com/v1.0/'
+    #  sget from other flask method
+    current_folder = request.form['file_id']
+    #  print("Current folder Id:", current_folder)
+    new_url = url + 'me/drive/items/' + current_folder + '/children'
+    sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
+    #  print(sub_items)
+    sub_items = sub_items['value']
+    #  for sub_entries in range(len(sub_items)):
+    for _, sub_entry in enumerate(sub_items):
+        #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
+        new_file = File(sub_entry['id'], sub_entry['name'], None, None)
+        # setting the filetype from the name
+        new_file.set_filetype()
+        # indexing the photo from filetype
+        new_file.set_file_icon()
+        file_list.append(new_file)
+        #  print(new_file.get_title(),new_file.get_filetype(),"\n")
+    return render_template("fileexplorer.html", folders=file_list)
+
+
+@app.route('/get_my_shared_files', methods=['POST'])
+def get_my_shared_files():
+    '''Summary
+    Params:
+    Returns:
+    '''
+    timeout = 30
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
+    url = 'https://graph.microsoft.com/v1.0/'
+    #  sget from other flask method
+    current_folder = request.form['file_id']
+    #  print("Current folder Id:", current_folder)
+    new_url = url + 'me/drive/items/' + current_folder + '/children'
+    sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
+    #  print(sub_items)
+    sub_items = sub_items['value']
+    #  for sub_entries in range(len(sub_items)):
+    for _, sub_entry in enumerate(sub_items):
+        #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
+        new_file = File(sub_entry['id'], sub_entry['name'], None, None)
+        # setting the filetype from the name
+        new_file.set_filetype()
+        # indexing the photo from filetype
+        new_file.set_file_icon()
+        file_list.append(new_file)
+        #  print(new_file.get_title(),new_file.get_filetype(),"\n")
+    return render_template("fileexplorer.html", folders=file_list)
+
+
+@app.route('/delete_file', methods=['POST'])
+@login_required
+def delete_file():
+    '''Summary:
+    Params:
+    Returns:
+    '''
+    timeout = 30
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_id = request.form['file_id']
+    file_name = request.form['file_title']
+    m_url = 'https://graph.microsoft.com/v1.0/'
+    url = '/me/drive/items/' + file_id
+    url = m_url + url
+    response = requests.delete(url, headers=headers, timeout=timeout)
+    if response.status_code == 204:
+        message = 'Item gone! If need to recover, please check OneDrive Recycle Bin.'
+    else:
+        message = 'Item could not be deleted. Go back and try again'
+    return render_template("deleted_file.html", title=file_name, message=message)
+
+
+@app.route('/download_file', methods=['POST'])
+@login_required
+def download_file():
+    '''Summary: Downloading files from One Drive
+    Params:
+    Returns:
+    Credit:
+    '''
+    timeout = 30
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    m_url = 'https://graph.microsoft.com/v1.0/'
+    file_id = request.form['file_id']
+    file_title = request.form['file_title']
+    url = 'me/drive/items/' + file_id + '/content'
+    url = m_url + url
+    file_name = file_title
+    save_location = os.path.expanduser('~/Downloads')
+    response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
+    with open(os.path.join(save_location, file_name), 'wb') as _f:
+        _f.write(response_file_contenet.content)
+
+    return render_template("download_file.html", title=file_name)
+
+
+@app.route('/favorite_file', methods=['POST'])
+@login_required
+def favorite_file():
+    '''Summary:
+    Params:
+    Returns:
+    '''
+    print("File has been favorited")
+    return render_template("homepage.html")
+
+
+@app.route('/searchfiles', methods=['POST'])
+@login_required
+def searchfiles():
+    '''Summary: Search Files
+    Params:
+    Returns:
+    '''
+    search_criteria = request.form['Search']
+    print(search_criteria)
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    file_list = []
+    timeout = 30
+    items = json.loads(requests.get(url + 'me/drive/root/children',
+                                    headers=headers, timeout=timeout).text)
+    items = items['value']
+    #  for entries in range(len(items)):
+    for _, entry in enumerate(items):
+        # get folders
+        #  print(entry['name'], '| item-id >', entry['id'])
+        new_file = File(entry['id'], entry['name'], None, None)
+        new_file.set_filetype()
+        new_file.set_file_icon()
+        if search_criteria.lower() in entry['name']:
+            file_list.append(new_file)
         current_folder = entry['id']
         # get files
         new_url = url + 'me/drive/items/' + current_folder + '/children'
@@ -539,14 +764,16 @@ def filefinder():
         sub_items = sub_items['value']
         #  for sub_entries in range(len(sub_items)):
         for _, sub_entry in enumerate(sub_items):
-            print(sub_entry['name'], '| item-id >', sub_entry['id'])
-            file_list += "\n" + '\t' + "- " + sub_entry['name'] + '\n'
-    print(file_list)
-    return render_template("fileexplorer.html", folders=file_list)
-
-
-# if __name__ == "__main__":
-#    app.run(debug=True)
+            #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
+            new_file = File(sub_entry['id'], sub_entry['name'], None, None)
+            new_file.set_filetype()
+            #  setting the filetype from the name
+            new_file.set_file_icon()
+            #  indexing the photo from filetype
+            if search_criteria.lower() in sub_entry['name']:
+                file_list.append(new_file)
+            #  print(new_file.get_title(),new_file.get_filetype(),"\n")
+    return render_template("searchtemplate.html", folders=file_list)
 
 
 if __name__ == "__main__":
