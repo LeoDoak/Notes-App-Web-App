@@ -314,10 +314,13 @@ def upload_page():
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data
+        if request.method == "POST":
+            group = request.form["groupinput"]
+            print(group)
         try:
             response = requests.put(
                 GRAPH_API_ENDPOINT +
-                f'/me/drive/items/root:/{file.filename}:/content',
+                f'/me/drive/items/root:/notesapp-{group}/{file.filename}:/content',
                 headers=headers,
                 data=file,
                 timeout=timeout
