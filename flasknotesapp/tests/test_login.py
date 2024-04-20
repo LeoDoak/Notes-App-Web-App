@@ -1,9 +1,16 @@
 
-# This is for testing the login functionality with valid credentials.
+'''
+This file will test login functionality using pytest.
+'''
 def test_login_valid():
+    '''
+    This will test login functionality with valid inputs.
+    '''
     return None
 
 
-# For testing login functionality with invalid credentials.
 def test_login_invalid():
+    '''
+    This will test login functionality with invalid inputs.
+    '''
     return None
