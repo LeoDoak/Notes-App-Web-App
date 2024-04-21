@@ -858,6 +858,7 @@ def share_group_action_shared():
     headers = json.loads(json_headers)
     #  shoutout chatgpt if this works
     email = request.form['email']
+    folder_id = request.form['file_id']
     current_folder_ids = request.form['file_id']
     ids_split = current_folder_ids.split(",")
     drive_id = ids_split[0]
