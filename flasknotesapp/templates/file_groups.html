@@ -28,6 +28,11 @@
                   <input type="hidden" name="title" value="{{ file.title}}">
                   <button type="submit">Share</button>
               </form>
+              <form action="{{url_for('upload_page_setup')}}" method="post">
+                  <input type="hidden" name="file_id" value="{{ file.file_id}}">
+                  <input type="hidden" name="title" value="{{ file.title}}">
+                  <button type="submit">Add files</button>
+              </form>
             </div>
         </div>
     </div>

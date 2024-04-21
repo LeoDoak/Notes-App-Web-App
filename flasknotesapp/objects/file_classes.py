@@ -51,7 +51,7 @@ class File:
         if '.' not in self.title:
             self.filetype = ['folder']
         else:
-            filetype = re.findall(r'[.][a-z]{3}', self.title)
+            filetype = re.findall(r'[.][a-zA-Z]{1,4}', self.title)
             self.filetype = filetype
 
     def get_filetype(self):
@@ -70,7 +70,7 @@ class File:
 
         Returns:
         '''
-        if self.filetype == ['.doc']:
+        if self.filetype == ['.docx']:
             self.fileicon = "static/file_icons/docx_file_icon.png"
         if self.filetype == ['.jpg']:
             self.fileicon = "static/file_icons/jpeg_icon.png"
@@ -84,3 +84,15 @@ class File:
             self.fileicon = "static/file_icons/csv_icon.png"
         if self.filetype == ['.obj']:
             self.fileicon = "static/file_icons/obj_icon.png"
+        if self.filetype == ['.R']:
+            self.fileicon = "static/file_icons/r_icon.png"
+        if self.filetype == ['.py']:
+            self.fileicon = "static/file_icons/py_icon.svg"
+        if self.filetype == ['.png']:
+            self.fileicon = "static/file_icons/png_icon.png"
+        if self.filetype == ['.tex']:
+            self.fileicon = "static/file_icons/tex_icon.png"
+        if self.filetype == ['.xlsx']:
+            self.fileicon = "static/file_icons/xlsx_icon.png"
+
+
