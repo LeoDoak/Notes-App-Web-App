@@ -4,7 +4,6 @@ import webbrowser
 from datetime import datetime
 import json
 import os
-# from flask import flash
 import msal
 
 # user_code = "placement_code"
@@ -50,12 +49,61 @@ def generate_access_token(app_id, scopes):
         user_code = flow['user_code']
         print('user_code: ' + user_code)
         webbrowser.open('https://microsoft.com/devicelogin')
+        display_popup(user_code)
         token_response = client.acquire_token_by_device_flow(flow)
 
     with open('ms_graph_api_token.json', 'w', encoding='utf-8') as _f:
         _f.write(access_token_cache.serialize())
 
     return token_response
+
+
+def display_popup(user_code):
+    """Summary or Description of the function
+        opens up a new webpage with the user code
+    Parameters: user code
+    """
+    html_content = f"""
+    <html>
+    <head>
+    <title>User Code</title>
+    <style>
+    body {{
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+    }}
+    .popup {{
+        width: 300px;
+        height: 200px;
+        margin: auto;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }}
+    </style>
+    </head>
+    <body>
+    <div class="popup">
+    <h1>User Code</h1>
+    <p>{user_code}</p>
+    <button onclick="window.close()">Close</button>
+    </div>
+    <script>
+    window.moveTo(((window.screen.width - window.outerWidth) / 2) - 150,
+    ((window.screen.height - window.outerHeight) / 2) - 100);
+    </script>
+    </body>
+    </html>
+    """
+
+    with open('popup.html', 'w', encoding='utf-8') as file:
+        file.write(html_content)
+
+    webbrowser.open('popup.html')
 
 
 if __name__ == '__main__':

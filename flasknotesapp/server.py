@@ -308,6 +308,7 @@ def upload_page():
     """
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
+        print(json_headers)
         return render_template('homepage.html')
     headers = json.loads(json_headers)
     timeout = 60
@@ -445,7 +446,6 @@ def onedrive():
     """
     app_id = '5e84b5a7-fd04-4398-a15f-377e3d85703e'
     scopes = ['Files.ReadWrite']
-    # global ACCESS_TOKEN
     access_token = generate_access_token(app_id, scopes)
     headers = {
         'Authorization': 'Bearer ' + access_token['access_token']
