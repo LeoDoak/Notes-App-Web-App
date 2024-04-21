@@ -308,7 +308,7 @@ def upload_page_setup():
 @app.route('/upload_page_action', methods=["GET", "POST"])
 @login_required
 def upload_page_action():
-    """Summary: 
+    """Summary:
     """
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
@@ -351,7 +351,7 @@ def upload_page_action_shared():
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
         return render_template("homepage.html")
-    headers = json.loads(json_headers)    
+    headers = json.loads(json_headers)
     group = request.form['group']
     current_folder_ids = request.form['file_id']
     ids_split = current_folder_ids.split(",")
@@ -373,6 +373,7 @@ def upload_page_action_shared():
         print(response.json())
 
     return get_shared_folders()
+
 
 @app.route('/group')
 @login_required

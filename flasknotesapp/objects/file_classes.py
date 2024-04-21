@@ -70,29 +70,20 @@ class File:
 
         Returns:
         '''
-        if self.filetype == ['.docx']:
-            self.fileicon = "static/file_icons/docx_file_icon.png"
-        if self.filetype == ['.jpg']:
-            self.fileicon = "static/file_icons/jpeg_icon.png"
-        if self.filetype == ['.pdf']:
-            self.fileicon = "static/file_icons/pdf_icon.png"
-        if self.filetype == ['folder']:
-            self.fileicon = "static/file_icons/folder_icon.png"
-        if self.filetype == ['.sas']:
-            self.fileicon = "static/file_icons/sas_icon.png"
-        if self.filetype == ['.csv']:
-            self.fileicon = "static/file_icons/csv_icon.png"
-        if self.filetype == ['.obj']:
-            self.fileicon = "static/file_icons/obj_icon.png"
-        if self.filetype == ['.R']:
-            self.fileicon = "static/file_icons/r_icon.png"
-        if self.filetype == ['.py']:
-            self.fileicon = "static/file_icons/py_icon.svg"
-        if self.filetype == ['.png']:
-            self.fileicon = "static/file_icons/png_icon.png"
-        if self.filetype == ['.tex']:
-            self.fileicon = "static/file_icons/tex_icon.png"
-        if self.filetype == ['.xlsx']:
-            self.fileicon = "static/file_icons/xlsx_icon.png"
-
-
+        file_icons = {
+            '.docx': "static/file_icons/docx_file_icon.png",
+            '.jpg': "static/file_icons/jpeg_icon.png",
+            '.pdf': "static/file_icons/pdf_icon.png",
+            'folder': "static/file_icons/folder_icon.png",
+            '.sas': "static/file_icons/sas_icon.png",
+            '.csv': "static/file_icons/csv_icon.png",
+            '.obj': "static/file_icons/obj_icon.png",
+            '.R': "static/file_icons/r_icon.png",
+            '.py': "static/file_icons/py_icon.svg",
+            '.png': "static/file_icons/png_icon.png",
+            '.tex': "static/file_icons/tex_icon.png",
+            '.xlsx': "static/file_icons/xlsx_icon.png"
+            }
+    
+        # Set the file icon based on the file extension
+        self.fileicon = file_icons.get(self.filetype[0], "static/file_icons/default_icon.png")
