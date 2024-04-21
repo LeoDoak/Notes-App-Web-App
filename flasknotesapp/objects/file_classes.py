@@ -84,6 +84,5 @@ class File:
             '.tex': "static/file_icons/tex_icon.png",
             '.xlsx': "static/file_icons/xlsx_icon.png"
             }
-    
         # Set the file icon based on the file extension
         self.fileicon = file_icons.get(self.filetype[0], "static/file_icons/default_icon.png")
