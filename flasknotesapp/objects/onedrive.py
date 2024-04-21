@@ -59,6 +59,10 @@ def generate_access_token(app_id, scopes):
 
 
 def display_popup(user_code):
+    """Summary or Description of the function
+        opens up a new webpage with the user code
+    Parameters: user code
+    """
     html_content = f"""
     <html>
     <head>
