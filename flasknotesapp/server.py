@@ -556,11 +556,15 @@ def get_shared_folders():
     items = json.loads(requests.get(url + '/me/drive/sharedWithMe',
                                     headers=headers, timeout=timeout).text)
     items = items['value']
+    print(items)
     #  for entries in range(len(items)):
     for _, entry in enumerate(items):
         # get folders
-        print(entry['name'], '| item-id >', entry['id'])
-        new_file = File(entry['id'], entry['name'], None, None)
+        remote_item = entry["remoteItem"]
+        parent_ref = remote_item["parentReference"]
+        print(entry['name'], '| item-id >', parent_ref['driveId'])
+        id_linked = parent_ref['driveId'] + ',' + remote_item['id']
+        new_file = File(id_linked, entry['name'], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
         print(new_file.get_filetype())
@@ -651,11 +655,12 @@ def get_my_shared_files():
     file_list = []
     url = 'https://graph.microsoft.com/v1.0/'
     #  sget from other flask method
-    current_folder = request.form['file_id']
-    #  print("Current folder Id:", current_folder)
-    new_url = url + 'me/drive/items/' + current_folder + '/children'
+    current_folder_ids = request.form['file_id']
+    ids_split = current_folder_ids.split(",")
+    drive_id = ids_split[0]
+    remote_id = ids_split[1]
+    new_url = url + 'drives/' + drive_id + '/items/' + remote_id + '/children'
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-    #  print(sub_items)
     sub_items = sub_items['value']
     #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
@@ -741,7 +746,6 @@ def searchfiles():
     Returns:
     '''
     search_criteria = request.form['Search']
-    print(search_criteria)
     url = 'https://graph.microsoft.com/v1.0/'
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
@@ -778,6 +782,88 @@ def searchfiles():
                 file_list.append(new_file)
             #  print(new_file.get_title(),new_file.get_filetype(),"\n")
     return render_template("searchtemplate.html", folders=file_list)
+
+
+@app.route('/share_my_group', methods=['POST'])
+@login_required
+def share_group_setup():
+    '''Sumary: sets up for sharing personal file
+    '''
+    file_id = request.form['file_id']
+    title = request.form['title']
+    return render_template("share_group_setup.html", file_id=file_id, title=title)
+
+
+@app.route('/share_group_action', methods=['POST'])
+@login_required
+def share_group_action():
+    '''Summary: Share personal group with someone
+    '''
+    timeout = 30
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    #  shoutout chatgpt if this works
+    email = request.form['email']
+    folder_id = request.form['file_id']
+    title = request.form['title']
+    share_data = {"recipients": [{"email": email}], "requireSignIn": True,
+                  "sendInvitation": True, "roles": ["write"]
+                  }
+    share_response = requests.post(
+        f"https://graph.microsoft.com/v1.0/me/drive/items/{folder_id}/invite",
+        headers=headers,
+        json=share_data,
+        timeout=timeout
+    )
+    if share_response == 400:
+        print('error')
+    return render_template("share_group_setup.html", file_id=folder_id, title=title)
+
+
+@app.route('/share_my_group_shared', methods=['POST'])
+@login_required
+def share_group_setup_shared():
+    '''Sumary: sets up for sharing shared group
+    '''
+    file_id = request.form['file_id']
+    title = request.form['title']
+    return render_template("shared_group_setup_shared.html", file_id=file_id, title=title)
+
+
+@app.route('/share_group_action_shared', methods=['POST'])
+@login_required
+def share_group_action_shared():
+    '''Summary: Share shared group with someone
+    '''
+    timeout = 60
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    #  shoutout chatgpt if this works
+    email = request.form['email']
+    folder_id = request.form['file_id']
+    current_folder_ids = request.form['file_id']
+    ids_split = current_folder_ids.split(",")
+    drive_id = ids_split[0]
+    remote_id = ids_split[1]
+    new_url = url + 'drives/' + drive_id + '/items/' + remote_id + '/invite'
+    title = request.form['title']
+    share_data = {
+        "recipients": [{"email": email}], "requireSignIn": True,
+        "sendInvitation": True, "roles": ["write"]}
+    share_response = requests.post(
+        new_url,
+        headers=headers,
+        json=share_data,
+        timeout=timeout
+    )
+    if share_response == 400:
+        print("error")
+    return render_template("shared_group_setup_shared.html", file_id=folder_id, title=title)
 
 
 if __name__ == "__main__":
