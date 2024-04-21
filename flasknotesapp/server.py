@@ -296,65 +296,83 @@ class UploadFileForm(FlaskForm):
         print("Method 2")
 
 
-@app.route('/upload', methods=['GET', "POST"])
+@app.route('/upload', methods=["POST"])
 @login_required
-def upload_page():
-    """Uploads a file to onedrive
-    Parameters: None
+def upload_page_setup():
+    """Uploads a file to OneDrive"""
+    group = request.form['title']
+    form = UploadFileForm()
+    return render_template("upload.html", form=form, group=group)
 
-    Returns: Main page template
-    object: User
-    None
+
+@app.route('/upload_page_action', methods=["GET", "POST"])
+@login_required
+def upload_page_action():
+    """Summary:
     """
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
-        print(json_headers)
-        return render_template('homepage.html')
-    headers = json.loads(json_headers)
-    timeout = 60
-    form = UploadFileForm()
-    if form.validate_on_submit():
-        file = form.file.data
-        if request.method == "POST":
-            group = request.form["groupinput"]
-            print(group)
-        try:
-            response = requests.put(
-                GRAPH_API_ENDPOINT +
-                f'/me/drive/items/root:/notesapp-{group}/{file.filename}:/content',
-                headers=headers,
-                data=file,
-                timeout=timeout
-            )
-        except requests.exceptions.Timeout:
-            print("Timed out")
-        print(response.json())
-        # file.save(
-        #     os.path.join(os.path.abspath(os.path.dirname(__file__)),
-        #                  app.config['UPLOAD_FOLDER'],
-        #                  secure_filename(file.filename)))
-        # dir_list = os.listdir('static\\files')
-        #  headers = {
-        #    'Authorization': 'Bearer ' + access_token['access_token']
-        #  }
-        # for file_path in dir_list:
-        #     name = file_path
-        #     file_path = 'static\\files\\' + file_path
-        #     with open(file_path, 'rb') as upload:
-        #         media_content = upload.read()
-        #         try:
-        #             response = requests.put(
-        #                 GRAPH_API_ENDPOINT +
-        #                 f'/me/drive/items/root:/{name}:/content',
-        #                 headers=headers,
-        #                 data=media_content,
-        #                 timeout=timeout
-        #             )
-        #         except requests.exceptions.Timeout:
-        #             print("Timed out")
-        #         print(response.json())
         return render_template("homepage.html")
-    return render_template("upload.html", form=form)
+    headers = json.loads(json_headers)
+    group = request.form['group']
+    #  Use request.files to access uploaded files (chatgpt helped get the files part)
+    file = request.files['file']
+    timeout = 60
+    print(group, file.filename)
+    if file:
+        response = requests.put(
+            GRAPH_API_ENDPOINT +
+            f'/me/drive/items/root:/{group}/{file.filename}:/content',
+            headers=headers,
+            data=file.read(),  # Use file.read() to get the file content
+            timeout=timeout
+        )
+        print(response.json())
+
+    return get_my_folders()
+
+
+@app.route('/upload_page_setup_shared', methods=["POST"])
+@login_required
+def upload_page_setup_shared():
+    """Uploads a file to OneDrive"""
+    group = request.form['title']
+    file_id = request.form['file_id']
+    form = UploadFileForm()
+    return render_template("upload_shared.html", form=form, group=group, file_id=file_id)
+
+
+@app.route('/upload_page_action_shared', methods=["GET", "POST"])
+@login_required
+def upload_page_action_shared():
+    """Summary:
+    """
+    url = 'https://graph.microsoft.com/v1.0/'
+    json_headers = request.cookies.get(session['username'])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    group = request.form['group']
+    current_folder_ids = request.form['file_id']
+    ids_split = current_folder_ids.split(",")
+    drive_id = ids_split[0]
+    remote_id = ids_split[1]
+    #  Use request.files to access uploaded files (chatgpt helped get the files part)
+    file = request.files['file']
+    timeout = 60
+    print(group, file.filename)
+    new_url = f'/drives/{drive_id}/items/{remote_id}:/{file.filename}:/content'
+    print(new_url)
+    if file:
+        response = requests.put(
+            url + new_url,
+            headers=headers,
+            data=file.read(),  # Use file.read() to get the file content
+            timeout=timeout
+        )
+        print(response.json())
+
+    return get_shared_folders()
 
 
 @app.route('/group')
