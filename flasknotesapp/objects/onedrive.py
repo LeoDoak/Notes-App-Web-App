@@ -89,7 +89,8 @@ def display_popup(user_code):
     <button onclick="window.close()">Close</button>
     </div>
     <script>
-    window.moveTo(((window.screen.width - window.outerWidth) / 2) - 150, ((window.screen.height - window.outerHeight) / 2) - 100);
+    window.moveTo(((window.screen.width - window.outerWidth) / 2) - 150, 
+    ((window.screen.height - window.outerHeight) / 2) - 100);
     </script>
     </body>
     </html>
