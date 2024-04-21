@@ -650,12 +650,12 @@ def get_my_shared_files():
     #  sget from other flask method
     current_folder_ids = request.form['file_id']
     ids_split = current_folder_ids.split(",")
-    driveId = ids_split[0]
+    drive_id = ids_split[0]
     remote_id = ids_split[1]
-    print(driveId+remote_id)
+    print(drive_id+remote_id)
     #  print("Current folder Id:", current_folder)
     #new_url = url + 'me/drive/items/' + current_folder + '/children'
-    new_url = url + 'drives/'+ driveId +'/items/' + remote_id  + '/children'
+    new_url = url + 'drives/'+ drive_id +'/items/' + remote_id  + '/children'
     print(new_url)
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
     print(sub_items)
@@ -745,7 +745,6 @@ def searchfiles():
     Returns:
     '''
     search_criteria = request.form['Search']
-    print(search_criteria)
     url = 'https://graph.microsoft.com/v1.0/'
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
@@ -791,8 +790,6 @@ def share_group_setup():
     '''
     file_id = request.form['file_id']
     title = request.form['title']
-    message = ''
-    print(file_id, title)
     return render_template("share_group_setup.html", file_id = file_id, title = title)
 
 
@@ -801,15 +798,15 @@ def share_group_setup():
 def share_group_action():
     '''Summary: Share personal group with someone 
     '''
+    timeout = 30
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    #  shoutout chatgpt if this works 
+    #  shoutout chatgpt if this works
     email = request.form['email']
     folder_id = request.form['file_id']
     title = request.form['title']
-    print(email,folder_id)
     share_data = {
     "recipients": [
         {
@@ -824,8 +821,11 @@ def share_group_action():
     share_response = requests.post(
         f"https://graph.microsoft.com/v1.0/me/drive/items/{folder_id}/invite",
         headers=headers,
-        json=share_data
+        json=share_data,
+        timeout = timeout
     )
+    if share_response == 400:
+        print('error')
     return render_template("share_group_setup.html", file_id = folder_id, title = title)
 
 
@@ -836,8 +836,6 @@ def share_group_setup_shared():
     '''
     file_id = request.form['file_id']
     title = request.form['title']
-    message = ''
-    print(file_id, title)
     return render_template("shared_group_setup_shared.html", file_id = file_id, title = title)
 
 
@@ -846,25 +844,24 @@ def share_group_setup_shared():
 def share_group_action_shared():
     '''Summary: Share shared group with someone 
     '''
+    timeout = 60
     url = 'https://graph.microsoft.com/v1.0/'
     json_headers = request.cookies.get(session['username'])
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    #  shoutout chatgpt if this works 
+    #  shoutout chatgpt if this works
     email = request.form['email']
     folder_id = request.form['file_id']
     current_folder_ids = request.form['file_id']
     ids_split = current_folder_ids.split(",")
-    driveId = ids_split[0]
+    drive_id = ids_split[0]
     remote_id = ids_split[1]
-    print(driveId+remote_id)
     #  print("Current folder Id:", current_folder)
     #new_url = url + 'me/drive/items/' + current_folder + '/children'
-    new_url = url + 'drives/'+ driveId +'/items/' + remote_id+'/invite'
+    new_url = url + 'drives/'+ drive_id +'/items/' + remote_id+'/invite'
 
     title = request.form['title']
-    print(email,folder_id)
     share_data = {
     "recipients": [
         {
@@ -880,11 +877,12 @@ def share_group_action_shared():
         #f"https://graph.microsoft.com/v1.0/me/drive/sharedWithMe/{folder_id}/invite",
         new_url,
         headers=headers,
-        json=share_data
+        json=share_data,
+        timeout = timeout
     )
-    print('Shared respinse:',share_response)
+    if share_response == 400:
+        print("error")
     return render_template("shared_group_setup_shared.html", file_id = folder_id, title = title)
-
 
 
 if __name__ == "__main__":

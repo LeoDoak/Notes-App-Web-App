@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html>
 <body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folders</title>
+    <link href="{{ url_for('static', filename='styles/share_group.css')}} " rel="stylesheet" />
+</head>
 
-<h1>Enter in the User's e-mail address that you would like to share {{title}}: {{file_id}} with: </h1>
+<h1>Enter in the User's e-mail address that you would like to share Group: {{title}} with: </h1>
 
 <form action="{{ url_for('share_group_action')}}" method="post">
   <label for="emails"> Email Address </label>
