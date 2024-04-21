@@ -72,4 +72,18 @@ $ pip install -r requirements.txt
 ## IDE Used 
 * Whichever application you may be using to run the code, we used VS Code or PyCharm, make sure to install the necessary frameworks, including Flask, waitress and any other import you might see in the code above.
 
+## Executing Tests
+
+* How to install testing library:
+```bash
+$ pip install pytest
+```
+
+### Command to execute tests
+
+* Run this in your terminal and all the tests should execute and you'll be able to see the results.
+```bash
+$ pytest
+```
+
 **That's all it takes to be able to run our program so far. Enjoy!**
