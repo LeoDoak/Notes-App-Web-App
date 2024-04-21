@@ -556,7 +556,7 @@ def get_shared_folders():
         remote_item = entry["remoteItem"]
         parent_ref = remote_item["parentReference"]
         print(entry['name'], '| item-id >', parent_ref['driveId'])
-        id_linked = parent_ref['driveId'] + ','+ remote_item['id']
+        id_linked = parent_ref['driveId'] + ',' + remote_item['id']
         new_file = File(id_linked, entry['name'], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
@@ -652,15 +652,9 @@ def get_my_shared_files():
     ids_split = current_folder_ids.split(",")
     drive_id = ids_split[0]
     remote_id = ids_split[1]
-    print(drive_id+remote_id)
-    #  print("Current folder Id:", current_folder)
-    #new_url = url + 'me/drive/items/' + current_folder + '/children'
-    new_url = url + 'drives/'+ drive_id +'/items/' + remote_id  + '/children'
-    print(new_url)
+    new_url = url + 'drives/' + drive_id + '/items/' + remote_id + '/children'
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-    print(sub_items)
     sub_items = sub_items['value']
-    print(sub_items)
     #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
         #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
@@ -786,17 +780,17 @@ def searchfiles():
 @app.route('/share_my_group', methods=['POST'])
 @login_required
 def share_group_setup():
-    '''Sumary: sets up for sharing personal file 
+    '''Sumary: sets up for sharing personal file
     '''
     file_id = request.form['file_id']
     title = request.form['title']
-    return render_template("share_group_setup.html", file_id = file_id, title = title)
+    return render_template("share_group_setup.html", file_id=file_id, title=title)
 
 
 @app.route('/share_group_action', methods=['POST'])
 @login_required
 def share_group_action():
-    '''Summary: Share personal group with someone 
+    '''Summary: Share personal group with someone
     '''
     timeout = 30
     json_headers = request.cookies.get(session['username'])
@@ -807,42 +801,34 @@ def share_group_action():
     email = request.form['email']
     folder_id = request.form['file_id']
     title = request.form['title']
-    share_data = {
-    "recipients": [
-        {
-            "email": email
-
-        }
-    ],
-    "requireSignIn": True,
-    "sendInvitation": True,
-    "roles": ["write"]
-    }
+    share_data = {"recipients": [{"email": email}], "requireSignIn": True,
+                  "sendInvitation": True, "roles": ["write"]
+                  }
     share_response = requests.post(
         f"https://graph.microsoft.com/v1.0/me/drive/items/{folder_id}/invite",
         headers=headers,
         json=share_data,
-        timeout = timeout
+        timeout=timeout
     )
     if share_response == 400:
         print('error')
-    return render_template("share_group_setup.html", file_id = folder_id, title = title)
+    return render_template("share_group_setup.html", file_id=folder_id, title=title)
 
 
 @app.route('/share_my_group_shared', methods=['POST'])
 @login_required
 def share_group_setup_shared():
-    '''Sumary: sets up for sharing shared group 
+    '''Sumary: sets up for sharing shared group
     '''
     file_id = request.form['file_id']
     title = request.form['title']
-    return render_template("shared_group_setup_shared.html", file_id = file_id, title = title)
+    return render_template("shared_group_setup_shared.html", file_id=file_id, title=title)
 
 
 @app.route('/share_group_action_shared', methods=['POST'])
 @login_required
 def share_group_action_shared():
-    '''Summary: Share shared group with someone 
+    '''Summary: Share shared group with someone
     '''
     timeout = 60
     url = 'https://graph.microsoft.com/v1.0/'
@@ -857,32 +843,20 @@ def share_group_action_shared():
     ids_split = current_folder_ids.split(",")
     drive_id = ids_split[0]
     remote_id = ids_split[1]
-    #  print("Current folder Id:", current_folder)
-    #new_url = url + 'me/drive/items/' + current_folder + '/children'
-    new_url = url + 'drives/'+ drive_id +'/items/' + remote_id+'/invite'
-
+    new_url = url + 'drives/' + drive_id + '/items/' + remote_id + '/invite'
     title = request.form['title']
     share_data = {
-    "recipients": [
-        {
-            "email": email
-
-        }
-    ],
-    "requireSignIn": True,
-    "sendInvitation": True,
-    "roles": ["write"]
-    }
+        "recipients": [{"email": email}], "requireSignIn": True,
+        "sendInvitation": True, "roles": ["write"]}
     share_response = requests.post(
-        #f"https://graph.microsoft.com/v1.0/me/drive/sharedWithMe/{folder_id}/invite",
         new_url,
         headers=headers,
         json=share_data,
-        timeout = timeout
+        timeout=timeout
     )
     if share_response == 400:
         print("error")
-    return render_template("shared_group_setup_shared.html", file_id = folder_id, title = title)
+    return render_template("shared_group_setup_shared.html", file_id=folder_id, title=title)
 
 
 if __name__ == "__main__":
