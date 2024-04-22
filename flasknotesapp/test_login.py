@@ -5,13 +5,14 @@ This file will test login functionality using pytest.
 
 from server import app
 
+
 def test_login_valid(monkeypatch):
     '''
     This will test login functionality with valid inputs.
     '''
     def mock_login():
         return True
-    
+
     monkeypatch.setattr("server.login", mock_login)
     test_client = app.test_client()
     response = test_client.post(
@@ -26,7 +27,7 @@ def test_login_invalid(monkeypatch):
 
     def mock_login():
         return False
-    
+
     monkeypatch.setattr("server.login", mock_login)
     test_client = app.test_client()
     response = test_client.post(
