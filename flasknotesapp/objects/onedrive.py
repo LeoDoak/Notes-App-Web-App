@@ -103,7 +103,15 @@ def display_popup(user_code):
     with open('popup.html', 'w', encoding='utf-8') as file:
         file.write(html_content)
 
-    webbrowser.open('popup.html')
+    # chat gpt helped with this
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    # Construct the path to popup.html
+    html_file_path = os.path.join(current_directory, '..', 'popup.html')
+    # Convert the file path to a URL using the file:// protocol
+    html_url = 'file://' + html_file_path
+    print(html_url)
+    # Open the HTML file in the default web browser
+    webbrowser.open(html_url)
 
 
 if __name__ == '__main__':
