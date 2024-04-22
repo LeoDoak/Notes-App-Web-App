@@ -16,7 +16,8 @@ def test_login_valid(monkeypatch):
     monkeypatch.setattr("server.login", mock_login)
     test_client = app.test_client()
     response = test_client.post(
-        "/login", data={"username": "valid_username", "password": "valid_password"}, follow_redirects=True)
+        "/login", data={
+            "username": "valid_username", "password": "valid_password"}, follow_redirects=True)
     assert response.headers["Location"] == "http://localhost/homepage"
 
 
@@ -31,6 +32,7 @@ def test_login_invalid(monkeypatch):
     monkeypatch.setattr("server.login", mock_login)
     test_client = app.test_client()
     response = test_client.post(
-        "/login", data={"username": "invalid_username", "password": "invalid_password"}, follow_redirects=True)
+        "/login", data={
+            "username": "invalid_username", "password": "invalid_password"}, follow_redirects=True)
 
     assert b'Incorrect Username or Password!' in response.data
