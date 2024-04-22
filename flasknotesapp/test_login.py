@@ -19,8 +19,17 @@ def test_login_valid(monkeypatch):
     assert response.headers["Location"] == "http://localhost/homepage"
 
 
-def test_login_invalid():
+def test_login_invalid(monkeypatch):
     '''
     This will test login functionality with invalid inputs.
     '''
-    return None
+
+    def mock_login():
+        return False
+    
+    monkeypatch.setattr("server.login", mock_login)
+    test_client = app.test_client()
+    response = test_client.post(
+        "/login", data={"username": "invalid_username", "password": "invalid_password"}, follow_redirects=True)
+
+    assert b'Incorrect Username or Password!' in response.data
