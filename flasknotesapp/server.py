@@ -820,10 +820,9 @@ def get_or_create_favorites_folder(headers):
                 return folder['id']
     else:
         # Handle errors during the search request
-        print("Error searching for 'Notes-App{Favorites}' folder:",
-        response.json()
-        )
+        print("Error searching for 'Notes-App{Favorites}' folder:", response.json())
         response.raise_for_status()
+    return None
 
 
 @app.route("/searchfiles", methods=["POST"])
