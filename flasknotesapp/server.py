@@ -84,7 +84,6 @@ def copy_file_to_favorites(headers, file_id, favorites_folder_id):
             "id": favorites_folder_id
         }
     }
-    
     response = requests.post(copy_url, headers=headers, json=body)
     if response.status_code == 202:
         # Get the URL to poll for the status of the copy operation from the Location header
@@ -95,14 +94,11 @@ def copy_file_to_favorites(headers, file_id, favorites_folder_id):
         print(f"Response Headers: {response.headers}")
         print(f"Response Text: {response.text}")
         response.raise_for_status()
-
-
-
+        
+        
 def folder_action():
     """Summary
-
     Paramter:
-
     Returns:
     """
     # Example usage
@@ -753,7 +749,6 @@ def download_file():
 
 @app.route("/add_favorite", methods=["POST"])
 def add_favorite():
-    #print("checking")
     """ move file to favorites folder
     """
     timeout = 30
@@ -770,20 +765,15 @@ def add_favorite():
     print("url id:", url)
     # if folder favorite does not exist, create it
     favorites_folder_id = get_or_create_favorites_folder(headers)
-    #print("favorite id:",favorites_folder_id)
-    #print("move start")
     # move file to favorites folder
     token = headers["Authorization"]
     copy_file_to_favorites(headers, file_id, favorites_folder_id)
-    #print("move ended")
     file_list = []
     url = "https://graph.microsoft.com/v1.0/"
     #  sget from other flask method
     current_folder = get_or_create_favorites_folder(headers)
-    #  print("Current folder Id:", current_folder)
     new_url = url + "me/drive/items/" + current_folder + "/children"
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-    #  print(sub_items)
     sub_items = sub_items["value"]
     #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
@@ -795,10 +785,10 @@ def add_favorite():
         new_file.set_file_icon()
         file_list.append(new_file)
         #  print(new_file.get_title(),new_file.get_filetype(),"\n")
-    return render_template("favoriteexplorer.html", folders=file_list )
+    return render_template("favoriteexplorer.html", folders=file_list)
 
 
-@app.route("/get_favorites", methods=["GET","POST"])
+@app.route("/get_favorites", methods=["GET", "POST"])
 def get_favorites():
     print("started_get fav")
     """Summary
@@ -814,21 +804,17 @@ def get_favorites():
     url = "https://graph.microsoft.com/v1.0/"
     #  sget from other flask method
     current_folder = get_or_create_favorites_folder(headers)
-    #print("Current folder Id:", current_folder)
     new_url = url + "me/drive/items/" + current_folder + "/children"
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-    #print(sub_items)
     sub_items = sub_items["value"]
     #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
-        #print(sub_entry['name'], '| item-id >', sub_entry['id'])
         new_file = File(sub_entry["id"], sub_entry["name"], None, None)
         # setting the filetype from the name
         new_file.set_filetype()
         # indexing the photo from filetype
         new_file.set_file_icon()
         file_list.append(new_file)
-        #print(new_file.get_title(),new_file.get_filetype(),"\n")
     return render_template("favoriteexplorer.html", folders=file_list)
 
 
@@ -861,7 +847,7 @@ def get_or_create_favorites_folder(headers):
         print("Error searching for 'Notes-App{Favorites}' folder:",
               response.json())
         return None
-    
+
 
 @app.route("/searchfiles", methods=["POST"])
 @login_required
