@@ -84,16 +84,8 @@ def copy_file_to_favorites(headers, file_id, favorites_folder_id):
             "id": favorites_folder_id
         }
     }
-    response = requests.post(copy_url, headers=headers, json=body)
-    if response.status_code == 202:
-        # Get the URL to poll for the status of the copy operation from the Location header
-        return response.headers.get('Location')
-    else:
-        # If the response is not 202, log the details for debugging
-        print(f"Response Status Code: {response.status_code}")
-        print(f"Response Headers: {response.headers}")
-        print(f"Response Text: {response.text}")
-        response.raise_for_status()
+    response = requests.post(copy_url, headers=headers, json=body, timeout=30)
+    response.raise_for_status()
 
 
 def folder_action():
@@ -790,11 +782,8 @@ def add_favorite():
 
 @app.route("/get_favorites", methods=["GET", "POST"])
 def get_favorites():
-    print("started_get fav")
-    """Summary
-    Params:
-    Returns:
-    """
+    '''
+    '''
     timeout = 30
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
@@ -819,8 +808,10 @@ def get_favorites():
 
 
 def get_or_create_favorites_folder(headers):
+    ''' 
+    '''
     search_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
-    response = requests.get(search_url, headers=headers)
+    response = requests.get(search_url, headers=headers, timeout=30)
     if response.status_code == 200:
         # Search for the 'Notes-App{Favorites}' folder
         folders = response.json()['value']
@@ -834,14 +825,6 @@ def get_or_create_favorites_folder(headers):
             json={"name": "Notes-App{Favorites}", "folder": {}},
             timeout=30
         )
-        if create_folder_response.status_code == 201:
-            # Return the id of the newly created folder
-            return create_folder_response.json()['id']
-        else:
-            # Handle errors during folder creation
-            print("Error creating 'Notes-App{Favorites}' folder:",
-                  create_folder_response.json())
-            return None
     else:
         # Handle errors during the search request
         print("Error searching for 'Notes-App{Favorites}' folder:",
