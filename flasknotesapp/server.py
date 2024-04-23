@@ -782,7 +782,7 @@ def add_favorite():
 
 @app.route("/get_favorites", methods=["GET", "POST"])
 def get_favorites():
-    '''
+    '''this function helps to display files in fav_tab
     '''
     timeout = 30
     json_headers = request.cookies.get(session["username"])
@@ -808,7 +808,7 @@ def get_favorites():
 
 
 def get_or_create_favorites_folder(headers):
-    '''
+    '''this function helps to get fav_folder
     '''
     search_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
     response = requests.get(search_url, headers=headers, timeout=30)
@@ -821,8 +821,8 @@ def get_or_create_favorites_folder(headers):
     else:
         # Handle errors during the search request
         print("Error searching for 'Notes-App{Favorites}' folder:",
-              response.json())
-        return None
+        response.json())
+        response.raise_for_status()
 
 
 @app.route("/searchfiles", methods=["POST"])
