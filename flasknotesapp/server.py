@@ -808,7 +808,7 @@ def get_favorites():
 
 
 def get_or_create_favorites_folder(headers):
-    ''' 
+    '''
     '''
     search_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
     response = requests.get(search_url, headers=headers, timeout=30)
@@ -818,13 +818,6 @@ def get_or_create_favorites_folder(headers):
         for folder in folders:
             if folder.get('name') == 'Notes-App{Favorites}' and 'folder' in folder:
                 return folder['id']
-        # Folder not found; create a new 'Notes-App{Favorites}' folder
-        create_folder_response = requests.post(
-            search_url,
-            headers=headers,
-            json={"name": "Notes-App{Favorites}", "folder": {}},
-            timeout=30
-        )
     else:
         # Handle errors during the search request
         print("Error searching for 'Notes-App{Favorites}' folder:",
