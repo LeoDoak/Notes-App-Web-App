@@ -1,81 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Favorites</title>
-    <link href="{{ url_for('static', filename='styles/mainpage.css')}}" rel="stylesheet" />
-    <!-- ... existing style ... -->
+    <title>Show Favorite Files</title>
+    <link href="{{ url_for('static', filename='styles/icon.css')}} " rel="stylesheet" />
 </head>
+
 <body>
-
-<div class="container">
-    <h2>My Favorites</h2>
-    <div id="filesList">
-        <!-- Pinned files will be listed here -->
-    </div>
-</div>
-
-<script>
-    // Load and display favorites when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        displayFavorites();
-    });
-
-    // Display the favorites
-    function displayFavorites() {
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        const listElement = document.getElementById("filesList");
-        listElement.innerHTML = ''; // Clear the list before adding new items
-
-        // Iterate over favorites and create file items
-        favorites.forEach(file => {
-            const fileElement = document.createElement("div");
-            fileElement.classList.add("file-item");
-            
-            // Create and add the star icon
-            const star = document.createElement("span");
-            star.classList.add('star', 'active');
-            star.innerHTML = '&#9733;'; // The filled star character
-            star.setAttribute('onclick', 'unfavoriteFile(this)');
-            star.dataset.filename = file;
-
-            // Create and add the file name span
-            const nameSpan = document.createElement("span");
-            nameSpan.classList.add("file-name");
-            nameSpan.textContent = file;
-            
-            // Append the star and name to the file element
-            fileElement.appendChild(star);
-            fileElement.appendChild(nameSpan);
-
-            // Add the file element to the list
-            listElement.appendChild(fileElement);
-        });
-
-        // Display a message if there are no favorites
-        if(favorites.length === 0) {
-            listElement.innerHTML = "<p>No pinned files yet.</p>";
-        }
-    }
-
-    // Function to unfavorite a file
-    function unfavoriteFile(starElement) {
-        const filename = starElement.dataset.filename;
-        removeFromFavorites(filename);
-        starElement.parentElement.remove(); // Remove the file item from the DOM
-    }
-
-    // Remove a file from favorites
-    function removeFromFavorites(filename) {
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        const index = favorites.indexOf(filename);
-        if (index !== -1) {
-            favorites.splice(index, 1); // Remove the file from the array
-            localStorage.setItem('favorites', JSON.stringify(favorites)); // Update local storage
-        }
-    }
-</script>
-
-</body>
-</html>
+    <h1>Favorite Files</h1>
+    <ul>
+        {% for file in files %}
+        <div class="gallery">
+            <img src="{{ url_for('static', filename=file.fileicon) }}" alt="{{ file.title }}" width="100" height="100">
+            <div class="desc">{{ file.name }}</div>
+            <div class="dropdown">
+                <button class="dropbtn">Options</button>
+                <div class="dropdown-content">
+                    <form action="/remove_favorite" method="post">
+                        <input type="hidden" name="file_id" value="{{ file.file_id }}">
+                        <button type="submit">Remove Favorite</button>
+                    </form>
+                    <form action="{{ url_for('download_file') }}" method="post">
+                        <input type="hidden" name="file_id" value="{{ file.file_id }}">
+                        <input type="hidden" name="file_title" value="{{ file.title }}">
+                        <button type="submit">Download</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </ul>
+<body>
