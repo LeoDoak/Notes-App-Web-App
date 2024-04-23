@@ -94,7 +94,7 @@ def copy_file_to_favorites(headers, file_id, favorites_folder_id):
         print(f"Response Headers: {response.headers}")
         print(f"Response Text: {response.text}")
         response.raise_for_status()
- 
+
 
 def folder_action():
     """Summary
