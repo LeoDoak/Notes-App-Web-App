@@ -94,8 +94,8 @@ def copy_file_to_favorites(headers, file_id, favorites_folder_id):
         print(f"Response Headers: {response.headers}")
         print(f"Response Text: {response.text}")
         response.raise_for_status()
-        
-        
+ 
+
 def folder_action():
     """Summary
     Paramter:
@@ -758,7 +758,7 @@ def add_favorite():
         return render_template("homepage.html")
     headers = json.loads(json_headers)
     file_id = request.form["file_id"]
-    file_name = request.form["file_title"]
+    # file_name = request.form["file_title"]
     m_url = "https://graph.microsoft.com/v1.0/"
     url = "/me/drive/items/" + file_id
     url = m_url + url
@@ -766,7 +766,7 @@ def add_favorite():
     # if folder favorite does not exist, create it
     favorites_folder_id = get_or_create_favorites_folder(headers)
     # move file to favorites folder
-    token = headers["Authorization"]
+    # token = headers["Authorization"]
     copy_file_to_favorites(headers, file_id, favorites_folder_id)
     file_list = []
     url = "https://graph.microsoft.com/v1.0/"
