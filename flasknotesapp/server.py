@@ -821,7 +821,8 @@ def get_or_create_favorites_folder(headers):
     else:
         # Handle errors during the search request
         print("Error searching for 'Notes-App{Favorites}' folder:",
-        response.json())
+        response.json()
+        )
         response.raise_for_status()
 
 
