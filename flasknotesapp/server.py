@@ -87,6 +87,7 @@ def copy_file_to_favorites(headers, file_id, favorites_folder_id):
     response = requests.post(copy_url, headers=headers, json=body, timeout=30)
     response.raise_for_status()
 
+
 def copy_file_to_favorites_shared(headers, file_id, favorites_folder_id):
     """
     copy a file to the 'Favorites' folder in OneDrive from a shared folder.
@@ -100,7 +101,7 @@ def copy_file_to_favorites_shared(headers, file_id, favorites_folder_id):
     driveid = ids_split[1]
     fileid = ids_split[0]
     # /drives/{driveId}/items/{itemId}/copy
-    #copy_url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/copy"
+    # copy_url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/copy"
     copy_url = f"https://graph.microsoft.com/v1.0/drives/{driveid}/items/{fileid}/copy"
     body = {
         "parentReference": {
@@ -110,7 +111,6 @@ def copy_file_to_favorites_shared(headers, file_id, favorites_folder_id):
     response = requests.post(copy_url, headers=headers, json=body, timeout=30)
     print(response)
     response.raise_for_status()
-
 
 
 @login_manager.user_loader
@@ -776,7 +776,6 @@ def download_file():
         return render_template("download_file.html", title=file_name)
 
 
-
 @app.route("/get_favorites", methods=["GET", "POST"])
 def get_favorites():
     '''this function helps to display files in fav_tab
@@ -804,7 +803,6 @@ def get_favorites():
     return render_template("favoriteexplorer.html", folders=file_list)
 
 
-
 @app.route("/add_favorite", methods=["POST"])
 def add_favorite():
     """ move file to favorites folder
@@ -828,6 +826,7 @@ def add_favorite():
     # token = headers["Authorization"]
     copy_file_to_favorites(headers, file_id, favorites_folder_id)
     return get_favorites()
+
 
 @app.route("/add_favorite_shared", methods=["POST"])
 def add_favorite_shared():
@@ -859,10 +858,10 @@ def get_or_create_favorites_folder(headers):
     Summary:
     '''
     search_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
-    
+
     # Send a request to retrieve the folders
     response = requests.get(search_url, headers=headers, timeout=30)
-    
+
     # Check if the request was successful
     if response.status_code == 200:
         # Search for the 'Notes-App{Favorites}' folder
@@ -870,7 +869,7 @@ def get_or_create_favorites_folder(headers):
         for folder in folders:
             if folder.get('name') == 'Notes-App{Favorites}' and 'folder' in folder:
                 return folder['id']
-        
+
         # If the folder doesn't exist, create it
         create_folder_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
         payload = {
@@ -878,8 +877,7 @@ def get_or_create_favorites_folder(headers):
             "folder": {}
         }
         create_response = requests.post(create_folder_url, headers=headers, json=payload)
-        
-    
+
         if create_response.status_code == 201:
             return create_response.json().get('id')
         else:
@@ -889,12 +887,6 @@ def get_or_create_favorites_folder(headers):
         print("Error searching for 'Notes-App{Favorites}' folder:", response.json())
         response.raise_for_status()
     return None
-
-
-
-
-
-
 
 
 @app.route("/searchfiles", methods=["POST"])
