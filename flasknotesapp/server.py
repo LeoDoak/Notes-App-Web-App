@@ -829,7 +829,7 @@ def add_favorite():
 
 @app.route("/add_favorite_shared", methods=["POST"])
 def add_favorite_shared():
-    """ move file to favorites folder from shared folder 
+    """ move file to favorites folder from shared folder
     """
     json_headers = request.cookies.get(session["username"])
     print("jason", json_headers)
