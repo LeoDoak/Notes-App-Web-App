@@ -42,6 +42,7 @@ app.secret_key = """967b75c111e64965848a7786bda9602
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+
 def copy_file_to_favorites(headers, file_id, favorites_folder_id):
     """
     copy a file to the 'Favorites' folder in OneDrive.
