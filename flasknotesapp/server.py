@@ -742,6 +742,7 @@ def download_file():
         _f.write(response_file_contenet.content)
     return render_template("download_file.html", title=file_name)
 
+
 @app.route("/download_file_shared", methods=["POST"])
 @login_required
 def download_file_shared():
