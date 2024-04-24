@@ -88,21 +88,6 @@ def copy_file_to_favorites(headers, file_id, favorites_folder_id):
     response.raise_for_status()
 
 
-def folder_action():
-    """Summary
-    Paramter:
-    Returns:
-    """
-    # Example usage
-    # Use uppercase for constants (no longer global)
-    # parent_folder_id = "root"
-    folder_name = "Notes-App{Favorites}"
-    headers = onedrive()
-
-    # Create a folder
-    create_folder(headers, folder_name)
-
-
 @login_manager.user_loader
 def load_user(user_id):
     """Load a user object from the database given its user ID.
@@ -757,27 +742,11 @@ def add_favorite():
     print("url id:", url)
     # if folder favorite does not exist, create it
     favorites_folder_id = get_or_create_favorites_folder(headers)
+    print("Favorites ID", favorites_folder_id)
     # move file to favorites folder
     # token = headers["Authorization"]
     copy_file_to_favorites(headers, file_id, favorites_folder_id)
-    file_list = []
-    url = "https://graph.microsoft.com/v1.0/"
-    #  sget from other flask method
-    current_folder = get_or_create_favorites_folder(headers)
-    new_url = url + "me/drive/items/" + current_folder + "/children"
-    sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-    sub_items = sub_items["value"]
-    #  for sub_entries in range(len(sub_items)):
-    for _, sub_entry in enumerate(sub_items):
-        #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
-        new_file = File(sub_entry["id"], sub_entry["name"], None, None)
-        # setting the filetype from the name
-        new_file.set_filetype()
-        # indexing the photo from filetype
-        new_file.set_file_icon()
-        file_list.append(new_file)
-        #  print(new_file.get_title(),new_file.get_filetype(),"\n")
-    return render_template("favoriteexplorer.html", folders=file_list)
+    return get_favorites()
 
 
 @app.route("/get_favorites", methods=["GET", "POST"])
@@ -807,22 +776,43 @@ def get_favorites():
     return render_template("favoriteexplorer.html", folders=file_list)
 
 
+import requests
+
 def get_or_create_favorites_folder(headers):
-    '''this function helps to get fav_folder
-    '''
+    # Define the search URL
     search_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
+    
+    # Send a request to retrieve the folders
     response = requests.get(search_url, headers=headers, timeout=30)
+    
+    # Check if the request was successful
     if response.status_code == 200:
         # Search for the 'Notes-App{Favorites}' folder
         folders = response.json()['value']
         for folder in folders:
             if folder.get('name') == 'Notes-App{Favorites}' and 'folder' in folder:
                 return folder['id']
+        
+        # If the folder doesn't exist, create it
+        create_folder_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
+        payload = {
+            "name": "Notes-App{Favorites}",
+            "folder": {}
+        }
+        create_response = requests.post(create_folder_url, headers=headers, json=payload)
+        
+    
+        if create_response.status_code == 201:
+            return create_response.json().get('id')
+        else:
+            print("Error creating 'Notes-App{Favorites}' folder:", create_response.json())
+            create_response.raise_for_status()
     else:
-        # Handle errors during the search request
         print("Error searching for 'Notes-App{Favorites}' folder:", response.json())
         response.raise_for_status()
+    
     return None
+
 
 
 @app.route("/searchfiles", methods=["POST"])
