@@ -42,33 +42,6 @@ app.secret_key = """967b75c111e64965848a7786bda9602
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-
-def create_folder(headers, folder_name):
-    """
-    Creates a new folder on a user's OneDrive via the Microsoft Graph API,
-    using an access token for authentication. Posts a request with the desired folder name,
-    handles errors, and returns the API's response.
-
-    Args:
-        token: The access token for authentication.
-        folder_name: The name of the folder to be created.
-
-    Returns:
-        The response from the OneDrive API as a JSON object.
-    """
-    url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
-    json_headers = request.cookies.get(session["username"])
-    headers = json.loads(json_headers)
-    if headers is None:
-        return render_template("homepage.html")
-
-    response = requests.post(
-        url, headers=headers, json={"name": folder_name, "folder": {}}, timeout=10
-    )
-    response.raise_for_status()
-    return response.json()
-
-
 def copy_file_to_favorites(headers, file_id, favorites_folder_id):
     """
     copy a file to the 'Favorites' folder in OneDrive.
