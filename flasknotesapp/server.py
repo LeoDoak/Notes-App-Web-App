@@ -142,14 +142,11 @@ def load_user(user_id):
 
 def checkdatabase():
     """calls the function that creates the database from the user_database file.
-
     Parameters:
     None.
-
     Returns:
     None.
     """
-    # call the function that creates the database
     user_database.create_database()
 
 
@@ -163,7 +160,6 @@ def set_up():
     Returns:
     flask method: render_template with String loginpage.html.
     """
-
     return render_template("loginpage.html")
 
 
@@ -367,7 +363,6 @@ def upload_page_action_shared():
     ids_split = current_folder_ids.split(",")
     drive_id = ids_split[0]
     remote_id = ids_split[1]
-    #  Use request.files to access uploaded files (chatgpt helped get the files part)
     file = request.files["file"]
     timeout = 60
     print(group, file.filename)
@@ -381,7 +376,6 @@ def upload_page_action_shared():
             timeout=timeout,
         )
         print(response.json())
-
     return get_shared_folders()
 
 
@@ -395,7 +389,6 @@ def group_page():
     Returns:
     rendered_template: HTML content of the rendered template.
     """
-
     return render_template("groups.html")
 
 
@@ -749,31 +742,31 @@ def download_file():
         _f.write(response_file_contenet.content)
     return render_template("download_file.html", title=file_name)
 
-    @app.route("/download_file_shared", methods=["POST"])
-    @login_required
-    def download_file_shared():
-        """Summary: Downloading files from One Drive
-        Params:
-        Returns:
-        Credit:
-        """
-        timeout = 30
-        json_headers = request.cookies.get(session["username"])
-        if json_headers is None:
-            return render_template("homepage.html")
-        headers = json.loads(json_headers)
-        m_url = "https://graph.microsoft.com/v1.0/"
-        file_id = request.form["file_id"]
-        file_id = file_id.split(',')[0]
-        file_title = request.form["file_title"]
-        url = "me/drive/items/" + file_id + "/content"
-        url = m_url + url
-        file_name = file_title
-        save_location = os.path.expanduser("~/Downloads")
-        response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
-        with open(os.path.join(save_location, file_name), "wb") as _f:
-            _f.write(response_file_contenet.content)
-        return render_template("download_file.html", title=file_name)
+@app.route("/download_file_shared", methods=["POST"])
+@login_required
+def download_file_shared():
+    """Summary: Downloading files from One Drive
+    Params:
+    Returns:
+    Credit:
+    """
+    timeout = 30
+    json_headers = request.cookies.get(session["username"])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    m_url = "https://graph.microsoft.com/v1.0/"
+    file_id = request.form["file_id"]
+    file_id = file_id.split(',')[0]
+    file_title = request.form["file_title"]
+    url = "me/drive/items/" + file_id + "/content"
+    url = m_url + url
+    file_name = file_title
+    save_location = os.path.expanduser("~/Downloads")
+    response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
+    with open(os.path.join(save_location, file_name), "wb") as _f:
+        _f.write(response_file_contenet.content)
+    return render_template("download_file.html", title=file_name)
 
 
 @app.route("/get_favorites", methods=["GET", "POST"])
@@ -792,12 +785,9 @@ def get_favorites():
     new_url = url + "me/drive/items/" + current_folder + "/children"
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
     sub_items = sub_items["value"]
-    #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
         new_file = File(sub_entry["id"], sub_entry["name"], None, None)
-        # setting the filetype from the name
         new_file.set_filetype()
-        # indexing the photo from filetype
         new_file.set_file_icon()
         file_list.append(new_file)
     return render_template("favoriteexplorer.html", folders=file_list)
@@ -813,16 +803,12 @@ def add_favorite():
         return render_template("homepage.html")
     headers = json.loads(json_headers)
     file_id = request.form["file_id"]
-    # file_name = request.form["file_title"]
     m_url = "https://graph.microsoft.com/v1.0/"
     url = "/me/drive/items/" + file_id
     url = m_url + url
     print("url id:", url)
-    # if folder favorite does not exist, create it
     favorites_folder_id = get_or_create_favorites_folder(headers)
     print("Favorites ID", favorites_folder_id)
-    # move file to favorites folder
-    # token = headers["Authorization"]
     copy_file_to_favorites(headers, file_id, favorites_folder_id)
     return get_favorites()
 
@@ -856,13 +842,8 @@ def get_or_create_favorites_folder(headers):
     Summary:
     '''
     search_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
-
-    # Send a request to retrieve the folders
     response = requests.get(search_url, headers=headers, timeout=30)
-
-    # Check if the request was successful
     if response.status_code == 200:
-        # Search for the 'Notes-App{Favorites}' folder
         folders = response.json()['value']
         for folder in folders:
             if folder.get('name') == 'Notes-App{Favorites}' and 'folder' in folder:
@@ -874,16 +855,7 @@ def get_or_create_favorites_folder(headers):
             "name": "Notes-App{Favorites}",
             "folder": {}
         }
-        create_response = requests.post(create_folder_url, headers=headers, json=payload)
-
-        if create_response.status_code == 201:
-            return create_response.json().get('id')
-        else:
-            print("Error creating 'Notes-App{Favorites}' folder:", create_response.json())
-            create_response.raise_for_status()
-    else:
-        print("Error searching for 'Notes-App{Favorites}' folder:", response.json())
-        response.raise_for_status()
+        requests.post(create_folder_url, headers=headers, json=payload, timeout=30)
     return None
 
 
@@ -908,10 +880,7 @@ def searchfiles():
         ).text
     )
     items = items["value"]
-    #  for entries in range(len(items)):
     for _, entry in enumerate(items):
-        # get folders
-        #  print(entry['name'], '| item-id >', entry['id'])
         new_file = File(entry["id"], entry["name"], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
@@ -998,7 +967,6 @@ def share_group_action_shared():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    #  shoutout chatgpt if this works
     email = request.form["email"]
     folder_id = request.form["file_id"]
     current_folder_ids = request.form["file_id"]
