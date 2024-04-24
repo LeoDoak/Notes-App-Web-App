@@ -807,7 +807,6 @@ def get_favorites():
 def add_favorite():
     """ move file to favorites folder
     """
-    timeout = 30
     json_headers = request.cookies.get(session["username"])
     print("jason", json_headers)
     if json_headers is None:
@@ -830,9 +829,8 @@ def add_favorite():
 
 @app.route("/add_favorite_shared", methods=["POST"])
 def add_favorite_shared():
-    """ move file to favorites folder
+    """ move file to favorites folder from shared folder 
     """
-    timeout = 30
     json_headers = request.cookies.get(session["username"])
     print("jason", json_headers)
     if json_headers is None:
