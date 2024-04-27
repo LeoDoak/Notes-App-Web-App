@@ -81,9 +81,9 @@ $ pip install pytest
 
 ### Command to execute tests
 
-* Run this in your terminal and all the tests should execute and you'll be able to see the results.
+* Run this in your terminal with the name of the test file you want to check and it will display test cases and if they succeeded or not.
 ```bash
-$ pytest
+$ pytest test_myfile.py
 ```
 
 **That's all it takes to be able to run our program so far. Enjoy!**
