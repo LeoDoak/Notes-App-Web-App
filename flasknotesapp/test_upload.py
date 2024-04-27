@@ -4,8 +4,11 @@ This file will test upload functionality using pytest.
 '''
 from server import app
 
-# User story #1. Tests a valid file png upload. If successful, response should take the user back to groups page.
 def test_upload_valid(monkeypatch):
+    '''
+    User story #1. Tests a valid file png upload. 
+    If successful, response should take the user back to groups page.
+    '''
     def mock_upload():
         return True
 
@@ -16,8 +19,12 @@ def test_upload_valid(monkeypatch):
             "file": 'static/filetest/mcd.png'}, follow_redirects=True)
     assert response.headers["Location"] == "http://localhost/file_groups"
 
-# User story #1. Tests an invalid upload, such as a String. Asserts that the response is an Invalid File.
+
 def test_upload_invalid(monkeypatch):
+    '''
+    # User story #1. Tests an invalid upload, such as a String. 
+    Asserts that the response is an Invalid File.
+    '''
     def mock_upload():
         return True
 
