@@ -4,6 +4,7 @@ This file will test upload functionality using pytest.
 '''
 from server import app
 
+
 def test_upload_valid(monkeypatch):
     '''
     User story #1. Tests a valid file png upload. 
