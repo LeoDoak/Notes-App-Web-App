@@ -137,7 +137,7 @@ def set_up():
     return render_template("loginpage.html")
 
 
-@app.route("/form_login", methods=["POST", "GET"])
+@app.route("/form_login", methods=["POST"])
 def login():
     """Handles the user login functionality.
 
@@ -363,6 +363,12 @@ def group_page():
     Returns:
     rendered_template: HTML content of the rendered template.
     """
+    json_headers = request.cookies.get(session["username"])
+    if json_headers is None:
+        return render_template("homepage.html")
+    headers = json.loads(json_headers)
+    if "value" not in headers:
+        return onedrive()
     return render_template("groups.html")
 
 
@@ -475,11 +481,13 @@ def create_group():
         return jsonify({"error": "Authentication headers not found"}), 401
 
     headers = json.loads(json_headers)
+    if "value" not in headers: 
+        return onedrive()
 
     # Create folder in OneDrive
     create_url = url + "/me/drive/root/children"
     body = {
-        "name": group_name,
+        "name": "NotesApp-" + group_name,
         "folder": {},
         "@microsoft.graph.conflictBehavior": "rename",
     }
@@ -541,8 +549,10 @@ def get_shared_folders():
             url + "/me/drive/sharedWithMe", headers=headers, timeout=timeout
         ).text
     )
+    if 'value' not in items: 
+        return onedrive()
     items = items["value"]
-    print(items)
+
     #  for entries in range(len(items)):
     for _, entry in enumerate(items):
         # get folders
@@ -554,7 +564,7 @@ def get_shared_folders():
         new_file.set_filetype()
         new_file.set_file_icon()
         print(new_file.get_filetype())
-        if "folder" in new_file.get_filetype():
+        if "folder" in new_file.get_filetype() and 'NotesApp-' in entry["name"]:
             file_list.append(new_file)
     print(file_list)
     return render_template("shared_file_groups.html", folders=file_list)
@@ -573,7 +583,7 @@ def get_my_folders():
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
-        return render_template("homepage.html")
+        return onedrive()
     headers = json.loads(json_headers)
     file_list = []
     timeout = 30
@@ -582,6 +592,8 @@ def get_my_folders():
             url + "me/drive/root/children", headers=headers, timeout=timeout
         ).text
     )
+    if 'value' not in items: 
+        return onedrive()
     items = items["value"]
     #  for entries in range(len(items)):
     for _, entry in enumerate(items):
@@ -591,7 +603,7 @@ def get_my_folders():
         new_file.set_filetype()
         new_file.set_file_icon()
         print(new_file.get_filetype())
-        if "folder" in new_file.get_filetype():
+        if "folder" in new_file.get_filetype() and 'NotesApp-' in entry['name'] and "NotesApp-Favorites" not in entry['name']:
             file_list.append(new_file)
     print(file_list)
     return render_template("file_groups.html", folders=file_list)
@@ -757,6 +769,8 @@ def get_favorites():
     url = "https://graph.microsoft.com/v1.0/"
     #  sget from other flask method
     current_folder = get_or_create_favorites_folder(headers)
+    if current_folder == None: 
+        return onedrive()
     new_url = url + "me/drive/items/" + current_folder + "/children"
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
     sub_items = sub_items["value"]
@@ -821,16 +835,16 @@ def get_or_create_favorites_folder(headers):
     if response.status_code == 200:
         folders = response.json()['value']
         for folder in folders:
-            if folder.get('name') == 'Notes-App{Favorites}' and 'folder' in folder:
+            if folder.get('name') == 'NotesApp-Favorites' and 'folder' in folder:
                 return folder['id']
-
         # If the folder doesn't exist, create it
         create_folder_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
         payload = {
-            "name": "Notes-App{Favorites}",
+            "name": "NotesApp-Favorites",
             "folder": {}
         }
         requests.post(create_folder_url, headers=headers, json=payload, timeout=30)
+        get_or_create_favorites_folder(headers)
     return None
 
 
@@ -840,6 +854,8 @@ def searchfiles():
     """Summary: Search Files
     Params:
     Returns:
+    Links: Adapted from: "list folder under directory method"
+    https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     """
     search_criteria = request.form["Search"]
     url = "https://graph.microsoft.com/v1.0/"
@@ -854,31 +870,31 @@ def searchfiles():
             url + "me/drive/root/children", headers=headers, timeout=timeout
         ).text
     )
+    if 'value' not in items: 
+        return onedrive()
     items = items["value"]
     for _, entry in enumerate(items):
         new_file = File(entry["id"], entry["name"], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
-        if search_criteria.lower() in entry["name"]:
-            file_list.append(new_file)
-        current_folder = entry["id"]
-        # get files
-        new_url = url + "me/drive/items/" + current_folder + "/children"
-        sub_items = json.loads(
-            requests.get(new_url, headers=headers, timeout=timeout).text
-        )
-        sub_items = sub_items["value"]
-        #  for sub_entries in range(len(sub_items)):
-        for _, sub_entry in enumerate(sub_items):
-            #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
-            new_file = File(sub_entry["id"], sub_entry["name"], None, None)
-            new_file.set_filetype()
-            #  setting the filetype from the name
-            new_file.set_file_icon()
-            #  indexing the photo from filetype
-            if search_criteria.lower() in sub_entry["name"]:
-                file_list.append(new_file)
-            #  print(new_file.get_title(),new_file.get_filetype(),"\n")
+        if "NotesApp-" in entry["name"] and "NotesApp-Favorites" not in entry["name"]:
+            current_folder = entry["id"]
+            # get files
+            new_url = url + "me/drive/items/" + current_folder + "/children"
+            sub_items = json.loads(
+                requests.get(new_url, headers=headers, timeout=timeout).text
+            )
+            sub_items = sub_items["value"]
+            #  for sub_entries in range(len(sub_items)):
+            for _, sub_entry in enumerate(sub_items):
+                #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
+                new_file = File(sub_entry["id"], sub_entry["name"], None, None)
+                new_file.set_filetype()
+                #  setting the filetype from the name
+                new_file.set_file_icon()
+                #  indexing the photo from filetype
+                if search_criteria.lower() in sub_entry["name"]:
+                    file_list.append(new_file)
     return render_template("searchtemplate.html", folders=file_list)
 
 
