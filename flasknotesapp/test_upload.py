@@ -7,7 +7,7 @@ from server import app
 
 def test_upload_valid(monkeypatch):
     '''
-    User story #1. Tests a valid file png upload. 
+    User story #1. Tests a valid file png upload.
     If successful, response should take the user back to groups page.
     '''
     def mock_upload():
@@ -23,7 +23,7 @@ def test_upload_valid(monkeypatch):
 
 def test_upload_invalid(monkeypatch):
     '''
-    # User story #1. Tests an invalid upload, such as a String. 
+    # User story #1. Tests an invalid upload, such as a String.
     Asserts that the response is an Invalid File.
     '''
     def mock_upload():
