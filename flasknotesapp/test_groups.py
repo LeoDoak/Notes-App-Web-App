@@ -1,5 +1,6 @@
 from server import app
 
+
 def test_create_group_valid(monkeypatch):
     '''
     User story #2. Tests creating a valid group.
@@ -15,7 +16,8 @@ def test_create_group_valid(monkeypatch):
             "group_name": "Test Group"
         }, follow_redirects=True)
     assert response.headers["Location"] == "http://localhost/group"
-    
+
+
 def test_create_group_invalid(monkeypatch):
     '''
     User story #2. Tests creating an invalid group, such as missing group name.
@@ -31,4 +33,3 @@ def test_create_group_invalid(monkeypatch):
             "group_name": "",  # Empty group name
         }, follow_redirects=True)
     assert b'Error creating group' in response.data
-
