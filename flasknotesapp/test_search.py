@@ -1,7 +1,11 @@
-from server import app
+
+'''
+This file will test upload functionality using pytest.
+'''
 from unittest.mock import Mock, patch
 import json
 import sys
+from server import app
 sys.path.insert(1, '')
 
 
@@ -10,7 +14,7 @@ def test_search_files_valid(monkeypatch):
     User story #4. Tests searching for files with valid search criteria.
     If successful, response should contain the files that match the criteria.
     '''
-    def mock_requests_get(*args, **kwargs):
+    def mock_requests_get():
         # Mock response data for the Graph API call
         data = {
             "value": [
@@ -46,7 +50,7 @@ def test_search_files_invalid(monkeypatch):
     User story #4. Tests searching for files with invalid search criteria or when an error occurs.
     The response should handle the error gracefully.
     '''
-    def mock_requests_get(*args, **kwargs):
+    def mock_requests_get():
         # Mock an error in the Graph API call
         response_mock = Mock()
         response_mock.status_code = 500
