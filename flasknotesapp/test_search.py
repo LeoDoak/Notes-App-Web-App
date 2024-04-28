@@ -29,9 +29,8 @@ def test_search_files_valid(monkeypatch):
     # Replace the 'requests.get' call with the mock
     monkeypatch.setattr('requests.get', mock_requests_get)
     # Mock File class used within the searchfiles function
-    with patch('server.File') as MockFileClass:
-        # Setup mock file instances that the mocked File class will return
-        mock_file_instance = MockFileClass.return_value
+    with patch('server.File') as mock_file_class:
+        mock_file_instance = mock_file_class.return_value
         mock_file_instance.set_file_icon.return_value = None
         mock_file_instance.set_filetype.return_value = None
         mock_file_instance.fileicon = '/static/icon/docx_icon.png'
