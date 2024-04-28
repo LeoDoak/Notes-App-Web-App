@@ -52,8 +52,6 @@ def test_search_files_invalid(monkeypatch):
         response_mock.status_code = 500
         response_mock.text = json.dumps({"error": {"code": "internalServerError"}})
         return response_mock
-
-
     # Replace the 'requests.get' call with the mock
     monkeypatch.setattr('requests.get', mock_requests_get)
     # Use test client to send a POST request to the search endpoint
