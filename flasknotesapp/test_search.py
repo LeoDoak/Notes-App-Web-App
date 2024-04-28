@@ -1,8 +1,8 @@
+from server import app
 from unittest.mock import Mock, patch
 import json
 import sys
 sys.path.insert(1, '')
-from server import app
 
 
 def test_search_files_valid(monkeypatch):
@@ -22,8 +22,6 @@ def test_search_files_valid(monkeypatch):
         response_mock.status_code = 200
         response_mock.text = json.dumps(data)
         return response_mock
-    
-    
     # Replace the 'requests.get' call with the mock
     monkeypatch.setattr('requests.get', mock_requests_get)
     # Mock File class used within the searchfiles function
@@ -34,7 +32,6 @@ def test_search_files_valid(monkeypatch):
         mock_file_instance.set_filetype.return_value = None
         mock_file_instance.fileicon = '/static/icon/docx_icon.png'
         mock_file_instance.title = 'Test Document'
-        
         # Use test client to send a POST request to the search endpoint
         test_client = app.test_client()
         response = test_client.post('/searchfiles', data={'Search': 'Test'})
@@ -42,7 +39,7 @@ def test_search_files_valid(monkeypatch):
         assert response.status_code == 200
         assert b'Test Document' in response.data
         assert b'Test Presentation' in response.data
-        
+
 
 def test_search_files_invalid(monkeypatch):
     '''
@@ -64,4 +61,3 @@ def test_search_files_invalid(monkeypatch):
     response = test_client.post('/searchfiles', data={'Search': 'Nonexistent'})
     # Assertions to check for error handling
     assert response.status_code == 500 or 'Error' in response.data
-
