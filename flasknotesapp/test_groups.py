@@ -1,3 +1,8 @@
+'''
+Tests for groups creation
+'''
+
+
 from server import app
 
 
