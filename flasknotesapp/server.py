@@ -23,6 +23,13 @@ from databases import user_database
 from objects.onedrive import generate_access_token, GRAPH_API_ENDPOINT
 from objects.user import User
 from objects.file_classes import File
+import urllib
+import os
+from getpass import getpass
+import time
+from datetime import datetime
+
+
 
 # Don't know if we need 2 of these.
 
@@ -367,8 +374,9 @@ def group_page():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    if "value" not in headers:
-        return onedrive()
+    print(headers)
+    #if "value" not in headers:
+    #    return onedrive()
     return render_template("groups.html")
 
 
@@ -432,16 +440,58 @@ def onedrive():
     object: User
     None
     """
-    app_id = "5e84b5a7-fd04-4398-a15f-377e3d85703e"
-    scopes = ["Files.ReadWrite"]
-    access_token = generate_access_token(app_id, scopes)
-    headers = {"Authorization": "Bearer " + access_token["access_token"]}
+    client_id = "1cda01e6-d1c5-4cc9-a03d-cfdef32fd32d"
+    permissions = ["Files.ReadWrite"]
+    url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
+    response_type = 'token'
+    redirect_uri = 'https://localhost:8000/'
+    scope = ''
+    for items in range(len(permissions)):
+        scope = scope + permissions[items]
+        if items < len(permissions)-1:
+            scope = scope + '+'
+    url = url + '?client_id=' + client_id + '&scope=' + scope + '&response_type=' + response_type+\
+         '&redirect_uri=' + urllib.parse.quote(redirect_uri)
+
+    print('Sign in to your account, copy the whole redirected URL.')
+    return render_template("onedrive.html", url = url, scope = scope)
+
+
+@app.route("/", methods=["POST"])
+@login_required
+def get_token():
+    permissions = ["Files.ReadWrite"]
+    client_id = "1cda01e6-d1c5-4cc9-a03d-cfdef32fd32d"
+    redirect_uri = 'https://localhost:8000/'
+    client_secret = "T3b8Q~b.NOaymmivYJA8uG6JyIhbtALu52rt2cUP"
+    code = request.form.get("info_url")
+    scope = request.form.get("scope")
+    token = code[(code.find('access_token') + len('access_token') + 1) : (code.find('&token_type'))]
+    URL = 'https://graph.microsoft.com/v1.0/'
+    headers = {'Authorization': 'Bearer ' + token}
+    response = requests.get(URL + 'me/drive/', headers = headers)
+
+    if (response.status_code == 200):
+        response = json.loads(response.text)
+        print('Connected to the OneDrive of', response['owner']['user']['displayName']+' (',response['driveType']+' ).', \
+             '\nConnection valid for one hour. Reauthenticate if required.')
+    elif (response.status_code == 401):
+        response = json.loads(response.text)
+        print('API Error! : ', response['error']['code'],\
+             '\nSee response for more details.')
+    else:
+        response = json.loads(response.text)
+        print('Unknown error! See response for more details.')
+
+    set_cookie(headers)   
+    return render_template("homepage.html")
+
+def set_cookie(headers): 
     resp = make_response("One Drive login opening in another page")
     json_headers = json.dumps(headers, indent=4)
     resp.set_cookie(session["username"], json_headers)  # setting the session ID
     print("Cookie is set")
     return resp
-
 
 def check_for_duplicate_group(group_name):
     """Check for the existence of a group with the given name in the database.
@@ -481,8 +531,8 @@ def create_group():
         return jsonify({"error": "Authentication headers not found"}), 401
 
     headers = json.loads(json_headers)
-    if "value" not in headers: 
-        return onedrive()
+    #if "value" not in headers: 
+    #    return onedrive()
 
     # Create folder in OneDrive
     create_url = url + "/me/drive/root/children"
