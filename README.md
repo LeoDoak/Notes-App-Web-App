@@ -92,3 +92,9 @@ $ python3 user_test.py
 ```
 
 **That's all it takes to be able to run our program so far. Enjoy!**
+
+### Deployment 
+
+* Deployed on python anywhere
+Link: https://ldoak.pythonanywhere.com/
+
