@@ -372,7 +372,7 @@ def group_page():
     """
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
-        return render_template("homepage.html")
+        return get_refresh_token()
     headers = json.loads(json_headers)
     print(headers)
     #if "value" not in headers:
@@ -428,6 +428,37 @@ def logout_method():
     logout_user()
     return render_template("logoutpage.html")
 
+@app.route("/show_message")
+def show_message():
+    '''Summary: 
+    '''
+    return render_template("show_message.html")
+
+
+def get_refresh_token():
+    client_id = "1cda01e6-d1c5-4cc9-a03d-cfdef32fd32d"
+    permissions = ["Files.ReadWrite"]
+    redirect_uri = "https://localhost:8000/show_message"
+    client_secret = "T3b8Q~b.NOaymmivYJA8uG6JyIhbtALu52rt2cUP"
+    #data = {
+    #    "client_id": client_id,
+    #    "scope": permissions,
+    #    "refresh_token": refresh_token,
+    #    "redirect_uri": redirect_uri,
+    #    "grant_type": 'refresh_token',
+    #    "client_secret": client_secret,
+    #}
+
+    #response = requests.post(URL, data=data)
+    print("getting refresh token")
+
+    #token = json.loads(response.text)["access_token"]
+    #refresh_token = json.loads(response.text)["refresh_token"]
+    #last_updated = time.mktime(datetime.today().timetuple())
+    #headers = {'Authorization': 'Bearer ' + token}
+    #print("refresh token", headers)
+    #set_cookie(headers)    
+
 
 @app.route("/onedrive")
 @login_required
@@ -444,7 +475,7 @@ def onedrive():
     permissions = ["Files.ReadWrite"]
     url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
     response_type = 'token'
-    redirect_uri = 'https://localhost:8000/'
+    redirect_uri = 'https://localhost:8000'
     scope = ''
     for items in range(len(permissions)):
         scope = scope + permissions[items]
@@ -462,7 +493,7 @@ def onedrive():
 def get_token():
     permissions = ["Files.ReadWrite"]
     client_id = "1cda01e6-d1c5-4cc9-a03d-cfdef32fd32d"
-    redirect_uri = 'https://localhost:8000/'
+    redirect_uri = 'http://localhost:8000'
     client_secret = "T3b8Q~b.NOaymmivYJA8uG6JyIhbtALu52rt2cUP"
     code = request.form.get("info_url")
     scope = request.form.get("scope")
@@ -483,8 +514,10 @@ def get_token():
         response = json.loads(response.text)
         print('Unknown error! See response for more details.')
 
+    print("headers", headers)
     set_cookie(headers)   
     return render_template("homepage.html")
+
 
 def set_cookie(headers): 
     resp = make_response("One Drive login opening in another page")
@@ -590,7 +623,7 @@ def get_shared_folders():
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
-        return render_template("homepage.html")
+        return onedrive()
     headers = json.loads(json_headers)
     file_list = []
     timeout = 30
@@ -599,8 +632,8 @@ def get_shared_folders():
             url + "/me/drive/sharedWithMe", headers=headers, timeout=timeout
         ).text
     )
-    if 'value' not in items: 
-        return onedrive()
+    #if 'value' not in items: 
+    #    return onedrive()
     items = items["value"]
 
     #  for entries in range(len(items)):
@@ -633,8 +666,9 @@ def get_my_folders():
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
-        return onedrive()
+        return get_refresh_token()
     headers = json.loads(json_headers)
+    print(headers)
     file_list = []
     timeout = 30
     items = json.loads(
@@ -642,8 +676,9 @@ def get_my_folders():
             url + "me/drive/root/children", headers=headers, timeout=timeout
         ).text
     )
+    print(items)
     if 'value' not in items: 
-        return onedrive()
+        return get_refresh_token()
     items = items["value"]
     #  for entries in range(len(items)):
     for _, entry in enumerate(items):
@@ -996,7 +1031,6 @@ def share_group_setup_shared():
     return render_template(
         "shared_group_setup_shared.html", file_id=file_id, title=title
     )
-
 
 @app.route("/share_group_action_shared", methods=["POST"])
 @login_required
