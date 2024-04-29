@@ -873,8 +873,6 @@ def searchfiles():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    if "value" not in headers:
-        return onedrive()
     file_list = []
     timeout = 30
     items = json.loads(
