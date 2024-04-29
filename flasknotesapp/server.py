@@ -445,11 +445,11 @@ def get_token():
     if response.status_code == 200:
         response = json.loads(response.text)
         print('Connected to the OneDrive of', response['owner']['user']['displayName'] + ' (',
-              response['driveType'] + ' ).', 
+              response['driveType'] + ' ).',
               '\nConnection valid for one hour. Reauthenticate if required.')
     elif response.status_code == 401:
         response = json.loads(response.text)
-        print('API Error! : ', response['error']['code'], 
+        print('API Error! : ', response['error']['code'],
               '\nSee response for more details.')
     else:
         response = json.loads(response.text)
