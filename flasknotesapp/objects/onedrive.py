@@ -8,7 +8,7 @@ import msal
 
 # user_code = "placement_code"
 
-GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0'
+GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0/'
 
 
 def generate_access_token(app_id, scopes):
