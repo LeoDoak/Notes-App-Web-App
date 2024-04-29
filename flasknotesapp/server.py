@@ -1,6 +1,7 @@
 """ Main Server Page  """
 
 import os
+import io
 import sqlite3
 import json
 import urllib
@@ -15,6 +16,7 @@ from flask import (
     url_for,
     session,
     make_response,
+    send_file
 )
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
@@ -432,6 +434,14 @@ def onedrive():
     return render_template("onedrive.html", url=url, scope=scope)
 
 
+@app.route('/message')
+def message():
+    '''
+    Summary: Message that will be displayed when user authenticates
+    '''
+    return render_template("message.html")
+
+
 @app.route("/", methods=["POST"])
 @login_required
 def get_token():
@@ -728,9 +738,12 @@ def download_file():
     response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
     if response_file_contenet == 400:
         return onedrive()
-    with open(os.path.join(save_location, file_name), "wb") as _f:
-        _f.write(response_file_contenet.content)
-    return render_template("download_file.html", title=file_name)
+    return send_file(
+        io.BytesIO(response_file_content.content),
+        mimetype="application/octet-stream",
+        as_attachment=True,
+        download_name=file_name
+    )
 
 
 @app.route("/download_file_shared", methods=["POST"])
