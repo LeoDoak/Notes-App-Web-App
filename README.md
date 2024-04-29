@@ -85,5 +85,10 @@ $ pip install pytest
 ```bash
 $ pytest
 ```
+* Executing user_test.py (Registration Test)
+```bash
+$ cd flasknotesapp
+$ python3 user_test.py 
+```
 
 **That's all it takes to be able to run our program so far. Enjoy!**
