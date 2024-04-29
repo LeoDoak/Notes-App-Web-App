@@ -29,22 +29,11 @@ from getpass import getpass
 import time
 from datetime import datetime
 
-
-
-# Don't know if we need 2 of these.
-
-# Used this tutorial to figure out login screen
-# https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
-
-# used this for the sql request for placeholders,
-# https://medium.com/@miguel.amezola/protecting-your-code-from-sql-injection-attacks-when-using-raw-sql-in-python-916466961c97
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secretkey"
 app.config["UPLOAD_FOLDER"] = "static\\files"
 app.secret_key = """967b75c111e64965848a7786bda9602
         f9d208f991036ccc4f793a4199a9f74b4"""
-
-# ACCESS_TOKEN = ""  "Global variable that flake8 does not like"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -90,7 +79,6 @@ def copy_file_to_favorites_shared(headers, file_id, favorites_folder_id):
         }
     }
     response = requests.post(copy_url, headers=headers, json=body, timeout=30)
-    print(response)
     response.raise_for_status()
 
 
@@ -114,7 +102,6 @@ def load_user(user_id):
         (user_id,),
     )
     row = cursor.fetchall()
-    print(row, "\n")
     connection.close()
     if len(row) == 1:
         return User(row[0][0], row[0][1], row[0][2], row[0][3])
@@ -231,7 +218,6 @@ def register_actions():
     ) = new_user.check_new_user(get_confirmpassword)
 
     if register_status is False:
-        print("not able to regster")
         return render_template(
             "register.html",
             email_error=email_message,
@@ -239,7 +225,6 @@ def register_actions():
             password_error=password_message,
             confirm_password_error=confirm_password_message,
         )
-    print("registered")
     flask.flash("Logged in successfully.")
     login_user(new_user)
     return render_template("homepage.html")
@@ -304,7 +289,6 @@ def upload_page_action():
     #  Use request.files to access uploaded files (chatgpt helped get the files part)
     file = request.files["file"]
     timeout = 60
-    print(group, file.filename)
     if file:
         response = requests.put(
             GRAPH_API_ENDPOINT
@@ -313,7 +297,6 @@ def upload_page_action():
             data=file.read(),  # Use file.read() to get the file content
             timeout=timeout,
         )
-        print(response.json())
 
     return get_my_folders()
 
@@ -346,9 +329,7 @@ def upload_page_action_shared():
     remote_id = ids_split[1]
     file = request.files["file"]
     timeout = 60
-    print(group, file.filename)
     new_url = f"/drives/{drive_id}/items/{remote_id}:/{file.filename}:/content"
-    print(new_url)
     if file:
         response = requests.put(
             url + new_url,
@@ -356,7 +337,6 @@ def upload_page_action_shared():
             data=file.read(),  # Use file.read() to get the file content
             timeout=timeout,
         )
-        print(response.json())
     return get_shared_folders()
 
 
@@ -372,11 +352,10 @@ def group_page():
     """
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
-        return get_refresh_token()
+        return onedrive()
     headers = json.loads(json_headers)
-    print(headers)
-    #if "value" not in headers:
-    #    return onedrive()
+    if "value" not in headers:
+        return onedrive()
     return render_template("groups.html")
 
 
@@ -435,31 +414,6 @@ def show_message():
     return render_template("show_message.html")
 
 
-def get_refresh_token():
-    client_id = "1cda01e6-d1c5-4cc9-a03d-cfdef32fd32d"
-    permissions = ["Files.ReadWrite"]
-    redirect_uri = "https://localhost:8000/show_message"
-    client_secret = "T3b8Q~b.NOaymmivYJA8uG6JyIhbtALu52rt2cUP"
-    #data = {
-    #    "client_id": client_id,
-    #    "scope": permissions,
-    #    "refresh_token": refresh_token,
-    #    "redirect_uri": redirect_uri,
-    #    "grant_type": 'refresh_token',
-    #    "client_secret": client_secret,
-    #}
-
-    #response = requests.post(URL, data=data)
-    print("getting refresh token")
-
-    #token = json.loads(response.text)["access_token"]
-    #refresh_token = json.loads(response.text)["refresh_token"]
-    #last_updated = time.mktime(datetime.today().timetuple())
-    #headers = {'Authorization': 'Bearer ' + token}
-    #print("refresh token", headers)
-    #set_cookie(headers)    
-
-
 @app.route("/onedrive")
 @login_required
 def onedrive():
@@ -513,17 +467,9 @@ def get_token():
     else:
         response = json.loads(response.text)
         print('Unknown error! See response for more details.')
-
-    print("headers", headers)
-    set_cookie(headers)   
-    return render_template("homepage.html")
-
-
-def set_cookie(headers): 
     resp = make_response("One Drive login opening in another page")
     json_headers = json.dumps(headers, indent=4)
     resp.set_cookie(session["username"], json_headers)  # setting the session ID
-    print("Cookie is set")
     return resp
 
 def check_for_duplicate_group(group_name):
@@ -641,15 +587,12 @@ def get_shared_folders():
         # get folders
         remote_item = entry["remoteItem"]
         parent_ref = remote_item["parentReference"]
-        print(entry["name"], "| item-id >", parent_ref["driveId"])
         id_linked = parent_ref["driveId"] + "," + remote_item["id"]
         new_file = File(id_linked, entry["name"], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
-        print(new_file.get_filetype())
         if "folder" in new_file.get_filetype() and 'NotesApp-' in entry["name"]:
             file_list.append(new_file)
-    print(file_list)
     return render_template("shared_file_groups.html", folders=file_list)
 
 
@@ -666,9 +609,10 @@ def get_my_folders():
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
-        return get_refresh_token()
+        return onedrive()
     headers = json.loads(json_headers)
-    print(headers)
+    if "value" not in headers:
+        return onedrive()
     file_list = []
     timeout = 30
     items = json.loads(
@@ -676,21 +620,17 @@ def get_my_folders():
             url + "me/drive/root/children", headers=headers, timeout=timeout
         ).text
     )
-    print(items)
     if 'value' not in items: 
-        return get_refresh_token()
+        return onedrive()
     items = items["value"]
     #  for entries in range(len(items)):
     for _, entry in enumerate(items):
         # get folders
-        print(entry["name"], "| item-id >", entry["id"])
         new_file = File(entry["id"], entry["name"], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
-        print(new_file.get_filetype())
         if "folder" in new_file.get_filetype() and 'NotesApp-' in entry['name'] and "NotesApp-Favorites" not in entry['name']:
             file_list.append(new_file)
-    print(file_list)
     return render_template("file_groups.html", folders=file_list)
 
 
@@ -709,21 +649,17 @@ def get_my_personal_files():
     url = "https://graph.microsoft.com/v1.0/"
     #  sget from other flask method
     current_folder = request.form["file_id"]
-    #  print("Current folder Id:", current_folder)
     new_url = url + "me/drive/items/" + current_folder + "/children"
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
-    #  print(sub_items)
     sub_items = sub_items["value"]
     #  for sub_entries in range(len(sub_items)):
     for _, sub_entry in enumerate(sub_items):
-        #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
         new_file = File(sub_entry["id"], sub_entry["name"], None, None)
         # setting the filetype from the name
         new_file.set_filetype()
         # indexing the photo from filetype
         new_file.set_file_icon()
         file_list.append(new_file)
-        #  print(new_file.get_title(),new_file.get_filetype(),"\n")
     return render_template("fileexplorer.html", folders=file_list)
 
 
@@ -743,7 +679,6 @@ def get_my_shared_files():
     #  sget from other flask method
     current_folder_ids = request.form["file_id"]
     ids_split = current_folder_ids.split(",")
-    print(ids_split)
     drive_id = ids_split[0]
     remote_id = ids_split[1]
     new_url = url + "drives/" + drive_id + "/items/" + remote_id + "/children"
@@ -759,7 +694,6 @@ def get_my_shared_files():
         # indexing the photo from filetype
         new_file.set_file_icon()
         file_list.append(new_file)
-        #  print(new_file.get_title(),new_file.get_filetype(),"\n")
     return render_template("fileexplorer_shared.html", folders=file_list)
 
 
@@ -872,7 +806,6 @@ def add_favorite():
     """ move file to favorites folder
     """
     json_headers = request.cookies.get(session["username"])
-    print("jason", json_headers)
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
@@ -880,9 +813,7 @@ def add_favorite():
     m_url = "https://graph.microsoft.com/v1.0/"
     url = "/me/drive/items/" + file_id
     url = m_url + url
-    print("url id:", url)
     favorites_folder_id = get_or_create_favorites_folder(headers)
-    print("Favorites ID", favorites_folder_id)
     copy_file_to_favorites(headers, file_id, favorites_folder_id)
     return get_favorites()
 
@@ -892,7 +823,6 @@ def add_favorite_shared():
     """ move file to favorites folder from shared folder
     """
     json_headers = request.cookies.get(session["username"])
-    print("jason", json_headers)
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
@@ -901,12 +831,9 @@ def add_favorite_shared():
     m_url = "https://graph.microsoft.com/v1.0/"
     url = "/me/drive/items/" + file_id
     url = m_url + url
-    print("url id:", url)
     # if folder favorite does not exist, create it
     favorites_folder_id = get_or_create_favorites_folder(headers)
-    print("Favorites ID", favorites_folder_id)
     # move file to favorites folder
-    # token = headers["Authorization"]
     copy_file_to_favorites_shared(headers, file_id, favorites_folder_id)
     return get_favorites()
 
@@ -972,7 +899,6 @@ def searchfiles():
             sub_items = sub_items["value"]
             #  for sub_entries in range(len(sub_items)):
             for _, sub_entry in enumerate(sub_items):
-                #  print(sub_entry['name'], '| item-id >', sub_entry['id'])
                 new_file = File(sub_entry["id"], sub_entry["name"], None, None)
                 new_file.set_filetype()
                 #  setting the filetype from the name
