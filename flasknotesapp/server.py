@@ -454,7 +454,8 @@ def get_token():
     else:
         response = json.loads(response.text)
         print('Unknown error! See response for more details.')
-    resp = make_response("One Drive successfully authenticationed, hit the back arrow twice to return to main menu")
+    resp = make_response("One Drive successfully authenticationed, \
+                        hit the back arrow twice to return to main menu")
     json_headers = json.dumps(headers, indent=4)
     resp.set_cookie(session["username"], json_headers)  # setting the session ID
     return resp
