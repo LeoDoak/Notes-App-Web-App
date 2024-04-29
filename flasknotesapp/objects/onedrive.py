@@ -10,6 +10,7 @@ import msal
 
 GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0/'
 
+
 def generate_access_token(app_id, scopes):
     """Summary or Description of the function
 

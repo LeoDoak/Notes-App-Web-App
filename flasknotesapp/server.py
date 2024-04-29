@@ -398,7 +398,7 @@ def logout_method():
 
 @app.route("/show_message")
 def show_message():
-    '''Summary: 
+    '''Summary: renders template for show_message
     '''
     return render_template("show_message.html")
 
@@ -441,15 +441,15 @@ def get_token():
     token = code[(code.find('access_token') + len('access_token') + 1): (code.find('&token_type'))]
     url = 'https://graph.microsoft.com/v1.0/'
     headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(url + 'me/drive/', headers=headers, timeout = 30)
+    response = requests.get(url + 'me/drive/', headers=headers, timeout=30)
     if response.status_code == 200:
         response = json.loads(response.text)
         print('Connected to the OneDrive of', response['owner']['user']['displayName'] + ' (',
-              response['driveType'] + ' ).', \
+              response['driveType'] + ' ).', 
               '\nConnection valid for one hour. Reauthenticate if required.')
     elif response.status_code == 401:
         response = json.loads(response.text)
-        print('API Error! : ', response['error']['code'], \
+        print('API Error! : ', response['error']['code'], 
               '\nSee response for more details.')
     else:
         response = json.loads(response.text)
@@ -616,7 +616,7 @@ def get_my_folders():
         new_file.set_filetype()
         new_file.set_file_icon()
         if "folder" in new_file.get_filetype() and 'NotesApp-' in entry['name'] \
-            and "NotesApp-Favorites" not in entry['name']:
+                and "NotesApp-Favorites" not in entry['name']:
             file_list.append(new_file)
     return render_template("file_groups.html", folders=file_list)
 
