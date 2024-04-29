@@ -420,7 +420,7 @@ def onedrive():
     permissions = ["Files.ReadWrite"]
     url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
     response_type = 'token'
-    redirect_uri = 'https://localhost:8000/message'
+    redirect_uri = 'https://localhost:8000/onedrive_message'
     scope = ''
     scope = ""
     for index, permission in enumerate(permissions):
@@ -429,13 +429,11 @@ def onedrive():
             scope += "+"
     url = url + '?client_id=' + client_id + '&scope=' + scope + '&response_type=' \
         + response_type + '&redirect_uri=' + urllib.parse.quote(redirect_uri)
-
-    print('Sign in to your account, copy the whole redirected URL.')
     return render_template("onedrive.html", url=url, scope=scope)
 
 
-@app.route('/message')
-def message():
+@app.route('/onedrive_message')
+def onedrive_message():
     '''
     Summary: Message that will be displayed when user authenticates
     '''
@@ -734,9 +732,8 @@ def download_file():
     url = "me/drive/items/" + file_id + "/content"
     url = m_url + url
     file_name = file_title
-    save_location = os.path.expanduser("~/Downloads")
-    response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
-    if response_file_contenet == 400:
+    response_file_content = requests.get(url, headers=headers, timeout=timeout)
+    if response_file_content.status_code != 200:
         return onedrive()
     return send_file(
         io.BytesIO(response_file_content.content),
@@ -828,7 +825,6 @@ def add_favorite_shared():
         return render_template("homepage.html")
     headers = json.loads(json_headers)
     file_id = request.form["file_id"]
-    # file_name = request.form["file_title"]
     m_url = "https://graph.microsoft.com/v1.0/"
     url = "/me/drive/items/" + file_id
     url = m_url + url
@@ -848,7 +844,6 @@ def get_or_create_favorites_folder(headers):
         for folder in folders:
             if folder.get('name') == 'NotesApp-Favorites' and 'folder' in folder:
                 return folder['id']
-        # If the folder doesn't exist, create it
         create_folder_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
         payload = {
             "name": "NotesApp-Favorites",
