@@ -434,7 +434,7 @@ def onedrive():
     """
     app_id = "5e84b5a7-fd04-4398-a15f-377e3d85703e"
     scopes = ["Files.ReadWrite"]
-    access_token = generate_access_token(app,app_id, scopes)
+    access_token = generate_access_token(app_id, scopes)
     headers = {"Authorization": "Bearer " + access_token["access_token"]}
     resp = make_response("One Drive login opening in another page")
     json_headers = json.dumps(headers, indent=4)
