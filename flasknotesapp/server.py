@@ -407,6 +407,7 @@ def logout_method():
     logout_user()
     return render_template("logoutpage.html")
 
+
 @app.route("/show_message")
 def show_message():
     '''Summary: 
@@ -433,13 +434,13 @@ def onedrive():
     scope = ''
     for items in range(len(permissions)):
         scope = scope + permissions[items]
-        if items < len(permissions)-1:
+        if items < len(permissions) - 1:
             scope = scope + '+'
-    url = url + '?client_id=' + client_id + '&scope=' + scope + '&response_type=' + response_type+\
-         '&redirect_uri=' + urllib.parse.quote(redirect_uri)
+    url = url + '?client_id=' + client_id + '&scope=' + scope + '&response_type=' + response_type + \
+          '&redirect_uri=' + urllib.parse.quote(redirect_uri)
 
     print('Sign in to your account, copy the whole redirected URL.')
-    return render_template("onedrive.html", url = url, scope = scope)
+    return render_template("onedrive.html", url=url, scope=scope)
 
 
 @app.route("/", methods=["POST"])
@@ -451,19 +452,20 @@ def get_token():
     client_secret = "T3b8Q~b.NOaymmivYJA8uG6JyIhbtALu52rt2cUP"
     code = request.form.get("info_url")
     scope = request.form.get("scope")
-    token = code[(code.find('access_token') + len('access_token') + 1) : (code.find('&token_type'))]
+    token = code[(code.find('access_token') + len('access_token') + 1): (code.find('&token_type'))]
     URL = 'https://graph.microsoft.com/v1.0/'
     headers = {'Authorization': 'Bearer ' + token}
-    response = requests.get(URL + 'me/drive/', headers = headers)
+    response = requests.get(URL + 'me/drive/', headers=headers)
 
     if (response.status_code == 200):
         response = json.loads(response.text)
-        print('Connected to the OneDrive of', response['owner']['user']['displayName']+' (',response['driveType']+' ).', \
-             '\nConnection valid for one hour. Reauthenticate if required.')
+        print('Connected to the OneDrive of', response['owner']['user']['displayName'] + ' (',
+              response['driveType'] + ' ).', \
+              '\nConnection valid for one hour. Reauthenticate if required.')
     elif (response.status_code == 401):
         response = json.loads(response.text)
-        print('API Error! : ', response['error']['code'],\
-             '\nSee response for more details.')
+        print('API Error! : ', response['error']['code'], \
+              '\nSee response for more details.')
     else:
         response = json.loads(response.text)
         print('Unknown error! See response for more details.')
@@ -471,6 +473,7 @@ def get_token():
     json_headers = json.dumps(headers, indent=4)
     resp.set_cookie(session["username"], json_headers)  # setting the session ID
     return resp
+
 
 def check_for_duplicate_group(group_name):
     """Check for the existence of a group with the given name in the database.
@@ -510,7 +513,7 @@ def create_group():
         return jsonify({"error": "Authentication headers not found"}), 401
 
     headers = json.loads(json_headers)
-    #if "value" not in headers: 
+    # if "value" not in headers:
     #    return onedrive()
 
     # Create folder in OneDrive
@@ -578,7 +581,7 @@ def get_shared_folders():
             url + "/me/drive/sharedWithMe", headers=headers, timeout=timeout
         ).text
     )
-    #if 'value' not in items: 
+    # if 'value' not in items:
     #    return onedrive()
     items = items["value"]
 
@@ -620,7 +623,7 @@ def get_my_folders():
             url + "me/drive/root/children", headers=headers, timeout=timeout
         ).text
     )
-    if 'value' not in items: 
+    if 'value' not in items:
         return onedrive()
     items = items["value"]
     #  for entries in range(len(items)):
@@ -629,7 +632,8 @@ def get_my_folders():
         new_file = File(entry["id"], entry["name"], None, None)
         new_file.set_filetype()
         new_file.set_file_icon()
-        if "folder" in new_file.get_filetype() and 'NotesApp-' in entry['name'] and "NotesApp-Favorites" not in entry['name']:
+        if "folder" in new_file.get_filetype() and 'NotesApp-' in entry['name'] and "NotesApp-Favorites" not in entry[
+            'name']:
             file_list.append(new_file)
     return render_template("file_groups.html", folders=file_list)
 
@@ -788,7 +792,7 @@ def get_favorites():
     url = "https://graph.microsoft.com/v1.0/"
     #  sget from other flask method
     current_folder = get_or_create_favorites_folder(headers)
-    if current_folder == None: 
+    if current_folder == None:
         return onedrive()
     new_url = url + "me/drive/items/" + current_folder + "/children"
     sub_items = json.loads(requests.get(new_url, headers=headers, timeout=timeout).text)
@@ -882,7 +886,7 @@ def searchfiles():
             url + "me/drive/root/children", headers=headers, timeout=timeout
         ).text
     )
-    if 'value' not in items: 
+    if 'value' not in items:
         return onedrive()
     items = items["value"]
     for _, entry in enumerate(items):
@@ -957,6 +961,7 @@ def share_group_setup_shared():
     return render_template(
         "shared_group_setup_shared.html", file_id=file_id, title=title
     )
+
 
 @app.route("/share_group_action_shared", methods=["POST"])
 @login_required
