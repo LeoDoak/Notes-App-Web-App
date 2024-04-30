@@ -91,4 +91,8 @@ $ cd flasknotesapp
 $ python3 user_test.py 
 ```
 
+### Deployment:
+* Deployed on python anywhere
+URL: https://ldoak.pythonanywhere.com/
+
 **That's all it takes to be able to run our program so far. Enjoy!**
