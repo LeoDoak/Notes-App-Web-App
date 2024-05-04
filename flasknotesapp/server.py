@@ -420,12 +420,7 @@ def onedrive():
     permissions = ["Files.ReadWrite"]
     url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
     response_type = 'token'
-<<<<<<< HEAD
-    redirect_uri = 'https://localhost:8000/'
-=======
     redirect_uri = 'https://localhost:8000/onedrive_message'
->>>>>>> main
-    scope = ''
     scope = ""
     for index, permission in enumerate(permissions):
         scope += permission
