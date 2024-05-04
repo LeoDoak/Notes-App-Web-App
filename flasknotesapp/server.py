@@ -1,6 +1,7 @@
 """ Main Server Page  """
 
 import os
+import io
 import sqlite3
 import json
 import urllib
@@ -15,6 +16,7 @@ from flask import (
     url_for,
     session,
     make_response,
+    send_file
 )
 from flask_login import login_required, login_user, logout_user, LoginManager
 from flask_wtf import FlaskForm
@@ -418,7 +420,11 @@ def onedrive():
     permissions = ["Files.ReadWrite"]
     url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
     response_type = 'token'
+<<<<<<< HEAD
     redirect_uri = 'https://localhost:8000/'
+=======
+    redirect_uri = 'https://localhost:8000/onedrive_message'
+>>>>>>> main
     scope = ''
     scope = ""
     for index, permission in enumerate(permissions):
@@ -427,9 +433,15 @@ def onedrive():
             scope += "+"
     url = url + '?client_id=' + client_id + '&scope=' + scope + '&response_type=' \
         + response_type + '&redirect_uri=' + urllib.parse.quote(redirect_uri)
-
-    print('Sign in to your account, copy the whole redirected URL.')
     return render_template("onedrive.html", url=url, scope=scope)
+
+
+@app.route('/onedrive_message')
+def onedrive_message():
+    '''
+    Summary: Message that will be displayed when user authenticates
+    '''
+    return render_template("message.html")
 
 
 @app.route("/", methods=["POST"])
@@ -724,13 +736,15 @@ def download_file():
     url = "me/drive/items/" + file_id + "/content"
     url = m_url + url
     file_name = file_title
-    save_location = os.path.expanduser("~/Downloads")
-    response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
-    if response_file_contenet == 400:
+    response_file_content = requests.get(url, headers=headers, timeout=timeout)
+    if response_file_content.status_code != 200:
         return onedrive()
-    with open(os.path.join(save_location, file_name), "wb") as _f:
-        _f.write(response_file_contenet.content)
-    return render_template("download_file.html", title=file_name)
+    return send_file(
+        io.BytesIO(response_file_content.content),
+        mimetype="application/octet-stream",
+        as_attachment=True,
+        download_name=file_name
+    )
 
 
 @app.route("/download_file_shared", methods=["POST"])
@@ -815,7 +829,6 @@ def add_favorite_shared():
         return render_template("homepage.html")
     headers = json.loads(json_headers)
     file_id = request.form["file_id"]
-    # file_name = request.form["file_title"]
     m_url = "https://graph.microsoft.com/v1.0/"
     url = "/me/drive/items/" + file_id
     url = m_url + url
@@ -835,7 +848,6 @@ def get_or_create_favorites_folder(headers):
         for folder in folders:
             if folder.get('name') == 'NotesApp-Favorites' and 'folder' in folder:
                 return folder['id']
-        # If the folder doesn't exist, create it
         create_folder_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
         payload = {
             "name": "NotesApp-Favorites",
@@ -865,8 +877,6 @@ def searchfiles():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    if "value" not in headers:
-        return onedrive()
     file_list = []
     timeout = 30
     items = json.loads(
