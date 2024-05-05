@@ -24,7 +24,7 @@
                   <input type="hidden" name="file_title" value="{{file.title}}">
                   <button type="submit">Favorite</button>
               </form>
-              <form action="{{ url_for('download_file') }}" method="post">
+              <form action="{{ url_for('download_file_shared') }}" method="post">
                   <input type="hidden" name="file_id" value="{{file.file_id}}">
                   <input type="hidden" name="file_title" value="{{file.title}}">
                   <button type="submit">Download</button>

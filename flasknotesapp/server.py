@@ -666,8 +666,8 @@ def get_my_shared_files():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    if "value" not in headers():
-        return onedrive()
+    #  if "value" not in headers():
+    #    return onedrive()
     file_list = []
     url = "https://graph.microsoft.com/v1.0/"
     current_folder_ids = request.form["file_id"]
@@ -762,13 +762,13 @@ def download_file_shared():
     url = "me/drive/items/" + file_id + "/content"
     url = m_url + url
     file_name = file_title
-    save_location = os.path.expanduser("~/Downloads")
-    response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
-    if response_file_contenet == 400:
-        return onedrive()
-    with open(os.path.join(save_location, file_name), "wb") as _f:
-        _f.write(response_file_contenet.content)
-    return render_template("download_file.html", title=file_name)
+    response_file_content = requests.get(url, headers=headers, timeout=timeout)
+    return send_file(
+        io.BytesIO(response_file_content.content),
+        mimetype="application/octet-stream",
+        as_attachment=True,
+        download_name=file_name
+    )
 
 
 @app.route("/get_favorites", methods=["GET", "POST"])
