@@ -666,8 +666,8 @@ def get_my_shared_files():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    if "value" not in headers():
-        return onedrive()
+    #if "value" not in headers():
+    #    return onedrive()
     file_list = []
     url = "https://graph.microsoft.com/v1.0/"
     current_folder_ids = request.form["file_id"]
