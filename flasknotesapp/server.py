@@ -421,7 +421,6 @@ def onedrive():
     url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
     response_type = 'token'
     redirect_uri = 'https://localhost:8000/onedrive_message'
-    scope = ''
     scope = ""
     for index, permission in enumerate(permissions):
         scope += permission
@@ -920,8 +919,6 @@ def share_group_action():
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    if "value" not in headers:
-        return onedrive()
     email = request.form["email"]
     folder_id = request.form["file_id"]
     title = request.form["title"]

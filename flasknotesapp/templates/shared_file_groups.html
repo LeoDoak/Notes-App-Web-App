@@ -23,7 +23,7 @@
                   <input type="hidden" name="file_id" value="{{ file.file_id}}">
                   <button type="submit">Open</button>
               </form>
-              <form action="{{ url_for('share_group_setup_shared')}}" method="post">
+              <form action="{{ url_for('share_group_setup_shared')}}                        " method="post">
                   <input type="hidden" name="file_id" value="{{ file.file_id}}">
                   <input type="hidden" name="title" value="{{ file.title}}">
                   <button type="submit">Share</button>
