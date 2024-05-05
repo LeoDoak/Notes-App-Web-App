@@ -762,13 +762,13 @@ def download_file_shared():
     url = "me/drive/items/" + file_id + "/content"
     url = m_url + url
     file_name = file_title
-    save_location = os.path.expanduser("~/Downloads")
-    response_file_contenet = requests.get(url, headers=headers, timeout=timeout)
-    if response_file_contenet == 400:
-        return onedrive()
-    with open(os.path.join(save_location, file_name), "wb") as _f:
-        _f.write(response_file_contenet.content)
-    return render_template("download_file.html", title=file_name)
+    response_file_content = requests.get(url, headers=headers, timeout=timeout)
+    return send_file(
+        io.BytesIO(response_file_content.content),
+        mimetype="application/octet-stream",
+        as_attachment=True,
+        download_name=file_name
+    )
 
 
 @app.route("/get_favorites", methods=["GET", "POST"])
