@@ -1,6 +1,7 @@
 ''' File for testing the user class'''
 # As a user I want to be able to input in my information to create an account
 # so that I can access the application as a new user
+# Source: Chatgpt helped give me examples that I then addapted to fit in more examples
 import unittest
 from objects.user import User
 
