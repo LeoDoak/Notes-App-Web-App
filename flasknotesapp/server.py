@@ -1,5 +1,4 @@
 """ Main Server Page  """
-
 import os
 import io
 import sqlite3
@@ -132,13 +131,13 @@ def set_up():
 @app.route("/form_login", methods=["POST"])
 def login():
     """Handles the user login functionality.
-
     Parameters:
     None.
-
     Returns:
     flask method: that redirects to homepage or render_template
     with loginpage.html and the errors messages with it.
+    Source: adapted from https://www.scaler.com/topics/login-page-in-html/
+    Souces: adapted this https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
     """
 
     get_name = request.form["username"]
@@ -190,13 +189,13 @@ def register():
 @app.route("/form_register", methods=["POST", "GET"])
 def register_actions():
     """Handles the register form and adds the user to database.
-
     Parameters:
     None.
-
     Returns:
     flask method with register.html with the error messages or
     flask method with homepage.html.
+    Sources: Adapted from https://www.scaler.com/topics/login-page-in-html/
+    Souces: adapted this https://www.youtube.com/watch?v=R-hkzqjRMwM&ab_channel=NachiketaHebbar
     """
     get_email = request.form["email"]
     get_name = request.form["username"]
@@ -238,10 +237,8 @@ def forgot_password():
 
 
 class UploadFileForm(FlaskForm):
-    """Summary or Description of the function
-    Gives the file that is uploaded
+    """Summary: Gives the file that is uploaded
     Parameters: specified formdata
-
     Returns: uploaded file
     object: User
     None
@@ -272,7 +269,9 @@ def upload_page_setup():
 @app.route("/upload_page_action", methods=["GET", "POST"])
 @login_required
 def upload_page_action():
-    """Summary:"""
+    """Summary:
+    Sources: https://www.youtube.com/watch?v=Ok8O_QnrSBI&ab_channel=JieJenn
+    """
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
         return render_template("homepage.html")
@@ -310,7 +309,11 @@ def upload_page_setup_shared():
 @app.route("/upload_page_action_shared", methods=["GET", "POST"])
 @login_required
 def upload_page_action_shared():
-    """Summary:"""
+    """Summary:
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
+    Soueces: Also used: https://learn.microsoft.com/en-us/onedrive/developer/
+    rest-api/api/driveitem_createlink?view=odsp-graph-online
+    """
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
@@ -415,6 +418,7 @@ def onedrive():
     Returns: headers to access onedrive account
     object: User
     None
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     """
     client_id = "1cda01e6-d1c5-4cc9-a03d-cfdef32fd32d"
     permissions = ["Files.ReadWrite"]
@@ -443,6 +447,7 @@ def onedrive_message():
 @login_required
 def get_token():
     ''' Gets the token
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     '''
     code = request.form.get("info_url")
     token = code[(code.find('access_token') + len('access_token') + 1): (code.find('&token_type'))]
@@ -556,12 +561,11 @@ def get_main_folders():
 @app.route("/get_shared_folders")
 def get_shared_folders():
     """Function that lists the files in a User's onedrive.
-
     Parameters:
     None.
-
     Returns:
     flask method with the filexplorer.html page with the OneDrive files.
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     """
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
@@ -578,7 +582,6 @@ def get_shared_folders():
     if 'value' not in items:
         return onedrive()
     items = items["value"]
-
     #  for entries in range(len(items)):
     for _, entry in enumerate(items):
         # get folders
@@ -596,12 +599,11 @@ def get_shared_folders():
 @app.route("/get_my_folders")
 def get_my_folders():
     """Function that lists the files in a User's onedrive.
-
     Parameters:
     None.
-
     Returns:
     flask method with the filexplorer.html page with the OneDrive files.
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     """
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
@@ -635,6 +637,7 @@ def get_my_personal_files():
     """Summary
     Params:
     Returns:
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     """
     timeout = 30
     json_headers = request.cookies.get(session["username"])
@@ -660,14 +663,15 @@ def get_my_shared_files():
     """Summary
     Params:
     Returns:
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
+    Sources: Looked at: https://learn.microsoft.com/en-us/onedrive/developer/
+    rest-api/api/driveitem_createlink?view=odsp-graph-online
     """
     timeout = 30
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
         return render_template("homepage.html")
     headers = json.loads(json_headers)
-    #  if "value" not in headers():
-    #    return onedrive()
     file_list = []
     url = "https://graph.microsoft.com/v1.0/"
     current_folder_ids = request.form["file_id"]
@@ -692,6 +696,7 @@ def delete_file():
     """Summary:
     Params:
     Returns:
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     """
     timeout = 30
     json_headers = request.cookies.get(session["username"])
@@ -718,7 +723,7 @@ def download_file():
     """Summary: Downloading files from One Drive
     Params:
     Returns:
-    Credit:
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
     """
     timeout = 30
     json_headers = request.cookies.get(session["username"])
@@ -748,7 +753,9 @@ def download_file_shared():
     """Summary: Downloading files from One Drive
     Params:
     Returns:
-    Credit:
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
+    Sources: Also used: https://learn.microsoft.com/en-us/onedrive/developer/
+    rest-api/api/driveitem_createlink?view=odsp-graph-online
     """
     timeout = 30
     json_headers = request.cookies.get(session["username"])
@@ -773,8 +780,7 @@ def download_file_shared():
 
 @app.route("/get_favorites", methods=["GET", "POST"])
 def get_favorites():
-    '''this function helps to display files in fav_tab
-    '''
+    '''this function helps to display files in fav_tab'''
     timeout = 30
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
@@ -833,9 +839,7 @@ def add_favorite_shared():
 
 
 def get_or_create_favorites_folder(headers):
-    '''
-    Summary:
-    '''
+    '''Summary:'''
     search_url = "https://graph.microsoft.com/v1.0/me/drive/root/children"
     response = requests.get(search_url, headers=headers, timeout=30)
     if response.status_code == 200:
@@ -864,8 +868,7 @@ def searchfiles():
     Params:
     Returns:
     Links: Adapted from: "list folder under directory method"
-    https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
-    """
+    https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python"""
     search_criteria = request.form["Search"]
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
@@ -914,7 +917,9 @@ def share_group_setup():
 @app.route("/share_group_action", methods=["POST"])
 @login_required
 def share_group_action():
-    """Summary: Share personal group with someone"""
+    """Summary: Share personal group with someone
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
+    """
     json_headers = request.cookies.get(session["username"])
     if json_headers is None:
         return render_template("homepage.html")
@@ -954,7 +959,9 @@ def share_group_setup_shared():
 @app.route("/share_group_action_shared", methods=["POST"])
 @login_required
 def share_group_action_shared():
-    """Summary: Share shared group with someone"""
+    """Summary: Share shared group with someone
+    Sources: Adapted from https://github.com/pranabdas/Access-OneDrive-via-Microsoft-Graph-Python
+    """
     timeout = 60
     url = "https://graph.microsoft.com/v1.0/"
     json_headers = request.cookies.get(session["username"])
