@@ -112,4 +112,7 @@ $ python3 user_test.py
 ### Powerpoint
 * In the github there is a powerpoint that was used to present our project to the class and the Professor in which we recieved overall positive feedback. 
 
+### Notes:
+* This code differs slightly than the code that was used to deploy, sa instead of using local host we use the web aplication addresss.
+
 **Thanks for looking at my web application, Enjoy!** 
